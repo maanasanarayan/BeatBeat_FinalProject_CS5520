@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "444251606198",
+    "project_id": "beatbeat-cs5520",
+    "storage_bucket": "beatbeat-cs5520.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444251606198:android:78e8ddb5f89b7c543bea17",
+        "android_client_info": {
+          "package_name": "edu.neu.madcourse.beatbeat_team22"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "444251606198-a15g5khdbcdu1u5o2b9krscqf0ih2lil.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuOMA7nfYelbs1qsFJfSzzCQcuPhrEGVM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "444251606198-a15g5khdbcdu1u5o2b9krscqf0ih2lil.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
