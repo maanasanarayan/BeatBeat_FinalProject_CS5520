@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Classes/MobileApp/BeatBeat_Team22/app/src/main/res/drawable/button_bg.xml" value="0.29583333333333334" />
+        <entry key="..\:/Classes/MobileApp/BeatBeat_Team22/app/src/main/res/drawable/layout_bg.xml" value="0.29583333333333334" />
+        <entry key="..\:/Classes/MobileApp/BeatBeat_Team22/app/src/main/res/drawable/textfield_bg.xml" value="0.29583333333333334" />
+        <entry key="..\:/Classes/MobileApp/BeatBeat_Team22/app/src/main/res/layout/activity_login.xml" value="0.45" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
