@@ -11,7 +11,7 @@ import android.widget.Toast;
 public class MainChallengeActivity extends AppCompatActivity {
     private boolean firstClick = true;
     private Button startTapButton;
-    private int count = 0;
+    private int count = 0; // temp
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +19,10 @@ public class MainChallengeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_challenge);
         startTapButton = findViewById(R.id.TapButton);
         setStart();
+    }
+
+    private void runChallenge() {
+        // logic for this level
     }
 
     private void setTap() {
@@ -35,11 +39,21 @@ public class MainChallengeActivity extends AppCompatActivity {
         if (firstClick) {
             setTap();
         } else {
-            count ++;
+            runChallenge();
+            count ++; // temp
         }
         if (count == 4) {
             Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
             // launch lesson activity
         }
+    }
+
+    public void onMenu(View view) {
+        // launch menu popup
+    }
+
+    public void onRedo(View view) {
+        setStart();
+        count = 0; // temp
     }
 }
