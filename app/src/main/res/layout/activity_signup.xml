@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignupActivity">
+
+    <ImageView
+        android:id="@+id/TitleLogo"
+        android:layout_width="123dp"
+        android:layout_height="98dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/music" />
+
+    <TextView
+        android:id="@+id/TitleSlogan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/caviar_dreams"
+        android:text="Welcome to BeatBeat!"
+        android:textColor="@color/secondaryDarkColor"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TitleLogo" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="311dp"
+        android:layout_height="444dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/layout_bg"
+        app:circularflow_radiusInDP="10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TitleSlogan">
+
+        <TextView
+            android:id="@+id/username_text3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/caviar_dreams"
+            android:text="Full Name"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/passwordSignUp"
+            android:layout_width="259dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/textfield_bg"
+            android:ems="10"
+            android:fontFamily="@font/caviar_dreams"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:paddingStart="10dp"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/username_text2" />
+
+        <EditText
+            android:id="@+id/confirmPwdSignUp"
+            android:layout_width="259dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/textfield_bg"
+            android:ems="10"
+            android:fontFamily="@font/caviar_dreams"
+            android:hint="Confirm Password"
+            android:inputType="textPassword"
+            android:paddingStart="10dp"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.48"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/username_text4" />
+
+        <EditText
+            android:id="@+id/userNameSignUp"
+            android:layout_width="261dp"
+            android:layout_height="39dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/textfield_bg"
+            android:ems="10"
+            android:fontFamily="@font/caviar_dreams"
+            android:hint="Username"
+            android:includeFontPadding="false"
+            android:inputType="textPersonName"
+            android:paddingStart="10dp"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/TitleTapHelp" />
+
+        <EditText
+            android:id="@+id/fullNameField"
+            android:layout_width="261dp"
+            android:layout_height="39dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/textfield_bg"
+            android:ems="10"
+            android:fontFamily="@font/caviar_dreams"
+            android:hint="Full Name"
+            android:includeFontPadding="false"
+            android:inputType="textPersonName"
+            android:paddingStart="10dp"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.52"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/username_text3" />
+
+        <TextView
+            android:id="@+id/username_text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/caviar_dreams"
+            android:text="Password"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/userNameSignUp" />
+
+        <TextView
+            android:id="@+id/username_text4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/caviar_dreams"
+            android:text="Confirm Password"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordSignUp" />
+
+        <TextView
+            android:id="@+id/TitleTapHelp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/caviar_dreams"
+            android:text="Username"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fullNameField" />
+
+        <Button
+            android:id="@+id/signupButton"
+            android:layout_width="110dp"
+            android:layout_height="42dp"
+            android:background="@drawable/button_bg"
+            android:fontFamily="@font/caviar_dreams"
+            android:onClick="onSignUp"
+            android:text="Sign Up"
+            android:textColor="@color/primaryTextColor"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/errorSignUp"
+            app:layout_constraintVertical_bias="0.22000003" />
+
+        <TextView
+            android:id="@+id/errorSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/errorColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/confirmPwdSignUp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
