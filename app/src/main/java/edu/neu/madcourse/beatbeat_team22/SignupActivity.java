@@ -2,6 +2,7 @@ package edu.neu.madcourse.beatbeat_team22;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -23,6 +24,8 @@ public class SignupActivity extends AppCompatActivity {
 
     public void onSignUp(View view) {
         validateInputs();
+        Intent intent = new Intent(this, MainChallengeActivity.class);
+        startActivity(intent);
     }
 
     private void validateInputs() {
