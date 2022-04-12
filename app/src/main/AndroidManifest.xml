@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BeatBeat_Team22">
         <activity
+            android:name=".PopUps"
+            android:exported="false" />
+        <activity
+            android:name=".LevelSelector"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

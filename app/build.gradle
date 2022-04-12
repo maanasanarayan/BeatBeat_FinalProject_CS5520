@@ -40,4 +40,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.google.firebase:firebase-auth'
+
+    //import card view
+    //noinspection GradleCompatible
+    implementation 'com.android.support:cardview-v7:28.0.0'
 }
