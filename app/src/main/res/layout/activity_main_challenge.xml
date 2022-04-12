@@ -8,16 +8,20 @@
 
     <Button
         android:id="@+id/TapButton"
-        android:layout_width="214dp"
+        android:layout_width="241dp"
         android:layout_height="114dp"
         android:onClick="onTap"
+        android:background="@drawable/button_bg"
+        android:fontFamily="@font/caviar_dreams"
         android:text="@string/start_string"
+        android:textColor="@color/primaryTextColor"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.77" />
+        app:layout_constraintVertical_bias="0.77"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
@@ -46,51 +50,51 @@
         tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageView
-        android:id="@+id/imageView7"
+        android:id="@+id/firstNote"
         android:layout_width="57dp"
         android:layout_height="66dp"
         android:layout_marginTop="322dp"
-        app:layout_constraintEnd_toStartOf="@+id/imageView12"
+        app:layout_constraintEnd_toStartOf="@+id/secondNote"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/quarter_note_96_xxxhdpi" />
+        app:srcCompat="@drawable/quarter_note" />
 
     <ImageView
-        android:id="@+id/imageView12"
+        android:id="@+id/secondNote"
         android:layout_width="57dp"
         android:layout_height="66dp"
         android:layout_marginTop="322dp"
-        app:layout_constraintEnd_toStartOf="@+id/imageView13"
+        app:layout_constraintEnd_toStartOf="@+id/thirdNote"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView7"
+        app:layout_constraintStart_toEndOf="@+id/firstNote"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/quarter_note_96_xxxhdpi" />
+        app:srcCompat="@drawable/quarter_note" />
 
     <ImageView
-        android:id="@+id/imageView13"
+        android:id="@+id/thirdNote"
         android:layout_width="57dp"
         android:layout_height="66dp"
         android:layout_marginTop="322dp"
-        app:layout_constraintEnd_toStartOf="@+id/imageView14"
+        app:layout_constraintEnd_toStartOf="@+id/fourthNote"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView12"
+        app:layout_constraintStart_toEndOf="@+id/secondNote"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/quarter_note_96_xxxhdpi" />
+        app:srcCompat="@drawable/quarter_note" />
 
     <ImageView
-        android:id="@+id/imageView14"
+        android:id="@+id/fourthNote"
         android:layout_width="57dp"
         android:layout_height="66dp"
         android:layout_marginTop="322dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView13"
+        app:layout_constraintStart_toEndOf="@+id/thirdNote"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/quarter_note_96_xxxhdpi" />
+        app:srcCompat="@drawable/quarter_note" />
 
     <ImageView
-        android:id="@+id/imageView11"
+        android:id="@+id/metronome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
