@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BeatBeat_Team22">
         <activity
+            android:name=".GlossaryActivity"
+            android:exported="false" />
+        <activity
             android:name=".TitleScreenActivity"
             android:exported="false" />
         <activity

@@ -59,10 +59,25 @@
             android:text="Glossary"
             android:textColor="@color/primaryTextColor"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/LeaderboardButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/LevelSelectButton" />
+
+        <Button
+            android:id="@+id/LeaderboardButton"
+            android:layout_width="260dp"
+            android:layout_height="42dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_bg"
+            android:fontFamily="@font/caviar_dreams"
+            android:text="Leaderboard"
+            android:textColor="@color/primaryTextColor"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/GlossaryButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
