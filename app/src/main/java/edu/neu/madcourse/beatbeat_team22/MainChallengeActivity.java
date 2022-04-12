@@ -2,7 +2,9 @@ package edu.neu.madcourse.beatbeat_team22;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.opengl.Visibility;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,12 +13,18 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainChallengeActivity extends AppCompatActivity {
     private boolean firstClick = true;
     private Button startTapButton;
     private Challenge challenge;
-    ImageView metronome;
+    ImageView metronomeRight;
+    ImageView metronomeLeft;
+    boolean showLeft = true;
+    Handler handler = new Handler();
+    int repeats = 0;
     private int count = 0; // temp
 
     @Override
@@ -37,19 +45,33 @@ public class MainChallengeActivity extends AppCompatActivity {
     }
 
     private void runChallenge() throws InterruptedException {
-        metronome = findViewById(R.id.metronome);
+        metronomeRight = findViewById(R.id.metronome);
+        metronomeLeft = findViewById(R.id.metronomeLeft);
 
-//        for (int i=0; i < challenge.getTotalBeats(); i++) {
-//            switchMetronome(i);
-//            Thread.sleep(1000);
-//        }
+        int runCount = challenge.getTotalBeats();
+        handler.postDelayed(toggleM, 0);
     }
 
-    private void switchMetronome(int iteration) {
-        if (iteration % 2 == 0) {
-            metronome.setImageResource(R.drawable.metronome_left);
+    private Runnable toggleM = new Runnable() {
+        @Override
+        public void run() {
+            Toast.makeText(getApplicationContext(), "changing metro", Toast.LENGTH_SHORT).show();
+            toggleMetronome(showLeft);
+            showLeft = !showLeft;
+            if (repeats < 12) {
+                handler.postDelayed(this, 1000);
+                repeats++;
+            }
+        }
+    };
+
+    private void toggleMetronome(boolean showLeft) {
+        if (showLeft) {
+            metronomeRight.setVisibility(View.INVISIBLE);
+            metronomeLeft.setVisibility(View.VISIBLE);
         } else {
-            metronome.setImageResource(R.drawable.metronome_right);
+            metronomeRight.setVisibility(View.VISIBLE);
+            metronomeLeft.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -63,10 +85,14 @@ public class MainChallengeActivity extends AppCompatActivity {
         startTapButton.setText(R.string.start_string);
     }
 
-    public void onTap(View view) throws InterruptedException {
+    public void onTap(View view){
         if (firstClick) {
             setTapButton();
-            runChallenge();
+            try {
+                runChallenge();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } else {
             count ++; // temp
         }
