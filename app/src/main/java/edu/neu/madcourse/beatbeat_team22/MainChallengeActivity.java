@@ -2,19 +2,12 @@ package edu.neu.madcourse.beatbeat_team22;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainChallengeActivity extends AppCompatActivity {
     private boolean firstClick = true;
@@ -22,7 +15,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     private Challenge challenge;
     ImageView metronomeRight;
     ImageView metronomeLeft;
-    boolean showLeft = true;
+    boolean showRight = false;
     Handler handler = new Handler();
     int repeats = 0;
     private int count = 0; // temp
@@ -37,7 +30,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     }
 
     private void tempGenerateChallenge() {
-        challenge = new Challenge();
+        challenge = new Challenge(4);
         challenge.addImage(R.drawable.quarter_note);
         challenge.addImage(R.drawable.quarter_note);
         challenge.addImage(R.drawable.quarter_note);
@@ -56,9 +49,9 @@ public class MainChallengeActivity extends AppCompatActivity {
         @Override
         public void run() {
             Toast.makeText(getApplicationContext(), "changing metro", Toast.LENGTH_SHORT).show();
-            toggleMetronome(showLeft);
-            showLeft = !showLeft;
-            if (repeats < 12) {
+            toggleMetronome(showRight);
+            showRight = !showRight;
+            if (repeats < challenge.getTotalBeats()) {
                 handler.postDelayed(this, 1000);
                 repeats++;
             }
