@@ -38,7 +38,6 @@ public class MainChallengeActivity extends AppCompatActivity {
     boolean showRight = false;
     Handler handler = new Handler();
     int repeatCount = 0;
-    int totalRepeats;
     private int count = 0; // temp
 
     @Override
@@ -89,15 +88,20 @@ public class MainChallengeActivity extends AppCompatActivity {
         highlightedNotes.add(secondNoteHighlighted);
         highlightedNotes.add(thirdNoteHighlighted);
         highlightedNotes.add(fourthNoteHighlighted);
+        // countdown images
+        countdownImageViews.add(threeView);
+        countdownImageViews.add(twoView);
+        countdownImageViews.add(oneView);
+        countdownImageViews.add(goView);
     }
 
     private void loadImages() {
         countdown.loadImages();
         Log.d("countdownSize", String.valueOf(countdown.getImagesList().size()));
-        for (int i=0; i< challenge.getmMeter(); i++) {
+        for (int i=0; i<challenge.getmMeter(); i++) {
             nonHighlightedNotes.get(i).setImageResource(challenge.getNonHighlightedNotes().get(i));
             highlightedNotes.get(i).setImageResource(challenge.getHighlightedNotesList().get(i));
-//            countdownImageViews.get(i).setImageResource(countdown.getImagesList().get(i));
+            countdownImageViews.get(i).setImageResource(countdown.getImagesList().get(i));
         }
     }
 
@@ -111,7 +115,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         @Override
         public void run() {
             playNextNote();
-//            playCountdown();
+            playCountdown();
             if (repeatCount < challenge.getTotalBeats()) {
                 toggleMetronome(showRight);
                 handler.postDelayed(this, 1000);
@@ -129,7 +133,7 @@ public class MainChallengeActivity extends AppCompatActivity {
             countdownImageViews.get(prevImage).setVisibility(View.INVISIBLE);
             countdownImageViews.get(currImage).setVisibility(View.VISIBLE);
         } else if (repeatCount == challenge.getmMeter()) {
-            countdownImageViews.get(currImage).setVisibility(View.INVISIBLE);
+            countdownImageViews.get(prevImage).setVisibility(View.INVISIBLE);
         }
     }
 
