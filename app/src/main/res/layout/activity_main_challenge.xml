@@ -58,7 +58,20 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/quarter_note" />
+         />
+
+    <ImageView
+        android:id="@+id/firstNoteHighlighted"
+        android:layout_width="57dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="322dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/secondNote"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
 
     <ImageView
         android:id="@+id/secondNote"
@@ -69,7 +82,19 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/firstNote"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/quarter_note" />
+        />
+
+    <ImageView
+        android:id="@+id/secondNoteHighlighted"
+        android:layout_width="57dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="322dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/thirdNote"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/firstNote"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <ImageView
         android:id="@+id/thirdNote"
@@ -80,7 +105,19 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/secondNote"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/quarter_note" />
+        />
+
+    <ImageView
+        android:id="@+id/thirdNoteHighlighted"
+        android:layout_width="57dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="322dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/fourthNote"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/secondNote"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <ImageView
         android:id="@+id/fourthNote"
@@ -91,7 +128,18 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/thirdNote"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/quarter_note" />
+        />
+
+    <ImageView
+        android:id="@+id/fourthNoteHighlighted"
+        android:layout_width="57dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="322dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/thirdNote"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/metronome"
@@ -113,5 +161,49 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/metronome_left" />
+
+    <ImageView
+        android:id="@+id/threeView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.22000003" />
+
+    <ImageView
+        android:id="@+id/twoView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.22000003" />
+
+    <ImageView
+        android:id="@+id/oneView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.22000003" />
+
+    <ImageView
+        android:id="@+id/goView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.22000003" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
