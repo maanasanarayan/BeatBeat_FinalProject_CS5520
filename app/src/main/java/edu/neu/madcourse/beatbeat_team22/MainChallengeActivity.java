@@ -1,7 +1,9 @@
 package edu.neu.madcourse.beatbeat_team22;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -9,6 +11,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +43,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     boolean showRight = false;
     Handler handler = new Handler();
     int repeatCount = 0;
+    private MediaPlayer mp;
     private int count = 0; // temp
 
     @Override
@@ -138,6 +144,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     }
 
     private void toggleMetronome(boolean showLeft) {
+        mp = MediaPlayer.create(this, R.raw.woodblock);
         if (showLeft) {
             metronomeRight.setVisibility(View.INVISIBLE);
             metronomeLeft.setVisibility(View.VISIBLE);
@@ -145,6 +152,14 @@ public class MainChallengeActivity extends AppCompatActivity {
             metronomeRight.setVisibility(View.VISIBLE);
             metronomeLeft.setVisibility(View.INVISIBLE);
         }
+        mp.start();
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                mp.stop();
+                mp.release();
+            }
+        });
         showRight = !showRight;
     }
 
