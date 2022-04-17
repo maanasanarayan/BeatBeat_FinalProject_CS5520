@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/popupResume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Resume"
+        android:textColor="@color/white"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/popupLevelSelector"
+
+        tools:layout_editor_absoluteX="158dp"
+        tools:layout_editor_absoluteY="147dp"></Button>
+
+    <Button
+        android:id="@+id/popupLevelSelector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Level Selector"
+        android:textColor="@color/white"
+
+        app:layout_constraintBottom_toTopOf="@+id/popupLeaderBoard"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/popupResume"
+
+        ></Button>
+
+    <Button
+        android:id="@+id/popupLeaderBoard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Leader Board"
+        android:textColor="@color/white"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/popupLevelSelector"
+        app:layout_constraintBottom_toTopOf="@+id/popupGlossary"
+
+        tools:layout_editor_absoluteX="132dp"
+        tools:layout_editor_absoluteY="309dp"></Button>
+
+    <Button
+        android:id="@+id/popupGlossary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Glossary"
+        android:textColor="@color/white"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/popupLeaderBoard"
+        app:layout_constraintBottom_toTopOf="@+id/popupExit"
+
+        tools:layout_editor_absoluteX="149dp"
+        tools:layout_editor_absoluteY="385dp"></Button>
+
+    <Button
+        android:id="@+id/popupExit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Exit"
+        android:textColor="@color/white"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/popupGlossary"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        tools:layout_editor_absoluteX="161dp"
+        tools:layout_editor_absoluteY="464dp"></Button>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

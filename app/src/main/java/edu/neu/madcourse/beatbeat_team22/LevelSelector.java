@@ -29,7 +29,7 @@ public class LevelSelector extends AppCompatActivity {
 
     public void createLevelSelectorList() {
         levelSelectorList = new ArrayList<>();
-        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 1", "sub title"));
+        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_twotone_music_note_24, "Level 1", "sub title"));
         levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 2", "sub title"));
         levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 3", "sub title"));
     }
