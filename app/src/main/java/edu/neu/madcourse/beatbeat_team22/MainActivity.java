@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnGlossary;
     private Button btnExit;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         btnLevelSelector.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                levelSelector(view);
             }
         });
 
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         btnExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                dialog.dismiss();
             }
         });
     }
@@ -82,6 +83,5 @@ public class MainActivity extends AppCompatActivity {
     public void levelSelector(View view) {
         Intent intent = new Intent(this, LevelSelector.class);
         startActivity(intent);
-
     }
 }

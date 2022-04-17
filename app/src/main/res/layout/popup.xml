@@ -12,14 +12,15 @@
         android:layout_height="wrap_content"
         android:text="Resume"
         android:textColor="@color/white"
+        android:background="@drawable/round_btn"
+        android:ems="8"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"
 
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/popupLevelSelector"
-
-        tools:layout_editor_absoluteX="158dp"
-        tools:layout_editor_absoluteY="147dp"></Button>
+        app:layout_constraintBottom_toTopOf="@id/popupLevelSelector"/>
 
     <Button
         android:id="@+id/popupLevelSelector"
@@ -27,13 +28,14 @@
         android:layout_height="wrap_content"
         android:text="Level Selector"
         android:textColor="@color/white"
+        android:background="@drawable/round_btn"
+        android:ems="8"
+        android:layout_marginBottom="20dp"
 
         app:layout_constraintBottom_toTopOf="@+id/popupLeaderBoard"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/popupResume"
-
-        ></Button>
+        app:layout_constraintTop_toBottomOf="@id/popupResume" />
 
     <Button
         android:id="@+id/popupLeaderBoard"
@@ -41,14 +43,14 @@
         android:layout_height="wrap_content"
         android:text="Leader Board"
         android:textColor="@color/white"
+        android:background="@drawable/round_btn"
+        android:ems="8"
+        android:layout_marginBottom="20dp"
 
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/popupLevelSelector"
-        app:layout_constraintBottom_toTopOf="@+id/popupGlossary"
-
-        tools:layout_editor_absoluteX="132dp"
-        tools:layout_editor_absoluteY="309dp"></Button>
+        app:layout_constraintBottom_toTopOf="@+id/popupGlossary" />
 
     <Button
         android:id="@+id/popupGlossary"
@@ -56,14 +58,14 @@
         android:layout_height="wrap_content"
         android:text="Glossary"
         android:textColor="@color/white"
+        android:background="@drawable/round_btn"
+        android:ems="8"
+        android:layout_marginBottom="20dp"
 
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/popupLeaderBoard"
-        app:layout_constraintBottom_toTopOf="@+id/popupExit"
-
-        tools:layout_editor_absoluteX="149dp"
-        tools:layout_editor_absoluteY="385dp"></Button>
+        app:layout_constraintBottom_toTopOf="@+id/popupExit"/>
 
     <Button
         android:id="@+id/popupExit"
@@ -71,14 +73,14 @@
         android:layout_height="wrap_content"
         android:text="Exit"
         android:textColor="@color/white"
+        android:background="@drawable/round_btn"
+        android:ems="8"
+        android:layout_marginBottom="40dp"
 
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/popupGlossary"
-        app:layout_constraintBottom_toBottomOf="parent"
-
-        tools:layout_editor_absoluteX="161dp"
-        tools:layout_editor_absoluteY="464dp"></Button>
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

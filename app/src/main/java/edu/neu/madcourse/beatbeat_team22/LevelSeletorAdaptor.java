@@ -4,9 +4,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -15,6 +18,7 @@ public class LevelSeletorAdaptor extends RecyclerView.Adapter<LevelSeletorAdapto
 
     private ArrayList<LevelSelectorItem> mLevelSelectorItemList;
     private OnItemClickerListener mListener;
+
 
     public interface OnItemClickerListener {
         void onItemClick(int position);

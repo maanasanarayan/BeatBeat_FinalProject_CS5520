@@ -6,6 +6,7 @@
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.134" />
         <entry key="app/src/main/res/drawable/ic_baseline_music_note_24.xml" value="0.134" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.134" />
+        <entry key="app/src/main/res/drawable/round_btn.xml" value="0.2855" />
         <entry key="app/src/main/res/layout/activity_level_selector.xml" value="0.20833333333333334" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1890625" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.304974365234375" />

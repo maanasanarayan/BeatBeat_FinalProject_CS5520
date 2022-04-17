@@ -3,16 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/levelCardView"
     app:cardCornerRadius="20dp"
     android:layout_margin="5dp"
-    app:cardBackgroundColor="@color/black">
+    app:cardBackgroundColor="@color/grey">
     <RelativeLayout
+        android:id="@+id/relativeLayoutCardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp">
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:background="@color/white"
             android:padding="2dp"
             android:id="@+id/imageView"/>
         <TextView
@@ -24,7 +27,8 @@
             android:textStyle="bold"
             android:textColor="@color/white"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/imageView"/>
+            android:layout_toEndOf="@+id/imageView"
+            android:layout_marginStart="8dp"/>/>
 
         <TextView
             android:id="@+id/textView2"

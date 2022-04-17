@@ -1,10 +1,13 @@
 package edu.neu.madcourse.beatbeat_team22;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -17,11 +20,15 @@ public class LevelSelector extends AppCompatActivity {
     private RecyclerView recyclerView;
     private LevelSeletorAdaptor adapter;
     private RecyclerView.LayoutManager layoutManager;
+    private CardView cardView;
+    boolean levelEnabled = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level_selector);
+
+
 
         createLevelSelectorList();
         buildRecyclerView();
@@ -29,13 +36,17 @@ public class LevelSelector extends AppCompatActivity {
 
     public void createLevelSelectorList() {
         levelSelectorList = new ArrayList<>();
-        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_twotone_music_note_24, "Level 1", "sub title"));
+        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 1", "If I had a Quarter."));
         levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 2", "sub title"));
         levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 3", "sub title"));
     }
 
-    public void changeItem(int position, String text) {
-        levelSelectorList.get(position).changeText1(text);
+    public void changeItem(int position, String text, boolean levelEnabled, CardView cardView) {
+        if (levelEnabled) {
+
+            levelSelectorList.get(position).changeText1(text);
+            cardView.setCardBackgroundColor(Color.BLACK);
+        }
         adapter.notifyItemChanged(position);
     }
 
@@ -47,12 +58,14 @@ public class LevelSelector extends AppCompatActivity {
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-
         adapter.setOnItemClickListener(new LevelSeletorAdaptor.OnItemClickerListener() {
             @Override
             public void onItemClick(int position) {
-                changeItem(position, "clicked");
+                cardView = findViewById(R.id.levelCardView);
+                Log.d("Level Selector Card view id", String.valueOf(cardView));
+                changeItem(position, "clicked", levelEnabled, cardView);
             }
+
         });
     }
 
