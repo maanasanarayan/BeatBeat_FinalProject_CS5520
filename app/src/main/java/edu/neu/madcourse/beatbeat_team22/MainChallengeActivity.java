@@ -34,6 +34,8 @@ public class MainChallengeActivity extends AppCompatActivity {
     private ImageView twoView;
     private ImageView oneView;
     private ImageView goView;
+    private ImageView listenView;
+    private ImageView tapView;
     private boolean firstClick = true;
     private Button startTapButton;
     private Challenge challenge;
@@ -43,6 +45,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     boolean showRight = false;
     Handler handler = new Handler();
     int repeatCount = 0;
+    // credit to findsounds.com for free use of their sounds
     private MediaPlayer mp;
     private int count = 0; // temp
 
@@ -81,6 +84,8 @@ public class MainChallengeActivity extends AppCompatActivity {
         twoView = findViewById(R.id.twoView);
         oneView = findViewById(R.id.oneView);
         goView = findViewById(R.id.goView);
+        listenView = findViewById(R.id.listenView);
+        tapView = findViewById(R.id.tapView);
     }
 
     private void buildImageArrays() {
@@ -103,6 +108,8 @@ public class MainChallengeActivity extends AppCompatActivity {
 
     private void loadImages() {
         countdown.loadImages();
+        listenView.setImageResource(R.drawable.listen_icon);
+        tapView.setImageResource(R.drawable.tap_icon);
         Log.d("countdownSize", String.valueOf(countdown.getImagesList().size()));
         for (int i=0; i<challenge.getmMeter(); i++) {
             nonHighlightedNotes.get(i).setImageResource(challenge.getNonHighlightedNotes().get(i));
@@ -135,24 +142,21 @@ public class MainChallengeActivity extends AppCompatActivity {
         int prevImage = repeatCount - 1;
         if (repeatCount == 0) {
             countdownImageViews.get(currImage).setVisibility(View.VISIBLE);
+            playWoodblock();
         } else if (repeatCount < challenge.getmMeter()) {
             countdownImageViews.get(prevImage).setVisibility(View.INVISIBLE);
             countdownImageViews.get(currImage).setVisibility(View.VISIBLE);
+            playWoodblock();
         } else if (repeatCount == challenge.getmMeter()) {
             countdownImageViews.get(prevImage).setVisibility(View.INVISIBLE);
+            playWoodblock();
         }
     }
 
-    private void toggleMetronome(boolean showLeft) {
+    private void playWoodblock() {
         mp = MediaPlayer.create(this, R.raw.woodblock);
-        if (showLeft) {
-            metronomeRight.setVisibility(View.INVISIBLE);
-            metronomeLeft.setVisibility(View.VISIBLE);
-        } else {
-            metronomeRight.setVisibility(View.VISIBLE);
-            metronomeLeft.setVisibility(View.INVISIBLE);
-        }
         mp.start();
+        // depreciated API ?
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
@@ -160,6 +164,21 @@ public class MainChallengeActivity extends AppCompatActivity {
                 mp.release();
             }
         });
+    }
+
+    private void playNoteSound() {
+        mp = MediaPlayer.create(this, R.raw.arp);
+        mp.start();
+    }
+
+    private void toggleMetronome(boolean showLeft) {
+        if (showLeft) {
+            metronomeRight.setVisibility(View.INVISIBLE);
+            metronomeLeft.setVisibility(View.VISIBLE);
+        } else {
+            metronomeRight.setVisibility(View.VISIBLE);
+            metronomeLeft.setVisibility(View.INVISIBLE);
+        }
         showRight = !showRight;
     }
 
@@ -168,9 +187,21 @@ public class MainChallengeActivity extends AppCompatActivity {
             int currNote = repeatCount % challenge.getmMeter();
             int prevNote = (repeatCount - 1) % challenge.getmMeter();
 
+            if (repeatCount == challenge.getmMeter()) {
+                listenView.setVisibility(View.VISIBLE);
+                Log.d("listen", String.valueOf(repeatCount));
+            }
+            if (repeatCount == challenge.getmMeter() * 2) {
+                listenView.setVisibility(View.INVISIBLE);
+                tapView.setVisibility(View.VISIBLE);
+                Log.d("tap", String.valueOf(repeatCount));
+            }
+
             if (repeatCount == challenge.getTotalBeats()) { // hide highlight last time
                 hideHighlighted(prevNote);
+                tapView.setVisibility(View.INVISIBLE);
             } else {
+                playNoteSound();
                 hideHighlighted(prevNote);
                 showHighlighted(currNote);
             }
