@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
-
+        //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     public void onSignUpClick(View view) {
@@ -116,4 +116,5 @@ public class LoginActivity extends AppCompatActivity {
             return false;
         }
     }
+
 }
