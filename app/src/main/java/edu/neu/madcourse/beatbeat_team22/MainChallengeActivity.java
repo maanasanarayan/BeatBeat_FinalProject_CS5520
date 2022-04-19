@@ -1,6 +1,5 @@
 package edu.neu.madcourse.beatbeat_team22;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.media.MediaPlayer;
@@ -11,9 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +38,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     private Countdown countdown;
     ImageView metronomeRight;
     ImageView metronomeLeft;
-    boolean showRight = false;
+    boolean showLeft = false;
     Handler handler = new Handler();
     int repeatCount = 0;
     // credit to findsounds.com for free use of their sounds
@@ -110,7 +106,6 @@ public class MainChallengeActivity extends AppCompatActivity {
         countdown.loadImages();
         listenView.setImageResource(R.drawable.listen_icon);
         tapView.setImageResource(R.drawable.tap_icon);
-        Log.d("countdownSize", String.valueOf(countdown.getImagesList().size()));
         for (int i=0; i<challenge.getmMeter(); i++) {
             nonHighlightedNotes.get(i).setImageResource(challenge.getNonHighlightedNotes().get(i));
             highlightedNotes.get(i).setImageResource(challenge.getHighlightedNotesList().get(i));
@@ -121,16 +116,19 @@ public class MainChallengeActivity extends AppCompatActivity {
     private void runChallenge() throws InterruptedException {
         metronomeRight = findViewById(R.id.metronome);
         metronomeLeft = findViewById(R.id.metronomeLeft);
-        handler.postDelayed(toggleM, 0);
+        challengeThread.run();
     }
 
-    private Runnable toggleM = new Runnable() {
+    private Runnable challengeThread = new Runnable() {
         @Override
         public void run() {
-            playNextNote();
+            Log.d("repeatCount", String.valueOf(repeatCount));
+            if (repeatCount >= challenge.getmMeter()) {
+                playNextNote.run();
+            }
             playCountdown();
             if (repeatCount < challenge.getTotalBeats()) {
-                toggleMetronome(showRight);
+                toggleMetronome.run();
                 handler.postDelayed(this, 1000);
                 repeatCount++;
             }
@@ -138,6 +136,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     };
 
     private void playCountdown() {
+        Log.d("repeatCount countdown", String.valueOf(repeatCount));
         int currImage = repeatCount;
         int prevImage = repeatCount - 1;
         if (repeatCount == 0) {
@@ -171,19 +170,24 @@ public class MainChallengeActivity extends AppCompatActivity {
         mp.start();
     }
 
-    private void toggleMetronome(boolean showLeft) {
-        if (showLeft) {
-            metronomeRight.setVisibility(View.INVISIBLE);
-            metronomeLeft.setVisibility(View.VISIBLE);
-        } else {
-            metronomeRight.setVisibility(View.VISIBLE);
-            metronomeLeft.setVisibility(View.INVISIBLE);
+    private Runnable toggleMetronome = new Runnable() {
+        @Override
+        public void run() {
+            if (showLeft) {
+                metronomeRight.setVisibility(View.INVISIBLE);
+                metronomeLeft.setVisibility(View.VISIBLE);
+            } else {
+                metronomeRight.setVisibility(View.VISIBLE);
+                metronomeLeft.setVisibility(View.INVISIBLE);
+            }
+            showLeft = !showLeft;
         }
-        showRight = !showRight;
-    }
+    };
 
-    private void playNextNote() {
-        if (repeatCount >= challenge.getmMeter()) {
+    private Runnable playNextNote = new Runnable() {
+        @Override
+        public void run() {
+            Log.d("repeatCount nextNote", String.valueOf(repeatCount));
             int currNote = repeatCount % challenge.getmMeter();
             int prevNote = (repeatCount - 1) % challenge.getmMeter();
 
@@ -206,7 +210,7 @@ public class MainChallengeActivity extends AppCompatActivity {
                 showHighlighted(currNote);
             }
         }
-    }
+    };
 
     private void hideHighlighted(int notePos) {
         highlightedNotes.get(notePos).setVisibility(View.INVISIBLE);
