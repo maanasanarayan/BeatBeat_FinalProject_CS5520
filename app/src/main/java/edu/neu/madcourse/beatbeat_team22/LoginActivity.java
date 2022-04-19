@@ -4,9 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -14,8 +15,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.neu.madcourse.beatbeat_team22.model.User;
 
@@ -24,8 +25,9 @@ public class LoginActivity extends AppCompatActivity {
     private User user;
     private EditText username;
     private EditText password;
+    private TextView error;
     private DatabaseReference db;
-    private List<String> usernames;
+    private Map<String, User> users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
 
         username = findViewById(R.id.userNameLogIn);
         password = findViewById(R.id.passwordLogIn);
+        error = findViewById(R.id.errorLogIn);
 
         // Setting user details if they signed up in same session.
         Intent intent = getIntent();
@@ -44,15 +47,14 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         db = FirebaseDatabase.getInstance().getReference();
-        usernames = new ArrayList<>();
+        users = new HashMap<>();
 
         // Retrieve all usernames from the DB
         db.child("Users").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                usernames.add(dataSnapshot.getKey());
                 User user = dataSnapshot.getValue(User.class);
-                Log.d("Snapshot", user.toString());
+                users.put(dataSnapshot.getKey(), user);
             }
 
             @Override
@@ -81,9 +83,37 @@ public class LoginActivity extends AppCompatActivity {
         String pwd = password.getText().toString();
 
         boolean valid = validateInputs(un, pwd);
+        if(valid) {
+            //Open main activity
+
+            //Show a toast to indicate successful login (To be removed later)
+            CharSequence text = "Successful Log in.";
+            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+            toast.show();
+        }
     }
 
     private boolean validateInputs(String userName, String pwd) {
-        return true;
+        if("".equals(userName) || "".equals(pwd)) {
+            error.setText("Fields cannot be empty.");
+            return false;
+        } else if(! users.containsKey(userName)) {
+            error.setText("User does not exist. Try signing up.");
+            return false;
+        } else if(! passwordMatch(userName, pwd)) {
+            error.setText("Password incorrect. Try again.");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean passwordMatch(String un, String pwd) {
+        User user = users.get(un);
+        if(user.getPassword().equals(pwd)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
