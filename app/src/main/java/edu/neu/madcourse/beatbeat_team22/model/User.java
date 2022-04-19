@@ -4,12 +4,16 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
-    private String fullname;
+    private String name;
     private String username;
     private String password;
 
+    public User() {
+
+    }
+
     public User(String name, String username, String password) {
-        this.fullname = name;
+        this.name = name;
         this.username = username;
         this.password = password;
     }
@@ -19,10 +23,19 @@ public class User implements Serializable {
     }
 
     public String getName() {
-        return fullname;
+        return name;
     }
 
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("User: Full name: ").append(getName());
+        sb.append(", Username: ").append(getUsername());
+        sb.append(", Password: ").append(getPassword());
+        return sb.toString();
     }
 }

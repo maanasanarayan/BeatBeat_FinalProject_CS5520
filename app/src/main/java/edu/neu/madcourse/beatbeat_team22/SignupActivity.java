@@ -1,6 +1,5 @@
 package edu.neu.madcourse.beatbeat_team22;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -37,10 +36,10 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         fullName = findViewById(R.id.fullNameField);
-        userName = findViewById(R.id.userNameSignUp);
-        password = findViewById(R.id.passwordSignUp);
+        userName = findViewById(R.id.userNameLogIn);
+        password = findViewById(R.id.passwordLogIn);
         confirmPassword = findViewById(R.id.confirmPwdSignUp);
-        error = findViewById(R.id.errorSignUp);
+        error = findViewById(R.id.errorLogIn);
         db = FirebaseDatabase.getInstance().getReference();
         usernames = new ArrayList<>();
 

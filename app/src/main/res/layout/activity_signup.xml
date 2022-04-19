@@ -57,7 +57,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/passwordSignUp"
+            android:id="@+id/passwordLogIn"
             android:layout_width="259dp"
             android:layout_height="38dp"
             android:layout_marginTop="8dp"
@@ -90,7 +90,7 @@
             app:layout_constraintTop_toBottomOf="@+id/username_text4" />
 
         <EditText
-            android:id="@+id/userNameSignUp"
+            android:id="@+id/userNameLogIn"
             android:layout_width="261dp"
             android:layout_height="39dp"
             android:layout_marginTop="8dp"
@@ -135,7 +135,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userNameSignUp" />
+            app:layout_constraintTop_toBottomOf="@+id/userNameLogIn" />
 
         <TextView
             android:id="@+id/username_text4"
@@ -148,7 +148,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/passwordSignUp" />
+            app:layout_constraintTop_toBottomOf="@+id/passwordLogIn" />
 
         <TextView
             android:id="@+id/username_text"
@@ -164,7 +164,7 @@
             app:layout_constraintTop_toBottomOf="@+id/fullNameField" />
 
         <Button
-            android:id="@+id/signupButton"
+            android:id="@+id/loginButton"
             android:layout_width="110dp"
             android:layout_height="42dp"
             android:background="@drawable/button_bg"
@@ -176,11 +176,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/errorSignUp"
+            app:layout_constraintTop_toBottomOf="@+id/errorLogIn"
             app:layout_constraintVertical_bias="0.22000003" />
 
         <TextView
-            android:id="@+id/errorSignUp"
+            android:id="@+id/errorLogIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
