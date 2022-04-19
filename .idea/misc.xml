@@ -3,12 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Classes/MobileApp/BeatBeat_Team22/app/src/main/res/drawable/button_bg.xml" value="0.29583333333333334" />
-        <entry key="..\:/Classes/MobileApp/BeatBeat_Team22/app/src/main/res/drawable/layout_bg.xml" value="0.29583333333333334" />
-        <entry key="..\:/Classes/MobileApp/BeatBeat_Team22/app/src/main/res/drawable/textfield_bg.xml" value="0.29583333333333334" />
-        <entry key="..\:/Classes/MobileApp/BeatBeat_Team22/app/src/main/res/layout/activity_login.xml" value="0.375" />
-        <entry key="..\:/Classes/MobileApp/BeatBeat_Team22/app/src/main/res/layout/activity_main.xml" value="0.17028985507246377" />
-        <entry key="..\:/Classes/MobileApp/BeatBeat_Team22/app/src/main/res/layout/activity_signup.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_signup.xml" value="0.20910680946205232" />
       </map>
     </option>
   </component>
