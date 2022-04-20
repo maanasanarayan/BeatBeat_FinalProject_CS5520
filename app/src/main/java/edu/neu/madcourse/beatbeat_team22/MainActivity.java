@@ -14,15 +14,15 @@ Home Page activity. Otherwise, proceeds to the Login activity.
  */
 public class MainActivity extends AppCompatActivity {
 
+    //pop up menu
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
-
+    //pop up menu button
     private Button btnResume;
     private Button btnLevelSelector;
     private Button btnLeaderBoard;
     private Button btnGlossary;
     private Button btnExit;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+    //pop up menu onClick method
     public void popUpMenu(View view) {
         dialogBuilder = new AlertDialog.Builder(this);
         final View popUpMenuView = getLayoutInflater().inflate(R.layout.popup, null);
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //level selector button - open level selector activity
     public void levelSelector(View view) {
         Intent intent = new Intent(this, LevelSelector.class);
         startActivity(intent);
