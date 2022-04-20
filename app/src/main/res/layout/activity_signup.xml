@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SignupActivity">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
 
     <ImageView
-        android:id="@+id/TitleLogo"
+        android:id="@+id/app_logo"
         android:layout_width="123dp"
         android:layout_height="98dp"
         android:layout_marginTop="32dp"
@@ -17,7 +23,7 @@
         app:srcCompat="@drawable/music" />
 
     <TextView
-        android:id="@+id/TitleSlogan"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -28,7 +34,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TitleLogo" />
+        app:layout_constraintTop_toBottomOf="@+id/app_logo" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -37,9 +43,11 @@
         android:layout_marginTop="32dp"
         android:background="@drawable/layout_bg"
         app:circularflow_radiusInDP="10"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TitleSlogan">
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.0">
 
         <TextView
             android:id="@+id/username_text3"
@@ -55,7 +63,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/passwordSignUp"
+            android:id="@+id/passwordLogIn"
             android:layout_width="259dp"
             android:layout_height="38dp"
             android:layout_marginTop="8dp"
@@ -88,7 +96,7 @@
             app:layout_constraintTop_toBottomOf="@+id/username_text4" />
 
         <EditText
-            android:id="@+id/userNameSignUp"
+            android:id="@+id/userNameLogIn"
             android:layout_width="261dp"
             android:layout_height="39dp"
             android:layout_marginTop="8dp"
@@ -102,7 +110,7 @@
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/TitleTapHelp" />
+            app:layout_constraintTop_toBottomOf="@+id/username_text" />
 
         <EditText
             android:id="@+id/fullNameField"
@@ -133,7 +141,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userNameSignUp" />
+            app:layout_constraintTop_toBottomOf="@+id/userNameLogIn" />
 
         <TextView
             android:id="@+id/username_text4"
@@ -146,10 +154,10 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/passwordSignUp" />
+            app:layout_constraintTop_toBottomOf="@+id/passwordLogIn" />
 
         <TextView
-            android:id="@+id/TitleTapHelp"
+            android:id="@+id/username_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -162,7 +170,7 @@
             app:layout_constraintTop_toBottomOf="@+id/fullNameField" />
 
         <Button
-            android:id="@+id/signupButton"
+            android:id="@+id/loginButton"
             android:layout_width="110dp"
             android:layout_height="42dp"
             android:background="@drawable/button_bg"
@@ -174,11 +182,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/errorSignUp"
+            app:layout_constraintTop_toBottomOf="@+id/errorLogIn"
             app:layout_constraintVertical_bias="0.22000003" />
 
         <TextView
-            android:id="@+id/errorSignUp"
+            android:id="@+id/errorLogIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -189,5 +197,23 @@
             app:layout_constraintTop_toBottomOf="@+id/confirmPwdSignUp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <TextView
+        android:id="@+id/loginLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/caviar_dreams"
+        android:onClick="loginLinkClick"
+        android:text="Go back to Login"
+        android:textColor="@color/secondaryDarkColor"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintVertical_bias="0.0" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
