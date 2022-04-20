@@ -90,6 +90,9 @@ public class LoginActivity extends AppCompatActivity {
             CharSequence text = "Successful Log in.";
             Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
             toast.show();
+
+            Intent intent = new Intent(this, HomepageActivity.class);
+            startActivity(intent);
         }
     }
 

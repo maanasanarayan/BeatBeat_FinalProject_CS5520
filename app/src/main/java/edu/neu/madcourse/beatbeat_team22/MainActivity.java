@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        logo = findViewById(R.id.app_logo);
+        /*logo = findViewById(R.id.app_logo);
         name = findViewById(R.id.app_name);
         slogan = findViewById(R.id.app_slogan);
 
@@ -59,9 +59,11 @@ public class MainActivity extends AppCompatActivity {
                 openLoginActivity();
                 finish();
             }
-        }, TIME_OUT);
-
+        }, TIME_OUT);*/
+        Intent intent = new Intent(this, TitleScreenActivity.class);
+        startActivity(intent);
         //openLoginActivity();
+
     }
 
     private void openLoginActivity() {
