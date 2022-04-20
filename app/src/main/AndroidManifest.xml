@@ -10,7 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BeatBeat_Team22">
         <activity
-            android:name=".LevelSelector"
+            android:name=".LevelSelector"/>
+        <activity
+            android:name=".SignupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity" 
             android:exported="false" />
         <activity
             android:name=".MainActivity"

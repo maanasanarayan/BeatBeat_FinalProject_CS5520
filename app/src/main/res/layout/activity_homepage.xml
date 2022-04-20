@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomepageActivity">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="302dp"
+        android:layout_height="673dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/layout_bg"
+        app:circularflow_radiusInDP="10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/StartButton"
+            android:layout_width="260dp"
+            android:layout_height="42dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_bg"
+            android:fontFamily="@font/caviar_dreams"
+            android:text="Start"
+            android:textColor="@color/primaryTextColor"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/LevelSelectButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <Button
+            android:id="@+id/LevelSelectButton"
+            android:layout_width="260dp"
+            android:layout_height="42dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_bg"
+            android:fontFamily="@font/caviar_dreams"
+            android:text="Level Select"
+            android:textColor="@color/primaryTextColor"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/GlossaryButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/StartButton" />
+
+        <Button
+            android:id="@+id/GlossaryButton"
+            android:layout_width="260dp"
+            android:layout_height="42dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_bg"
+            android:fontFamily="@font/caviar_dreams"
+            android:text="Glossary"
+            android:textColor="@color/primaryTextColor"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/LeaderboardButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/LevelSelectButton" />
+
+        <Button
+            android:id="@+id/LeaderboardButton"
+            android:layout_width="260dp"
+            android:layout_height="42dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_bg"
+            android:fontFamily="@font/caviar_dreams"
+            android:text="Leaderboard"
+            android:textColor="@color/primaryTextColor"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/GlossaryButton" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
