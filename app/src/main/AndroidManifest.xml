@@ -11,6 +11,10 @@
         android:theme="@style/Theme.BeatBeat_Team22">
         <activity
             android:name=".LevelSelector"/>
+        <activity android:name=".HomepageActivity"/>
+        <activity android:name=".LeaderboardActivity"/>
+        <activity android:name=".GlossaryActivity"/>
+        <activity android:name=".TitleScreenActivity"/>
         <activity
             android:name=".SignupActivity"
             android:exported="false" />
