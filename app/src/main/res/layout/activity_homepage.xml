@@ -74,10 +74,25 @@
             android:text="Leaderboard"
             android:textColor="@color/primaryTextColor"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/LogoutButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/GlossaryButton" />
+
+        <Button
+            android:id="@+id/LogoutButton"
+            android:layout_width="260dp"
+            android:layout_height="42dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_bg"
+            android:fontFamily="@font/caviar_dreams"
+            android:text="Log out"
+            android:textColor="@color/primaryTextColor"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/LeaderboardButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

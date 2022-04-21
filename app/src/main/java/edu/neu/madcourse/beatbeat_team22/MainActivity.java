@@ -3,7 +3,9 @@ package edu.neu.madcourse.beatbeat_team22;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -43,46 +45,63 @@ public class MainActivity extends AppCompatActivity {
     private ImageView logo;
     private static int TIME_OUT = 5000;
 
+    public static final String SHARED_PREFS = "shared_prefs";
+    public static final String USER_KEY = "username";
+    private SharedPreferences sharedPreferences;
+    private String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*
-         * logo = findViewById(R.id.app_logo);
-         * name = findViewById(R.id.app_name);
-         * slogan = findViewById(R.id.app_slogan);
-         * 
-         * animation1 = new AlphaAnimation(0.0f, 1.0f);
-         * animation1.setDuration(1000);
-         * animation1.setStartOffset(1000);
-         * 
-         * animation2 = new AlphaAnimation(0.0f, 1.0f);
-         * animation2.setDuration(1000);
-         * animation2.setStartOffset(2000);
-         * 
-         * animation3 = new AlphaAnimation(0.0f, 1.0f);
-         * animation3.setDuration(1000);
-         * animation3.setStartOffset(3000);
-         * 
-         * logo.startAnimation(animation1);
-         * name.startAnimation(animation2);
-         * slogan.startAnimation(animation3);
-         * 
-         * // Call this after app title is shown
-         * new Handler().postDelayed(new Runnable() {
-         * 
-         * @Override
-         * public void run() {
-         * openLoginActivity();
-         * finish();
-         * }
-         * }, TIME_OUT);
-         */
-        Intent intent = new Intent(this, TitleScreenActivity.class);
-        startActivity(intent);
-        // openLoginActivity();
+        showTitleAnimation();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
+        //Getting the session if exists
+        sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        username = sharedPreferences.getString(USER_KEY, null);
+    }
+
+    private void showTitleAnimation() {
+        logo = findViewById(R.id.app_logo);
+        name = findViewById(R.id.app_name);
+        slogan = findViewById(R.id.app_slogan);
+
+        animation1 = new AlphaAnimation(0.0f, 1.0f);
+        animation1.setDuration(1000);
+        animation1.setStartOffset(1000);
+
+        animation2 = new AlphaAnimation(0.0f, 1.0f);
+        animation2.setDuration(1000);
+        animation2.setStartOffset(2000);
+
+        animation3 = new AlphaAnimation(0.0f, 1.0f);
+        animation3.setDuration(1000);
+        animation3.setStartOffset(3000);
+
+        logo.startAnimation(animation1);
+        name.startAnimation(animation2);
+        slogan.startAnimation(animation3);
+
+        // Call this after app title is shown
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                if(username != null) {
+                    openHomePageActivity();
+                } else {
+                    openLoginActivity();
+                }
+                finish();
+            }
+        }, TIME_OUT);
+    }
+
+    private void openHomePageActivity() {
+        Intent intent = new Intent(this, HomepageActivity.class);
+        startActivity(intent);
     }
 
     private void openLoginActivity() {
