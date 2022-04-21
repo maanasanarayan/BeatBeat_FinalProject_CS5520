@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/caviar_dreams"
-        android:text="Find the rhythm in you"
+        android:text="Find the rhythm in you!"
         android:textColor="@color/secondaryDarkColor"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
