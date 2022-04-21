@@ -13,6 +13,7 @@ import java.util.logging.Level;
 
 public class HomepageActivity extends AppCompatActivity {
 
+    Button StartButton;
     Button LeaderboardButton;
     Button GlossaryButton;
     Button LevelSelectButton;
@@ -23,6 +24,15 @@ public class HomepageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
+
+        StartButton = findViewById(R.id.StartButton);
+        StartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent StartIntent = new Intent(getApplicationContext(), MainChallengeActivity.class);
+                startActivity(StartIntent);
+            }
+        });
 
         LeaderboardButton = findViewById(R.id.LeaderboardButton);
         LeaderboardButton.setOnClickListener(new View.OnClickListener() {
