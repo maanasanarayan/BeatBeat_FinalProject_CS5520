@@ -243,7 +243,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         } else {
             calculateScore();
         }
-        if (count == 4) {
+        if (count == challenge.getmMeter()) {
             Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
             // launch lesson activity
         }
