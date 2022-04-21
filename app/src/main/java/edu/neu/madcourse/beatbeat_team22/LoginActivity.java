@@ -2,7 +2,9 @@ package edu.neu.madcourse.beatbeat_team22;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -28,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView error;
     private DatabaseReference db;
     private Map<String, User> users;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         username = findViewById(R.id.userNameLogIn);
         password = findViewById(R.id.passwordLogIn);
         error = findViewById(R.id.errorLogIn);
+        sharedPreferences = getSharedPreferences(MainActivity.SHARED_PREFS, Context.MODE_PRIVATE);
 
         // Setting user details if they signed up in same session.
         Intent intent = getIntent();
@@ -70,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
-        //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     public void onSignUpClick(View view) {
@@ -84,13 +88,12 @@ public class LoginActivity extends AppCompatActivity {
 
         boolean valid = validateInputs(un, pwd);
         if(valid) {
-            //Open main activity
+            //Set shared preferences
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(MainActivity.USER_KEY, un);
+            editor.apply();
 
-            //Show a toast to indicate successful login (To be removed later)
-            CharSequence text = "Successful Log in.";
-            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
-            toast.show();
-
+            //Open home page activity
             Intent intent = new Intent(this, HomepageActivity.class);
             startActivity(intent);
         }
