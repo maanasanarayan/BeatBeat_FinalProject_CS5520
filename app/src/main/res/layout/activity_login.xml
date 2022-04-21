@@ -110,11 +110,7 @@
             android:layout_height="42dp"
             android:background="@drawable/button_bg"
             android:fontFamily="@font/caviar_dreams"
-<<<<<<< HEAD
             android:onClick="onLogIn"
-=======
-            android:onClick="onLoginClick"
->>>>>>> bo_dev
             android:text="Log in"
             android:textColor="@color/primaryTextColor"
             android:textStyle="bold"
