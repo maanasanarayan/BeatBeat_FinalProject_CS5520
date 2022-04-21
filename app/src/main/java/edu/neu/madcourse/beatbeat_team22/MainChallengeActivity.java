@@ -32,7 +32,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     private ImageView goView;
     private ImageView listenView;
     private ImageView tapView;
-    private boolean firstClick = true;
+    private boolean firstClick;
     private Button startTapButton;
     private Challenge challenge;
     private Countdown countdown;
@@ -40,21 +40,21 @@ public class MainChallengeActivity extends AppCompatActivity {
     ImageView metronomeLeft;
     boolean showLeft = false;
     Handler handler = new Handler();
-    int repeatCount = 0;
+    int repeatCount;
     // credit to findsounds.com for free use of their sounds
     private MediaPlayer mp;
-    private int count = 0; // temp
+    private int score = 0; // temp
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_challenge);
         startTapButton = findViewById(R.id.TapButton);
-        setStartButton();
         generateChallenge();
         findViews();
         buildImageArrays();
         loadImages();
+        setStartButton();
     }
 
     private void generateChallenge() {
@@ -148,7 +148,6 @@ public class MainChallengeActivity extends AppCompatActivity {
             playWoodblock();
         } else if (repeatCount == challenge.getmMeter()) {
             countdownImageViews.get(prevImage).setVisibility(View.INVISIBLE);
-            playWoodblock();
         }
     }
 
@@ -228,6 +227,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     }
 
     private void setStartButton() {
+        repeatCount = 0;
         firstClick = true;
         startTapButton.setText(R.string.start_string);
     }
@@ -243,14 +243,14 @@ public class MainChallengeActivity extends AppCompatActivity {
         } else {
             calculateScore();
         }
-        if (count == challenge.getmMeter()) {
+        if (score == challenge.getmMeter()) {
             Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
             // launch lesson activity
         }
     }
 
     private void calculateScore() {
-        count ++; // temp
+        score ++; // temp
     }
 
     public void onMenu(View view) {
@@ -259,6 +259,7 @@ public class MainChallengeActivity extends AppCompatActivity {
 
     public void onRedo(View view) {
         setStartButton();
-        count = 0; // temp
+        score = 0; // temp
+        Log.d("redo", String.valueOf(repeatCount));
     }
 }
