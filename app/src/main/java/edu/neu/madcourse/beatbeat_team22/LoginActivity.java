@@ -77,6 +77,11 @@ public class LoginActivity extends AppCompatActivity {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
+    public void onLoginClick(View view) {
+        Intent intent = new Intent(this, MainChallengeActivity.class);
+        startActivity(intent);
+    }
+
     public void onSignUpClick(View view) {
         Intent intent = new Intent(this, SignupActivity.class);
         startActivity(intent);
