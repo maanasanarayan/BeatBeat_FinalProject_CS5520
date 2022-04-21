@@ -34,6 +34,8 @@ public class MainChallengeActivity extends AppCompatActivity {
     private ImageView tapView;
     private boolean firstClick;
     private Button startTapButton;
+    private Integer currLevel;
+    private ChallengeGenerator challengeGenerator;
     private Challenge challenge;
     private Countdown countdown;
     ImageView metronomeRight;
@@ -58,13 +60,10 @@ public class MainChallengeActivity extends AppCompatActivity {
     }
 
     private void generateChallenge() {
-        challenge = new Challenge(4);
+        currLevel = (Integer) getIntent().getSerializableExtra("level");
+        challengeGenerator = new ChallengeGenerator(currLevel);
+        challenge = challengeGenerator.buildChallenge();
         countdown = new Countdown();
-        for (int i=0; i< challenge.getmMeter(); i++) {
-            // image credit to icons8.com for free use of their images
-            challenge.addNonHighlightedNote(R.drawable.quarter_note);
-            challenge.addHighlightedNote(R.drawable.quarter_note_highlighted);
-        }
     }
 
     private void findViews() {
@@ -111,6 +110,7 @@ public class MainChallengeActivity extends AppCompatActivity {
             highlightedNotes.get(i).setImageResource(challenge.getHighlightedNotesList().get(i));
             countdownImageViews.get(i).setImageResource(countdown.getImagesList().get(i));
         }
+        Log.d("noteList", String.valueOf(challenge.getNonHighlightedNotes()));
     }
 
     private void runChallenge() throws InterruptedException {
@@ -186,25 +186,26 @@ public class MainChallengeActivity extends AppCompatActivity {
     private Runnable playNextNote = new Runnable() {
         @Override
         public void run() {
-            Log.d("repeatCount nextNote", String.valueOf(repeatCount));
             int currNote = repeatCount % challenge.getmMeter();
             int prevNote = (repeatCount - 1) % challenge.getmMeter();
 
             if (repeatCount == challenge.getmMeter()) {
                 listenView.setVisibility(View.VISIBLE);
-                Log.d("listen", String.valueOf(repeatCount));
             }
             if (repeatCount == challenge.getmMeter() * 2) {
                 listenView.setVisibility(View.INVISIBLE);
                 tapView.setVisibility(View.VISIBLE);
-                Log.d("tap", String.valueOf(repeatCount));
             }
 
             if (repeatCount == challenge.getTotalBeats()) { // hide highlight last time
                 hideHighlighted(prevNote);
                 tapView.setVisibility(View.INVISIBLE);
             } else {
-                playNoteSound();
+                Boolean isPlayed = challenge.getIsNotePlayedList().get(currNote);
+                Log.d("isPlayed", String.valueOf(isPlayed));
+                if (isPlayed) {
+                    playNoteSound();
+                }
                 hideHighlighted(prevNote);
                 showHighlighted(currNote);
             }
@@ -230,6 +231,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         repeatCount = 0;
         firstClick = true;
         startTapButton.setText(R.string.start_string);
+        generateChallenge();
     }
 
     public void onTap(View view){

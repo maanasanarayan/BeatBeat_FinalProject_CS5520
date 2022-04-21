@@ -5,6 +5,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class LevelSelector extends AppCompatActivity {
 
@@ -22,6 +24,7 @@ public class LevelSelector extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private CardView cardView;
     boolean levelEnabled = true;
+    private int currLevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +65,10 @@ public class LevelSelector extends AppCompatActivity {
             @Override
             public void onItemClick(int position) {
                 cardView = findViewById(R.id.levelCardView);
-                Log.d("Level Selector Card view id", String.valueOf(cardView));
                 changeItem(position, "clicked", levelEnabled, cardView);
+                Intent intent = new Intent(LevelSelector.this, MainChallengeActivity.class);
+                intent.putExtra("level", levelSelectorList.get(position).getmLevel());
+                startActivity(intent);
             }
 
         });
