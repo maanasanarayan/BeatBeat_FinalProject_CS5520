@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Challenge {
     private List<Integer> notesList = new ArrayList<>();
+    private List<Boolean> isNotePlayedList = new ArrayList<>();
     private List<Integer> highlightedNotesList = new ArrayList<>();
     private int totalBeats;
     private int mMeter;
@@ -19,17 +20,19 @@ public class Challenge {
     public int getNumNotes() { return this.notesList.size(); }
 
     public List<Integer> getNonHighlightedNotes() {
-        return notesList;
+        return this.notesList;
     }
 
-    public void addNonHighlightedNote(Integer image) {
+    public void addNonHighlightedNote(Integer image, Boolean notePlayed) {
+        this.isNotePlayedList.add(notePlayed);
         this.notesList.add(image);
-
     }
 
     public List<Integer> getHighlightedNotesList() {
-        return highlightedNotesList;
+        return this.highlightedNotesList;
     }
+
+    public List<Boolean> getIsNotePlayedList() { return this.isNotePlayedList; }
 
     public void addHighlightedNote(Integer image) {
         this.highlightedNotesList.add(image);
@@ -41,6 +44,6 @@ public class Challenge {
     }
 
     public int getmMeter() {
-        return mMeter;
+        return this.mMeter;
     }
 }

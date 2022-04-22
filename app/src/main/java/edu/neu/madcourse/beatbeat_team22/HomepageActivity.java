@@ -19,6 +19,7 @@ public class HomepageActivity extends AppCompatActivity {
     Button LevelSelectButton;
     Button LogoutButton;
     SharedPreferences sharedPreferences;
+    Integer currLevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,8 @@ public class HomepageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent StartIntent = new Intent(getApplicationContext(), MainChallengeActivity.class);
+                currLevel = 1; // TODO: pull from DB
+                StartIntent.putExtra("level", currLevel);
                 startActivity(StartIntent);
             }
         });

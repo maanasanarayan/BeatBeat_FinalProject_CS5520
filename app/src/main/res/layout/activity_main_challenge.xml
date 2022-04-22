@@ -6,226 +6,235 @@
     android:layout_height="match_parent"
     tools:context=".MainChallengeActivity">
 
-    <Button
-        android:id="@+id/TapButton"
-        android:layout_width="241dp"
-        android:layout_height="114dp"
-        android:background="@drawable/button_bg"
-        android:fontFamily="@font/caviar_dreams"
-        android:onClick="onTap"
-        android:text="@string/start_string"
-        android:textColor="@color/primaryTextColor"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="302dp"
+        android:layout_height="673dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/layout_bg"
+        app:circularflow_radiusInDP="10"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.77" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="40dp"
-        android:clickable="true"
-        android:onClick="onMenu"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/menu_icon"
-        tools:ignore="SpeakableTextPresentCheck" />
+        <Button
+            android:id="@+id/TapButton"
+            android:layout_width="241dp"
+            android:layout_height="114dp"
+            android:background="@drawable/button_bg"
+            android:fontFamily="@font/caviar_dreams"
+            android:onClick="onTap"
+            android:text="@string/start_string"
+            android:textColor="@color/primaryTextColor"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.77" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/redoButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginBottom="40dp"
-        android:clickable="true"
-        android:onClick="onRedo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/redo"
-        tools:ignore="SpeakableTextPresentCheck" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="40dp"
+            android:clickable="true"
+            android:onClick="onMenu"
+            android:backgroundTint="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/menu_icon"
+            tools:ignore="SpeakableTextPresentCheck" />
 
-    <ImageView
-        android:id="@+id/firstNote"
-        android:layout_width="57dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="322dp"
-        app:layout_constraintEnd_toStartOf="@+id/secondNote"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-         />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/redoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginBottom="40dp"
+            android:clickable="true"
+            android:onClick="onRedo"
+            android:backgroundTint="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/redo"
+            tools:ignore="SpeakableTextPresentCheck" />
 
-    <ImageView
-        android:id="@+id/firstNoteHighlighted"
-        android:layout_width="57dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="322dp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toStartOf="@+id/secondNote"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        <ImageView
+            android:id="@+id/firstNote"
+            android:layout_width="57dp"
+            android:layout_height="66dp"
+            android:layout_marginTop="322dp"
+            app:layout_constraintEnd_toStartOf="@+id/secondNote"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/firstNoteHighlighted"
+            android:layout_width="57dp"
+            android:layout_height="66dp"
+            android:layout_marginTop="322dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@+id/secondNote"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-    <ImageView
-        android:id="@+id/secondNote"
-        android:layout_width="57dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="322dp"
-        app:layout_constraintEnd_toStartOf="@+id/thirdNote"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/firstNote"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        <ImageView
+            android:id="@+id/secondNote"
+            android:layout_width="57dp"
+            android:layout_height="66dp"
+            android:layout_marginTop="322dp"
+            app:layout_constraintEnd_toStartOf="@+id/thirdNote"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/firstNote"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/secondNoteHighlighted"
-        android:layout_width="57dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="322dp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toStartOf="@+id/thirdNote"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/firstNote"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        <ImageView
+            android:id="@+id/secondNoteHighlighted"
+            android:layout_width="57dp"
+            android:layout_height="66dp"
+            android:layout_marginTop="322dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@+id/thirdNote"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/firstNote"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/thirdNote"
-        android:layout_width="57dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="322dp"
-        app:layout_constraintEnd_toStartOf="@+id/fourthNote"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/secondNote"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        <ImageView
+            android:id="@+id/thirdNote"
+            android:layout_width="57dp"
+            android:layout_height="66dp"
+            android:layout_marginTop="322dp"
+            app:layout_constraintEnd_toStartOf="@+id/fourthNote"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/secondNote"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/thirdNoteHighlighted"
-        android:layout_width="57dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="322dp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toStartOf="@+id/fourthNote"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/secondNote"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        <ImageView
+            android:id="@+id/thirdNoteHighlighted"
+            android:layout_width="57dp"
+            android:layout_height="66dp"
+            android:layout_marginTop="322dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@+id/fourthNote"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/secondNote"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/fourthNote"
-        android:layout_width="57dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="322dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/thirdNote"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        <ImageView
+            android:id="@+id/fourthNote"
+            android:layout_width="57dp"
+            android:layout_height="66dp"
+            android:layout_marginTop="322dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/thirdNote"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/fourthNoteHighlighted"
-        android:layout_width="57dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="322dp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/thirdNote"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/fourthNoteHighlighted"
+            android:layout_width="57dp"
+            android:layout_height="66dp"
+            android:layout_marginTop="322dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/thirdNote"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/metronome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="23dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/metronome_right" />
+        <ImageView
+            android:id="@+id/metronome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="23dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/metronome_right" />
 
-    <ImageView
-        android:id="@+id/metronomeLeft"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="40dp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/metronome_left" />
+        <ImageView
+            android:id="@+id/metronomeLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="40dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/metronome_left" />
 
-    <ImageView
-        android:id="@+id/threeView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.22000003" />
+        <ImageView
+            android:id="@+id/threeView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.22000003" />
 
-    <ImageView
-        android:id="@+id/twoView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.22000003" />
+        <ImageView
+            android:id="@+id/twoView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.22000003" />
 
-    <ImageView
-        android:id="@+id/oneView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.22000003" />
+        <ImageView
+            android:id="@+id/oneView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.22000003" />
 
-    <ImageView
-        android:id="@+id/goView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.22000003" />
+        <ImageView
+            android:id="@+id/goView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.22000003" />
 
-    <ImageView
-        android:id="@+id/listenView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.22000003" />
+        <ImageView
+            android:id="@+id/listenView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.22000003" />
 
-    <ImageView
-        android:id="@+id/tapView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.22000003" />
+        <ImageView
+            android:id="@+id/tapView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.22000003" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
