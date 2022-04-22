@@ -39,14 +39,14 @@ public class LevelSelector extends AppCompatActivity {
 
     public void createLevelSelectorList() {
         levelSelectorList = new ArrayList<>();
-        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 1", "If I had a Quarter."));
-        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 2", "sub title"));
-        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 3", "sub title"));
+        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 1", "If I had a Quarter"));
+        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 2", "The Quarter Rest"));
+        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 3", "Mixin' It Up"));
+        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 4", "Give It a Rest"));
     }
 
     public void changeItem(int position, String text, boolean levelEnabled, CardView cardView) {
         if (levelEnabled) {
-
             levelSelectorList.get(position).changeText1(text);
             cardView.setCardBackgroundColor(Color.BLACK);
         }
@@ -73,39 +73,4 @@ public class LevelSelector extends AppCompatActivity {
 
         });
     }
-
-//    public void onClick(View view) {
-//        switch (view.getId()) {
-//            case R.id.level1:
-//                //openlevel  activity
-//                break;
-//            case R.id.level2:
-//                //openlevel  activity
-//                break;
-//            case R.id.level3:
-//                //openlevel  activity
-//                break;
-//            case R.id.level4:
-//                //openlevel  activity
-//                break;
-//            case R.id.level5:
-//                //openlevel  activity
-//                break;
-//            case R.id.level6:
-//                //openlevel  activity
-//                break;
-//            case R.id.level7:
-//                //openlevel  activity
-//                break;
-//            case R.id.level8:
-//                //openlevel  activity
-//                break;
-//            case R.id.level9:
-//                //openlevel  activity
-//                break;
-//            case R.id.level10:
-//                //openlevel  activity
-//                break;
-//        }
-//    }
 }

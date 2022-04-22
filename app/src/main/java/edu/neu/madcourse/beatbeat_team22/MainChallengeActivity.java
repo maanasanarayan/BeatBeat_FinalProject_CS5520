@@ -63,6 +63,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         currLevel = (Integer) getIntent().getSerializableExtra("level");
         challengeGenerator = new ChallengeGenerator(currLevel);
         challenge = challengeGenerator.buildChallenge();
+        Log.d("levelAfterGenerate", String.valueOf(challenge.getNonHighlightedNotes()));
         countdown = new Countdown();
     }
 
@@ -110,7 +111,7 @@ public class MainChallengeActivity extends AppCompatActivity {
             highlightedNotes.get(i).setImageResource(challenge.getHighlightedNotesList().get(i));
             countdownImageViews.get(i).setImageResource(countdown.getImagesList().get(i));
         }
-        Log.d("noteList", String.valueOf(challenge.getNonHighlightedNotes()));
+        Log.d("noteList level", String.valueOf(challenge.getNonHighlightedNotes()));
     }
 
     private void runChallenge() throws InterruptedException {
@@ -263,5 +264,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         setStartButton();
         score = 0; // temp
         Log.d("redo", String.valueOf(repeatCount));
+        Toast.makeText(getApplicationContext(),
+                "Level " + String.valueOf(currLevel) + " reset", Toast.LENGTH_SHORT).show();
     }
 }

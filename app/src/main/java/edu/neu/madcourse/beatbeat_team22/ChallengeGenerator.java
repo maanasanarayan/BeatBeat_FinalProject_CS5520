@@ -13,6 +13,7 @@ public class ChallengeGenerator {
 
     public Challenge buildChallenge() {
         createLevel();
+        Log.d("levelBeforeSending", String.valueOf(thisChallenge.getNonHighlightedNotes()));
         return thisChallenge;
     }
 
@@ -23,7 +24,9 @@ public class ChallengeGenerator {
             case 2: buildLevel2();
             break;
             case 3: buildLevel3();
-            default: buildLevel1();
+            break;
+            case 4: buildLevel4();
+            break;
         }
     }
 
@@ -63,8 +66,25 @@ public class ChallengeGenerator {
                 case 2:
                     thisChallenge.addNonHighlightedNote(R.drawable.quarter_rest_90, false);
                     thisChallenge.addHighlightedNote(R.drawable.quarter_note_highlighted);
+                    break;
             }
         }
-        Log.d("levelNonHigh", String.valueOf(thisChallenge.getNonHighlightedNotes()));
+    }
+
+    private void buildLevel4() {
+        Log.d("currLevel", String.valueOf(currLevel));
+        thisChallenge = new Challenge(4);
+        for (int i=0; i< thisChallenge.getmMeter(); i++) {
+            switch (i) {
+                case 1:
+                    thisChallenge.addNonHighlightedNote(R.drawable.quarter_note, true);
+                    thisChallenge.addHighlightedNote(R.drawable.quarter_note_highlighted);
+                    break;
+                case 0: case 2: case 3:
+                    thisChallenge.addNonHighlightedNote(R.drawable.quarter_rest_90, false);
+                    thisChallenge.addHighlightedNote(R.drawable.quarter_note_highlighted);
+                    break;
+            }
+        }
     }
 }
