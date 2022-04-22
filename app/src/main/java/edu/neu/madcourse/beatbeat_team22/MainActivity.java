@@ -27,16 +27,6 @@ Home Page activity. Otherwise, proceeds to the Login activity.
  */
 public class MainActivity extends AppCompatActivity {
 
-//    // pop up menu
-//    private AlertDialog.Builder dialogBuilder;
-//    private AlertDialog dialog;
-//    // pop up menu button
-//    private Button btnResume;
-//    private Button btnLevelSelector;
-//    private Button btnLeaderBoard;
-//    private Button btnGlossary;
-//    private Button btnExit;
-
     private AlphaAnimation animation1;
     private AlphaAnimation animation2;
     private AlphaAnimation animation3;
@@ -108,61 +98,4 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
-//
-//    // pop up menu onClick method
-//    public void popUpMenu(View view) {
-//        dialogBuilder = new AlertDialog.Builder(this);
-//        final View popUpMenuView = getLayoutInflater().inflate(R.layout.popup, null);
-//
-//        btnResume = popUpMenuView.findViewById(R.id.popupResume);
-//        btnLevelSelector = popUpMenuView.findViewById(R.id.popupLevelSelector);
-//        btnLeaderBoard = popUpMenuView.findViewById(R.id.popupLeaderBoard);
-//        btnGlossary = popUpMenuView.findViewById(R.id.popupGlossary);
-//        btnExit = popUpMenuView.findViewById(R.id.popupExit);
-//
-//        dialogBuilder.setView(popUpMenuView);
-//        dialog = dialogBuilder.create();
-//        dialog.show();
-//
-//        btnResume.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
-//
-//        btnLevelSelector.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                levelSelector(view);
-//            }
-//        });
-//
-//        btnLeaderBoard.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
-//
-//        btnGlossary.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
-//
-//        btnExit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                dialog.dismiss();
-//            }
-//        });
-//    }
-//
-//    // level selector button - open level selector activity
-//    public void levelSelector(View view) {
-//        Intent intent = new Intent(this, LevelSelector.class);
-//        startActivity(intent);
-//    }
 }
