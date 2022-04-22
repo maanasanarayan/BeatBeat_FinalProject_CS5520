@@ -2,6 +2,8 @@ package edu.neu.madcourse.beatbeat_team22;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,6 +48,16 @@ public class MainChallengeActivity extends AppCompatActivity {
     // credit to findsounds.com for free use of their sounds
     private MediaPlayer mp;
     private int score = 0; // temp
+
+    //popUp menu
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+    // pop up menu button
+    private Button btnResume;
+    private Button btnLevelSelector;
+    private Button btnLeaderBoard;
+    private Button btnGlossary;
+    private Button btnExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -258,6 +270,7 @@ public class MainChallengeActivity extends AppCompatActivity {
 
     public void onMenu(View view) {
         // launch menu popup
+        openPopUpMenu(view);
     }
 
     public void onRedo(View view) {
@@ -267,4 +280,75 @@ public class MainChallengeActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),
                 "Level " + String.valueOf(currLevel) + " reset", Toast.LENGTH_SHORT).show();
     }
+
+
+    //pop up menu builder
+    public void openPopUpMenu(View view) {
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View popUpMenuView = getLayoutInflater().inflate(R.layout.popup, null);
+
+        btnResume = popUpMenuView.findViewById(R.id.popupResume);
+        btnLevelSelector = popUpMenuView.findViewById(R.id.popupLevelSelector);
+        btnLeaderBoard = popUpMenuView.findViewById(R.id.popupLeaderBoard);
+        btnGlossary = popUpMenuView.findViewById(R.id.popupGlossary);
+        btnExit = popUpMenuView.findViewById(R.id.popupExit);
+
+        dialogBuilder.setView(popUpMenuView);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        btnResume.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        btnLevelSelector.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                levelSelector(view);
+            }
+        });
+
+        btnLeaderBoard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openLeaderBoardFromPopupMenu(view);
+            }
+        });
+
+        btnGlossary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openGlossaryPopupFromMenu(view);
+            }
+        });
+
+        btnExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    // level selector button - open level selector activity
+    public void levelSelector(View view) {
+        Intent intent = new Intent(this, LevelSelector.class);
+        startActivity(intent);
+    }
+
+    // open leader board from pop up menu
+    public void openLeaderBoardFromPopupMenu(View view) {
+        Intent intent = new Intent(this, LeaderboardActivity.class);
+        startActivity(intent);
+    }
+
+    // open glossary from pop upmenu
+    public void openGlossaryPopupFromMenu(View view) {
+        Intent intent = new Intent(this, GlossaryActivity.class);
+        startActivity(intent);
+    }
+
 }
