@@ -45,6 +45,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     int repeatCount;
     // credit to findsounds.com for free use of their sounds
     private MediaPlayer mp;
+    private Boolean isPlayed;
     private int score = 0; // temp
 
     @Override
@@ -202,7 +203,7 @@ public class MainChallengeActivity extends AppCompatActivity {
                 hideHighlighted(prevNote);
                 tapView.setVisibility(View.INVISIBLE);
             } else {
-                Boolean isPlayed = challenge.getIsNotePlayedList().get(currNote);
+                isPlayed = challenge.getIsNotePlayedList().get(currNote);
                 Log.d("isPlayed", String.valueOf(isPlayed));
                 if (isPlayed) {
                     playNoteSound();
@@ -253,7 +254,14 @@ public class MainChallengeActivity extends AppCompatActivity {
     }
 
     private void calculateScore() {
-        score ++; // temp
+        if (isPlayed) {
+            score++;
+            Log.d("score Correct", String.valueOf(score));
+        } else {
+            score--;
+            Log.d("score Incorrect", String.valueOf(score));
+            Toast.makeText(getApplicationContext(), "Incorrect!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void onMenu(View view) {
@@ -263,7 +271,6 @@ public class MainChallengeActivity extends AppCompatActivity {
     public void onRedo(View view) {
         setStartButton();
         score = 0; // temp
-        Log.d("redo", String.valueOf(repeatCount));
         Toast.makeText(getApplicationContext(),
                 "Level " + String.valueOf(currLevel) + " reset", Toast.LENGTH_SHORT).show();
     }
