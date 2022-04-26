@@ -58,6 +58,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     private Button btnLeaderBoard;
     private Button btnGlossary;
     private Button btnExit;
+    private ImageView emoji;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,8 @@ public class MainChallengeActivity extends AppCompatActivity {
         buildImageArrays();
         loadImages();
         setStartButton();
+        showHappyFace();
+//        showSadFace();
     }
 
     private void generateChallenge() {
@@ -94,6 +97,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         goView = findViewById(R.id.goView);
         listenView = findViewById(R.id.listenView);
         tapView = findViewById(R.id.tapView);
+        emoji = findViewById(R.id.emoji_face);
     }
 
     private void buildImageArrays() {
@@ -349,6 +353,16 @@ public class MainChallengeActivity extends AppCompatActivity {
     public void openGlossaryPopupFromMenu(View view) {
         Intent intent = new Intent(this, GlossaryActivity.class);
         startActivity(intent);
+    }
+
+    private void showHappyFace() {
+        emoji.setImageResource(R.drawable.happy_face_foreground);
+        emoji.setVisibility(View.VISIBLE);
+    }
+
+    private void showSadFace() {
+        emoji.setImageResource(R.drawable.sad_face_foreground);
+        emoji.setVisibility(View.VISIBLE);
     }
 
 }
