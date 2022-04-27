@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class MainChallengeActivity extends AppCompatActivity {
     private List<ImageView> nonHighlightedNotes = new ArrayList<>();
@@ -47,9 +48,11 @@ public class MainChallengeActivity extends AppCompatActivity {
     int repeatCount;
     // credit to findsounds.com for free use of their sounds
     private MediaPlayer mp;
-    private int score = 0; // temp
+    private Boolean isPlayed;
+    private int requiredScore = 0;
+    private int score = 0;
 
-    //popUp menu
+    // popUp menu
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
     // pop up menu button
@@ -70,8 +73,6 @@ public class MainChallengeActivity extends AppCompatActivity {
         buildImageArrays();
         loadImages();
         setStartButton();
-        showHappyFace();
-//        showSadFace();
     }
 
     private void generateChallenge() {
@@ -122,7 +123,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         countdown.loadImages();
         listenView.setImageResource(R.drawable.listen_icon);
         tapView.setImageResource(R.drawable.tap_icon);
-        for (int i=0; i<challenge.getmMeter(); i++) {
+        for (int i = 0; i < challenge.getmMeter(); i++) {
             nonHighlightedNotes.get(i).setImageResource(challenge.getNonHighlightedNotes().get(i));
             highlightedNotes.get(i).setImageResource(challenge.getHighlightedNotesList().get(i));
             countdownImageViews.get(i).setImageResource(countdown.getImagesList().get(i));
@@ -214,14 +215,27 @@ public class MainChallengeActivity extends AppCompatActivity {
                 tapView.setVisibility(View.VISIBLE);
             }
 
-            if (repeatCount == challenge.getTotalBeats()) { // hide highlight last time
+            if (repeatCount == challenge.getTotalBeats()) { // last time
                 hideHighlighted(prevNote);
                 tapView.setVisibility(View.INVISIBLE);
+                hideEmoji();
+                if (score == requiredScore) {
+                    Log.d("score results passed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
+                    Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
+                    // launch lesson activity
+                } else {
+                    Log.d("score results failed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
+                    Toast.makeText(getApplicationContext(), "Try Again!", Toast.LENGTH_SHORT).show();
+                }
             } else {
-                Boolean isPlayed = challenge.getIsNotePlayedList().get(currNote);
+                isPlayed = challenge.getIsNotePlayedList().get(currNote);
                 Log.d("isPlayed", String.valueOf(isPlayed));
                 if (isPlayed) {
                     playNoteSound();
+                    if (repeatCount >= challenge.getmMeter() * 2) {
+                        requiredScore++;
+                        Log.d("score required", String.valueOf(requiredScore));
+                    }
                 }
                 hideHighlighted(prevNote);
                 showHighlighted(currNote);
@@ -250,10 +264,11 @@ public class MainChallengeActivity extends AppCompatActivity {
         startTapButton.setText(R.string.start_string);
         generateChallenge();
     }
+
     LevelSelector levelSelector;
     LevelSelectorItem levelSelectorItem;
 
-    public void onTap(View view){
+    public void onTap(View view) {
         if (firstClick) {
             setTapButton();
             try {
@@ -264,15 +279,19 @@ public class MainChallengeActivity extends AppCompatActivity {
         } else {
             calculateScore();
         }
-        if (score == challenge.getmMeter()) {
-            Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
-            // open tutorial
-
-        }
     }
 
     private void calculateScore() {
-        score ++; // temp
+        if (isPlayed) {
+            score++;
+            showHappyFace();
+            Log.d("score Correct", String.valueOf(score));
+        } else {
+            score--;
+            showSadFace();
+            Log.d("score Incorrect", String.valueOf(score));
+            Toast.makeText(getApplicationContext(), "Incorrect!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void onMenu(View view) {
@@ -283,13 +302,11 @@ public class MainChallengeActivity extends AppCompatActivity {
     public void onRedo(View view) {
         setStartButton();
         score = 0; // temp
-        Log.d("redo", String.valueOf(repeatCount));
         Toast.makeText(getApplicationContext(),
                 "Level " + String.valueOf(currLevel) + " reset", Toast.LENGTH_SHORT).show();
     }
 
-
-    //pop up menu builder
+    // pop up menu builder
     public void openPopUpMenu(View view) {
         dialogBuilder = new AlertDialog.Builder(this);
         final View popUpMenuView = getLayoutInflater().inflate(R.layout.popup, null);
@@ -361,6 +378,10 @@ public class MainChallengeActivity extends AppCompatActivity {
     private void showHappyFace() {
         emoji.setImageResource(R.drawable.happy_face_foreground);
         emoji.setVisibility(View.VISIBLE);
+    }
+
+    private void hideEmoji() {
+        emoji.setVisibility(View.INVISIBLE);
     }
 
     private void showSadFace() {
