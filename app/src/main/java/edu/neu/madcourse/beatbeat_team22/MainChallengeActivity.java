@@ -73,8 +73,6 @@ public class MainChallengeActivity extends AppCompatActivity {
         buildImageArrays();
         loadImages();
         setStartButton();
-        showHappyFace();
-//        showSadFace();
     }
 
     private void generateChallenge() {
@@ -220,6 +218,7 @@ public class MainChallengeActivity extends AppCompatActivity {
             if (repeatCount == challenge.getTotalBeats()) { // last time
                 hideHighlighted(prevNote);
                 tapView.setVisibility(View.INVISIBLE);
+                hideEmoji();
                 if (score == requiredScore) {
                     Log.d("score results passed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
                     Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
@@ -282,9 +281,11 @@ public class MainChallengeActivity extends AppCompatActivity {
     private void calculateScore() {
         if (isPlayed) {
             score++;
+            showHappyFace();
             Log.d("score Correct", String.valueOf(score));
         } else {
             score--;
+            showSadFace();
             Log.d("score Incorrect", String.valueOf(score));
             Toast.makeText(getApplicationContext(), "Incorrect!", Toast.LENGTH_SHORT).show();
         }
@@ -375,6 +376,10 @@ public class MainChallengeActivity extends AppCompatActivity {
     private void showHappyFace() {
         emoji.setImageResource(R.drawable.happy_face_foreground);
         emoji.setVisibility(View.VISIBLE);
+    }
+
+    private void hideEmoji() {
+        emoji.setVisibility(View.INVISIBLE);
     }
 
     private void showSadFace() {
