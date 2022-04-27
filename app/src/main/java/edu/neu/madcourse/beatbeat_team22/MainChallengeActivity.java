@@ -60,6 +60,12 @@ public class MainChallengeActivity extends AppCompatActivity {
     private Button btnExit;
     private ImageView emoji;
 
+    //score calculation
+    private long deltatime = 0;
+    private double secondsperbeat = 1;
+    private double timingEarlyGate = 0.75;
+    private double timingLateGate = 1.25;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +76,8 @@ public class MainChallengeActivity extends AppCompatActivity {
         buildImageArrays();
         loadImages();
         setStartButton();
-        showHappyFace();
-//        showSadFace();
+        //showHappyFace();
+        showSadFace();
     }
 
     private void generateChallenge() {
@@ -182,7 +188,8 @@ public class MainChallengeActivity extends AppCompatActivity {
     }
 
     private void playNoteSound() {
-        mp = MediaPlayer.create(this, R.raw.arp);
+        //mp = MediaPlayer.create(this, R.raw.arp);
+        mp = MediaPlayer.create(this, R.raw.woodblock);
         mp.start();
     }
 
@@ -242,6 +249,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     private void setTapButton() {
         firstClick = false;
         startTapButton.setText(R.string.tap_string);
+        deltatime = 0;
     }
 
     private void setStartButton() {
@@ -269,7 +277,19 @@ public class MainChallengeActivity extends AppCompatActivity {
     }
 
     private void calculateScore() {
-        score ++; // temp
+        if (deltatime == 0) {
+            score++;
+        }
+        else if (System.currentTimeMillis() - deltatime > 750 && System.currentTimeMillis() - deltatime < 1250) {
+            score++;
+        }
+        else if (System.currentTimeMillis() - deltatime < (secondsperbeat * timingEarlyGate)){
+            Toast.makeText(getApplicationContext(), "Too early", Toast.LENGTH_SHORT).show();
+        }
+        else if (System.currentTimeMillis() - deltatime > (secondsperbeat * timingLateGate)) {
+            Toast.makeText(getApplicationContext(), "Too late", Toast.LENGTH_SHORT).show();
+        }
+        deltatime = System.currentTimeMillis();
     }
 
     public void onMenu(View view) {
