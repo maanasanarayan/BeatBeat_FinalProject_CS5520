@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class MainChallengeActivity extends AppCompatActivity {
     private List<ImageView> nonHighlightedNotes = new ArrayList<>();
@@ -46,7 +47,8 @@ public class MainChallengeActivity extends AppCompatActivity {
     // credit to findsounds.com for free use of their sounds
     private MediaPlayer mp;
     private Boolean isPlayed;
-    private int score = 0; // temp
+    private int requiredScore = 0;
+    private int score = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         challenge = challengeGenerator.buildChallenge();
         Log.d("levelAfterGenerate", String.valueOf(challenge.getNonHighlightedNotes()));
         countdown = new Countdown();
+        countDownLatch = new CountDownLatch(challenge.getTotalBeats());
     }
 
     private void findViews() {
@@ -199,14 +202,26 @@ public class MainChallengeActivity extends AppCompatActivity {
                 tapView.setVisibility(View.VISIBLE);
             }
 
-            if (repeatCount == challenge.getTotalBeats()) { // hide highlight last time
+            if (repeatCount == challenge.getTotalBeats()) { // last time
                 hideHighlighted(prevNote);
                 tapView.setVisibility(View.INVISIBLE);
+                if (score == requiredScore) {
+                    Log.d("score results passed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
+                    Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
+                    // launch lesson activity
+                } else {
+                    Log.d("score results failed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
+                    Toast.makeText(getApplicationContext(), "Try Again!", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 isPlayed = challenge.getIsNotePlayedList().get(currNote);
                 Log.d("isPlayed", String.valueOf(isPlayed));
                 if (isPlayed) {
                     playNoteSound();
+                    if (repeatCount >= challenge.getmMeter() * 2) {
+                        requiredScore++;
+                        Log.d("score required", String.valueOf(requiredScore));
+                    }
                 }
                 hideHighlighted(prevNote);
                 showHighlighted(currNote);
@@ -246,10 +261,6 @@ public class MainChallengeActivity extends AppCompatActivity {
             }
         } else {
             calculateScore();
-        }
-        if (score == challenge.getmMeter()) {
-            Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
-            // launch lesson activity
         }
     }
 
