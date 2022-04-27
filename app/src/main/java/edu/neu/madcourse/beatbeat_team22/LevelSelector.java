@@ -31,8 +31,6 @@ public class LevelSelector extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level_selector);
 
-
-
         createLevelSelectorList();
         buildRecyclerView();
     }
@@ -45,10 +43,9 @@ public class LevelSelector extends AppCompatActivity {
         levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 4", "Give It a Rest"));
     }
 
-    public void changeItem(int position, String text, boolean levelEnabled, CardView cardView) {
+    public void changeItem(int position,  boolean levelEnabled, CardView cardView) {
         if (levelEnabled) {
-            levelSelectorList.get(position).changeText1(text);
-            cardView.setCardBackgroundColor(Color.BLACK);
+            cardView.setCardBackgroundColor(Color.RED);
         }
         adapter.notifyItemChanged(position);
     }
@@ -65,7 +62,7 @@ public class LevelSelector extends AppCompatActivity {
             @Override
             public void onItemClick(int position) {
                 cardView = findViewById(R.id.levelCardView);
-                changeItem(position, "clicked", levelEnabled, cardView);
+                changeItem(position, levelEnabled, cardView);
                 Intent intent = new Intent(LevelSelector.this, MainChallengeActivity.class);
                 intent.putExtra("level", levelSelectorList.get(position).getmLevel());
                 startActivity(intent);
