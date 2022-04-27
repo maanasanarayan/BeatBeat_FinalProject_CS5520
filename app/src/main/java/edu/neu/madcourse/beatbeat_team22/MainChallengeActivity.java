@@ -51,6 +51,10 @@ public class MainChallengeActivity extends AppCompatActivity {
     private Boolean isPlayed;
     private int requiredScore = 0;
     private int score = 0;
+    private long prevtime = 0;
+    private double timingEarlyGate = 0.75;
+    private double timingLateGate = 1.25;
+    private long milisecondsperbeat = 1000;
 
     //popUp menu
     private AlertDialog.Builder dialogBuilder;
@@ -256,6 +260,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     private void setTapButton() {
         firstClick = false;
         startTapButton.setText(R.string.tap_string);
+        prevtime = 0;
     }
 
     private void setStartButton() {
@@ -279,16 +284,28 @@ public class MainChallengeActivity extends AppCompatActivity {
     }
 
     private void calculateScore() {
-        if (isPlayed) {
+        long deltatime = System.currentTimeMillis() - prevtime;
+        if (prevtime == 0) {
             score++;
             showHappyFace();
             Log.d("score Correct", String.valueOf(score));
-        } else {
+        }
+        else if (deltatime > milisecondsperbeat * timingEarlyGate && deltatime < milisecondsperbeat * timingLateGate) {
+            score++;
+            showHappyFace();
+            Log.d("score Correct", String.valueOf(score));
+        } else if (deltatime < milisecondsperbeat *  timingEarlyGate) {
             score--;
             showSadFace();
-            Log.d("score Incorrect", String.valueOf(score));
-            Toast.makeText(getApplicationContext(), "Incorrect!", Toast.LENGTH_SHORT).show();
+            Log.d("score Incorrect: Too Early", String.valueOf(score));
+            Toast.makeText(getApplicationContext(), "Incorrect! Too Early!", Toast.LENGTH_SHORT).show();
+        } else if (deltatime > milisecondsperbeat *  timingLateGate) {
+            score--;
+            showSadFace();
+            Log.d("score Incorrect: Too Late", String.valueOf(score));
+            Toast.makeText(getApplicationContext(), "Incorrect! Too Late!", Toast.LENGTH_SHORT).show();
         }
+        prevtime = System.currentTimeMillis();
     }
 
     public void onMenu(View view) {
