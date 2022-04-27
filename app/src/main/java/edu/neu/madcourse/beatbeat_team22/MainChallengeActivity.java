@@ -83,7 +83,6 @@ public class MainChallengeActivity extends AppCompatActivity {
         challenge = challengeGenerator.buildChallenge();
         Log.d("levelAfterGenerate", String.valueOf(challenge.getNonHighlightedNotes()));
         countdown = new Countdown();
-        countDownLatch = new CountDownLatch(challenge.getTotalBeats());
     }
 
     private void findViews() {
