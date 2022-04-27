@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,6 +37,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     private ImageView goView;
     private ImageView listenView;
     private ImageView tapView;
+    private ImageView redoButton;
     private boolean firstClick;
     private Button startTapButton;
     private Integer currLevel;
@@ -49,8 +52,8 @@ public class MainChallengeActivity extends AppCompatActivity {
     // credit to findsounds.com for free use of their sounds
     private MediaPlayer mp;
     private Boolean isPlayed;
-    private int requiredScore = 0;
-    private int score = 0;
+    private int requiredScore;
+    private int score;
 
     //popUp menu
     private AlertDialog.Builder dialogBuilder;
@@ -76,6 +79,8 @@ public class MainChallengeActivity extends AppCompatActivity {
     }
 
     private void generateChallenge() {
+        requiredScore = 0;
+        score = 0;
         currLevel = (Integer) getIntent().getSerializableExtra("level");
         challengeGenerator = new ChallengeGenerator(currLevel);
         challenge = challengeGenerator.buildChallenge();
@@ -99,6 +104,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         listenView = findViewById(R.id.listenView);
         tapView = findViewById(R.id.tapView);
         emoji = findViewById(R.id.emoji_face);
+        redoButton = findViewById(R.id.redoButton);
     }
 
     private void buildImageArrays() {
@@ -128,7 +134,6 @@ public class MainChallengeActivity extends AppCompatActivity {
             highlightedNotes.get(i).setImageResource(challenge.getHighlightedNotesList().get(i));
             countdownImageViews.get(i).setImageResource(countdown.getImagesList().get(i));
         }
-        Log.d("noteList level", String.valueOf(challenge.getNonHighlightedNotes()));
     }
 
     private void runChallenge() throws InterruptedException {
@@ -140,7 +145,6 @@ public class MainChallengeActivity extends AppCompatActivity {
     private Runnable challengeThread = new Runnable() {
         @Override
         public void run() {
-            Log.d("repeatCount", String.valueOf(repeatCount));
             if (repeatCount >= challenge.getmMeter()) {
                 playNextNote.run();
             }
@@ -154,7 +158,6 @@ public class MainChallengeActivity extends AppCompatActivity {
     };
 
     private void playCountdown() {
-        Log.d("repeatCount countdown", String.valueOf(repeatCount));
         int currImage = repeatCount;
         int prevImage = repeatCount - 1;
         if (repeatCount == 0) {
@@ -210,7 +213,7 @@ public class MainChallengeActivity extends AppCompatActivity {
             if (repeatCount == challenge.getmMeter()) {
                 listenView.setVisibility(View.VISIBLE);
             }
-            if (repeatCount == challenge.getmMeter() * 2) {
+            if (repeatCount == challenge.getmMeter() * 2) { // when player should tap
                 listenView.setVisibility(View.INVISIBLE);
                 tapView.setVisibility(View.VISIBLE);
             }
@@ -219,6 +222,7 @@ public class MainChallengeActivity extends AppCompatActivity {
                 hideHighlighted(prevNote);
                 tapView.setVisibility(View.INVISIBLE);
                 hideEmoji();
+                enableRedo();
                 if (score == requiredScore) {
                     Log.d("score results passed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
                     Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
@@ -262,18 +266,23 @@ public class MainChallengeActivity extends AppCompatActivity {
         repeatCount = 0;
         firstClick = true;
         startTapButton.setText(R.string.start_string);
+        disableRedo();
         generateChallenge();
     }
 
     public void onTap(View view){
         if (firstClick) {
             setTapButton();
+//            startTapButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+//            startTapButton.setEnabled(false);
             try {
                 runChallenge();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        } else {
+        } else if (repeatCount >= challenge.getmMeter() * 2){
+//            startTapButton.getBackground().setColorFilter(null);
+//            startTapButton.setEnabled(true);
             calculateScore();
         }
     }
@@ -301,6 +310,14 @@ public class MainChallengeActivity extends AppCompatActivity {
         score = 0; // temp
         Toast.makeText(getApplicationContext(),
                 "Level " + String.valueOf(currLevel) + " reset", Toast.LENGTH_SHORT).show();
+    }
+
+    private void disableRedo() {
+        redoButton.setEnabled(false);
+    }
+
+    private void enableRedo() {
+        redoButton.setEnabled(true);
     }
 
 
