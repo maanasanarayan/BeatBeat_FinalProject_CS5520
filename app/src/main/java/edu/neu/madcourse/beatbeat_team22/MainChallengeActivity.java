@@ -250,6 +250,8 @@ public class MainChallengeActivity extends AppCompatActivity {
         startTapButton.setText(R.string.start_string);
         generateChallenge();
     }
+    LevelSelector levelSelector;
+    LevelSelectorItem levelSelectorItem;
 
     public void onTap(View view){
         if (firstClick) {
@@ -264,7 +266,8 @@ public class MainChallengeActivity extends AppCompatActivity {
         }
         if (score == challenge.getmMeter()) {
             Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
-            // launch lesson activity
+            // open tutorial
+
         }
     }
 

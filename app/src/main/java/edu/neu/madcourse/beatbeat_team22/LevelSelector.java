@@ -23,8 +23,10 @@ public class LevelSelector extends AppCompatActivity {
     private LevelSeletorAdaptor adapter;
     private RecyclerView.LayoutManager layoutManager;
     private CardView cardView;
-    boolean levelEnabled = true;
+    //boolean levelEnabled = true;
     private int currLevel;
+
+    private MainChallengeActivity mainChallengeActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,18 +39,13 @@ public class LevelSelector extends AppCompatActivity {
 
     public void createLevelSelectorList() {
         levelSelectorList = new ArrayList<>();
-        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 1", "If I had a Quarter"));
-        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 2", "The Quarter Rest"));
-        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 3", "Mixin' It Up"));
-        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 4", "Give It a Rest"));
+        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 1", "If I had a Quarter", true));
+        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 2", "The Quarter Rest", false));
+        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 3", "Mixin' It Up", false));
+        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 4", "Give It a Rest", false));
     }
 
-    public void changeItem(int position,  boolean levelEnabled, CardView cardView) {
-        if (levelEnabled) {
-            cardView.setCardBackgroundColor(Color.RED);
-        }
-        adapter.notifyItemChanged(position);
-    }
+
 
     public void buildRecyclerView() {
         recyclerView = findViewById(R.id.recyclerView);
@@ -60,14 +57,35 @@ public class LevelSelector extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new LevelSeletorAdaptor.OnItemClickerListener() {
             @Override
-            public void onItemClick(int position) {
-                cardView = findViewById(R.id.levelCardView);
-                changeItem(position, levelEnabled, cardView);
-                Intent intent = new Intent(LevelSelector.this, MainChallengeActivity.class);
-                intent.putExtra("level", levelSelectorList.get(position).getmLevel());
-                startActivity(intent);
+            public void onItemClick(int position, View view) {
+                unlockLevel(position, view);
             }
 
         });
     }
+
+
+
+    public void unlockLevel(int position, View view) {
+
+        int nextPosition = position + 1;
+
+        if (levelSelectorList.get(position).getLevelUnlocked()){
+
+            view.setBackgroundColor(Color.GREEN);
+            levelUnlocked(position);
+
+            // if (levelCompleted)
+            levelSelectorList.get(nextPosition).setLevelUnlocked();
+
+        }
+    }
+
+    public void levelUnlocked (int position) {
+        Intent intent = new Intent(LevelSelector.this, MainChallengeActivity.class);
+        intent.putExtra("level", levelSelectorList.get(position).getmLevel());
+        startActivity(intent);
+    }
+
+
 }
