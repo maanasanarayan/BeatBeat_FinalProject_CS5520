@@ -21,6 +21,17 @@ import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import edu.neu.madcourse.beatbeat_team22.model.User;
+
 /*
 Shows title activity. If user has logged in before on the same device, proceeds to the
 Home Page activity. Otherwise, proceeds to the Login activity.
@@ -39,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String USER_KEY = "username";
     private SharedPreferences sharedPreferences;
     private String username;
+    private DatabaseReference db;
+    private Map<String, User> users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +64,31 @@ public class MainActivity extends AppCompatActivity {
         //Getting the session if exists
         sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         username = sharedPreferences.getString(USER_KEY, null);
+
+        db = FirebaseDatabase.getInstance().getReference();
+        users = new HashMap<>();
+
+        // Retrieve all usernames from the DB
+        db.child("Users").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                User user = dataSnapshot.getValue(User.class);
+                users.put(dataSnapshot.getKey(), user);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {}
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
     }
 
     private void showTitleAnimation() {
@@ -91,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void openHomePageActivity() {
         Intent intent = new Intent(this, HomepageActivity.class);
+        intent.putExtra("user", users.get(username));
         startActivity(intent);
     }
 

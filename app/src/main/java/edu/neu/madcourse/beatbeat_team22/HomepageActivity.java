@@ -6,10 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import java.util.logging.Level;
+
+import edu.neu.madcourse.beatbeat_team22.model.User;
 
 public class HomepageActivity extends AppCompatActivity {
 
@@ -20,11 +23,19 @@ public class HomepageActivity extends AppCompatActivity {
     Button LogoutButton;
     SharedPreferences sharedPreferences;
     Integer currLevel;
+    int counter = 0;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
+
+        Intent intent = getIntent();
+        if(intent.hasExtra("user")) {
+            user = (User) intent.getSerializableExtra("user");
+            Log.d("User details","user: " + user);
+        }
 
         StartButton = findViewById(R.id.StartButton);
         StartButton.setOnClickListener(new View.OnClickListener() {
@@ -84,5 +95,12 @@ public class HomepageActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        counter++;
+        if(counter == 2) {
+            moveTaskToBack(true);
+        }
+    }
 
 }
