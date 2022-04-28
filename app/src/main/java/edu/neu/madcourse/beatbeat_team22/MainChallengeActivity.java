@@ -186,7 +186,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     }
 
     private void playNoteSound() {
-        mp = MediaPlayer.create(this, R.raw.arp);
+        mp = MediaPlayer.create(this, R.raw.piano_note);
         mp.start();
     }
 
@@ -216,6 +216,7 @@ public class MainChallengeActivity extends AppCompatActivity {
             if (repeatCount == challenge.getmMeter() * 2) { // when player should tap
                 listenView.setVisibility(View.INVISIBLE);
                 tapView.setVisibility(View.VISIBLE);
+                enableTapButton();
             }
 
             if (repeatCount == challenge.getTotalBeats()) { // last time
@@ -223,6 +224,7 @@ public class MainChallengeActivity extends AppCompatActivity {
                 tapView.setVisibility(View.INVISIBLE);
                 hideEmoji();
                 enableRedo();
+                enableTapButton();
                 if (score == requiredScore) {
                     Log.d("score results passed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
                     Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
@@ -273,18 +275,16 @@ public class MainChallengeActivity extends AppCompatActivity {
     public void onTap(View view){
         if (firstClick) {
             setTapButton();
-//            startTapButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
-//            startTapButton.setEnabled(false);
+            disableTapButton();
             try {
                 runChallenge();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         } else if (repeatCount >= challenge.getmMeter() * 2){
-//            startTapButton.getBackground().setColorFilter(null);
-//            startTapButton.setEnabled(true);
             calculateScore();
         }
+        // TODO: add feedback when player fails to tap
     }
 
     private void calculateScore() {
@@ -312,6 +312,16 @@ public class MainChallengeActivity extends AppCompatActivity {
                 "Level " + String.valueOf(currLevel) + " reset", Toast.LENGTH_SHORT).show();
     }
 
+    private void disableTapButton() {
+        startTapButton.setText("");
+        startTapButton.setEnabled(false);
+    }
+
+    private void enableTapButton() {
+        startTapButton.setText(R.string.tap_string);
+        startTapButton.setEnabled(true);
+    }
+
     private void disableRedo() {
         redoButton.setEnabled(false);
     }
@@ -319,7 +329,6 @@ public class MainChallengeActivity extends AppCompatActivity {
     private void enableRedo() {
         redoButton.setEnabled(true);
     }
-
 
     //pop up menu builder
     public void openPopUpMenu(View view) {

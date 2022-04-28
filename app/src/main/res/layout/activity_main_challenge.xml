@@ -36,7 +36,7 @@
             android:id="@+id/TapButton"
             android:layout_width="241dp"
             android:layout_height="114dp"
-            android:background="@drawable/button_bg"
+            android:background="@drawable/button_selector"
             android:fontFamily="@font/caviar_dreams"
             android:onClick="onTap"
             android:text="@string/start_string"
