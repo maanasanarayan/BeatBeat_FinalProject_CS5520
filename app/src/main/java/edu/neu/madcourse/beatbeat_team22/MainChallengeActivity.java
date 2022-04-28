@@ -55,6 +55,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     private double timingEarlyGate = 0.75;
     private double timingLateGate = 1.25;
     private long milisecondsperbeat = 1000;
+    private int currnoteTiming;
 
     //popUp menu
     private AlertDialog.Builder dialogBuilder;
@@ -261,6 +262,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         firstClick = false;
         startTapButton.setText(R.string.tap_string);
         prevtime = 0;
+        currnoteTiming = 0;
     }
 
     private void setStartButton() {
@@ -285,7 +287,12 @@ public class MainChallengeActivity extends AppCompatActivity {
 
     private void calculateScore() {
         long deltatime = System.currentTimeMillis() - prevtime;
-        if (prevtime == 0) {
+        if (!challenge.getIsNotePlayedList().get(currnoteTiming)) {
+            showSadFace();
+            Log.d("score Incorrect: Don't Tap During a Rest", String.valueOf(score));
+            score--;
+        }
+        else if (prevtime == 0) {
             score++;
             showHappyFace();
             Log.d("score Correct", String.valueOf(score));
@@ -306,6 +313,7 @@ public class MainChallengeActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Incorrect! Too Late!", Toast.LENGTH_SHORT).show();
         }
         prevtime = System.currentTimeMillis();
+        currnoteTiming++;
     }
 
     public void onMenu(View view) {
