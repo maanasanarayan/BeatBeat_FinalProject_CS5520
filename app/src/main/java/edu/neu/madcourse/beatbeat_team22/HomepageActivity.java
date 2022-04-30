@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Level;
 
 import edu.neu.madcourse.beatbeat_team22.model.User;
@@ -21,10 +23,12 @@ public class HomepageActivity extends AppCompatActivity {
     Button GlossaryButton;
     Button LevelSelectButton;
     Button LogoutButton;
+    Button DailyChallengeButton;
     SharedPreferences sharedPreferences;
     Integer currLevel;
     int counter = 0;
     User user;
+    Random random;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +95,15 @@ public class HomepageActivity extends AppCompatActivity {
 
                 Intent LogoutIntent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(LogoutIntent);
+            }
+        });
+
+        DailyChallengeButton = findViewById(R.id.DailyChallenge);
+        DailyChallengeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent DailyChallenge = new Intent(getApplicationContext(), DailyChallengeActivity.class);
+//                startActivity(DailyChallenge);
             }
         });
     }

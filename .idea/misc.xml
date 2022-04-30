@@ -10,7 +10,8 @@
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/drawable/ic_twotone_music_note_24.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/drawable/layout_bg.xml" value="0.14479166666666668" />
-        <entry key="app/src/main/res/layout/activity_homepage.xml" value="0.14447463768115942" />
+        <entry key="app/src/main/res/layout/activity_daily_challenge.xml" value="0.22282608695652173" />
+        <entry key="app/src/main/res/layout/activity_homepage.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_leaderboard.xml" value="0.14447463768115942" />
         <entry key="app/src/main/res/layout/activity_level_selector.xml" value="0.14447463768115942" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1503623188405797" />
