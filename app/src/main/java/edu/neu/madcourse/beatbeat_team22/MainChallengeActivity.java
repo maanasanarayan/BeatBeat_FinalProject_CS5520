@@ -230,6 +230,8 @@ public class MainChallengeActivity extends AppCompatActivity {
                 if (score == requiredScore) {
                     Log.d("score results passed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
                     Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
+                    errorDescription.setText("Level Complete!");
+                    errorDescription.setVisibility(View.VISIBLE);
                     // launch lesson activity
                 } else {
                     Log.d("score results failed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
