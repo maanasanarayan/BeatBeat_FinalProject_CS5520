@@ -25,6 +25,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText fullName;
     private EditText userName;
     private EditText password;
+    private Integer atLevel;
     private EditText confirmPassword;
     private TextView error;
     private DatabaseReference db;
@@ -39,6 +40,7 @@ public class SignupActivity extends AppCompatActivity {
         userName = findViewById(R.id.userNameLogIn);
         password = findViewById(R.id.passwordLogIn);
         confirmPassword = findViewById(R.id.confirmPwdSignUp);
+        atLevel = 1;
         error = findViewById(R.id.errorLogIn);
         db = FirebaseDatabase.getInstance().getReference();
         usernames = new ArrayList<>();
@@ -76,11 +78,12 @@ public class SignupActivity extends AppCompatActivity {
         String un = userName.getText().toString();
         String pwd = password.getText().toString();
         String cnfPwd = confirmPassword.getText().toString();
+        Integer level = 1;
 
         // Check if inputs are valid
         boolean valid = validateInputs(fn, un, pwd, cnfPwd);
         if(valid) {
-            createUser(fn, un, pwd);
+            createUser(fn, un, pwd, level);
         }
     }
 
@@ -91,9 +94,9 @@ public class SignupActivity extends AppCompatActivity {
      * @param username
      * @param pwd
      */
-    private void createUser(String name, String username, String pwd) {
+    private void createUser(String name, String username, String pwd, Integer level) {
         //Create user in Database
-        User user = new User(name, username, pwd);
+        User user = new User(name, username, pwd, level);
         db.child("Users").child(user.getUsername()).setValue(user);
 
         //Show a toast to indicate successful registration

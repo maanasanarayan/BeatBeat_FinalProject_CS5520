@@ -10,15 +10,13 @@ public class LevelSelectorItem {
     private String mText2;
     private Integer mLevel;
     private Integer mNextLevel;
-    private boolean mLevelUnlocked;
 
-    public LevelSelectorItem(int imageResource, String text1, String text2, boolean levelUnlocked) {
+    public LevelSelectorItem(int imageResource, String text1, String text2) {
         mImageResource = imageResource;
         mText1 = text1;
         mText2 = text2;
         mLevel = parseLevel(text1);
         mNextLevel = mLevel + 1;
-        mLevelUnlocked = levelUnlocked;
     }
 
     private int parseLevel(String text) {
@@ -49,12 +47,6 @@ public class LevelSelectorItem {
 
     public Integer getmNextLevel() {
         return mNextLevel;
-    }
-
-    public boolean getLevelUnlocked() { return mLevelUnlocked; }
-
-    public void setLevelUnlocked() {
-        this.mLevelUnlocked = true;
     }
 
 

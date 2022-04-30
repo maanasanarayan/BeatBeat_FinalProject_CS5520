@@ -12,6 +12,7 @@ public class Challenge {
     private List<Integer> highlightedNotesList = new ArrayList<>();
     private int totalBeats;
     private int mMeter;
+    private boolean passed;
 
     public Challenge(int meter) {
         this.mMeter = meter;

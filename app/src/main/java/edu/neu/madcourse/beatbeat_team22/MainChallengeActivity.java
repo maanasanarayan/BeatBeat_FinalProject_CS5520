@@ -15,9 +15,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
+import java.util.logging.Level;
 
-public class MainChallengeActivity extends AppCompatActivity {
+import edu.neu.madcourse.beatbeat_team22.model.User;
+
+public class MainChallengeActivity extends AppCompatActivity{
     private List<ImageView> nonHighlightedNotes = new ArrayList<>();
     private List<ImageView> highlightedNotes = new ArrayList<>();
     private List<ImageView> countdownImageViews = new ArrayList<>();
@@ -62,6 +64,9 @@ public class MainChallengeActivity extends AppCompatActivity {
     private Button btnGlossary;
     private Button btnExit;
     private ImageView emoji;
+    boolean complete;
+
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +78,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         buildImageArrays();
         loadImages();
         setStartButton();
+        complete = false;
     }
 
     private void generateChallenge() {
@@ -201,11 +207,16 @@ public class MainChallengeActivity extends AppCompatActivity {
         }
     };
 
+
     private Runnable playNextNote = new Runnable() {
+
+
         @Override
         public void run() {
+
             int currNote = repeatCount % challenge.getmMeter();
             int prevNote = (repeatCount - 1) % challenge.getmMeter();
+
 
             if (repeatCount == challenge.getmMeter()) {
                 listenView.setVisibility(View.VISIBLE);
@@ -223,6 +234,8 @@ public class MainChallengeActivity extends AppCompatActivity {
                     Log.d("score results passed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
                     Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
                     // launch lesson activity
+
+                    user.setLevelPassed(currLevel);
                 } else {
                     Log.d("score results failed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
                     Toast.makeText(getApplicationContext(), "Try Again!", Toast.LENGTH_SHORT).show();
@@ -264,9 +277,6 @@ public class MainChallengeActivity extends AppCompatActivity {
         startTapButton.setText(R.string.start_string);
         generateChallenge();
     }
-
-    LevelSelector levelSelector;
-    LevelSelectorItem levelSelectorItem;
 
     public void onTap(View view) {
         if (firstClick) {
@@ -388,5 +398,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         emoji.setImageResource(R.drawable.sad_face_foreground);
         emoji.setVisibility(View.VISIBLE);
     }
+
+
 
 }
