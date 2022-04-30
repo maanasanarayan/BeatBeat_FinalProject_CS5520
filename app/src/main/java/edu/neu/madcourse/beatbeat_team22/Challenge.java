@@ -12,6 +12,7 @@ public class Challenge {
     private List<Integer> highlightedNotesList = new ArrayList<>();
     private int totalBeats;
     private int mMeter;
+    private String mLessonTitle;
 
     public Challenge(int meter) {
         this.mMeter = meter;
@@ -33,6 +34,14 @@ public class Challenge {
     }
 
     public List<Boolean> getIsNotePlayedList() { return this.isNotePlayedList; }
+
+    public String getmLessonTitle() {
+        return mLessonTitle;
+    }
+
+    public void setmLessonTitle(String mLessonTitle) {
+        this.mLessonTitle = mLessonTitle;
+    }
 
     public void addHighlightedNote(Integer image) {
         this.highlightedNotesList.add(image);
