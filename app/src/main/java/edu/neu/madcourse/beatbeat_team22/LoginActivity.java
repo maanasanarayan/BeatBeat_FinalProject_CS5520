@@ -110,6 +110,7 @@ public class LoginActivity extends AppCompatActivity {
 
             //Open home page activity
             Intent intent = new Intent(this, HomepageActivity.class);
+            intent.putExtra("user", users.get(un));
             startActivity(intent);
         }
     }

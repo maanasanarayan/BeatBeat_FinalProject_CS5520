@@ -9,9 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BeatBeat_Team22">
+
         <activity
             android:name=".LessonActivity"
             android:exported="false" />
+
         <activity android:name=".LevelSelector" />
         <activity android:name=".HomepageActivity" />
         <activity android:name=".LeaderboardActivity" />
