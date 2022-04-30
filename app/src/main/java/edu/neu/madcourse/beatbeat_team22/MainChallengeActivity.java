@@ -4,8 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
+import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,9 +14,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 public class MainChallengeActivity extends AppCompatActivity {
     private List<ImageView> nonHighlightedNotes = new ArrayList<>();
@@ -76,6 +75,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         buildImageArrays();
         loadImages();
         setStartButton();
+        setMediaPlayer();
     }
 
     private void generateChallenge() {
@@ -145,11 +145,15 @@ public class MainChallengeActivity extends AppCompatActivity {
     private Runnable challengeThread = new Runnable() {
         @Override
         public void run() {
-            if (repeatCount >= challenge.getmMeter()) {
+            if (repeatCount >= challenge.getmMeter()) { // after 4 iterations
                 playNextNote.run();
             }
-            playCountdown();
-            if (repeatCount < challenge.getTotalBeats()) {
+            try {
+                playCountdown(); // first 4 beats
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (repeatCount < challenge.getTotalBeats()) { // first 4 beats
                 toggleMetronome.run();
                 handler.postDelayed(this, 1000);
                 repeatCount++;
@@ -157,12 +161,12 @@ public class MainChallengeActivity extends AppCompatActivity {
         }
     };
 
-    private void playCountdown() {
+    private void playCountdown() throws IOException {
         int currImage = repeatCount;
         int prevImage = repeatCount - 1;
         if (repeatCount == 0) {
-            countdownImageViews.get(currImage).setVisibility(View.VISIBLE);
             playWoodblock();
+            countdownImageViews.get(currImage).setVisibility(View.VISIBLE);
         } else if (repeatCount < challenge.getmMeter()) {
             countdownImageViews.get(prevImage).setVisibility(View.INVISIBLE);
             countdownImageViews.get(currImage).setVisibility(View.VISIBLE);
@@ -172,22 +176,12 @@ public class MainChallengeActivity extends AppCompatActivity {
         }
     }
 
-    private void playWoodblock() {
-        mp = MediaPlayer.create(this, R.raw.woodblock);
-        mp.start();
-        // depreciated API ?
-        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                mp.stop();
-                mp.release();
-            }
-        });
+    private void playWoodblock() throws IOException {
+        playSound(R.raw.woodblock);
     }
 
-    private void playNoteSound() {
-        mp = MediaPlayer.create(this, R.raw.piano_note);
-        mp.start();
+    private void playNoteSound() throws IOException {
+        playSound(R.raw.piano_note);
     }
 
     private Runnable toggleMetronome = new Runnable() {
@@ -237,7 +231,11 @@ public class MainChallengeActivity extends AppCompatActivity {
                 isPlayed = challenge.getIsNotePlayedList().get(currNote);
                 Log.d("isPlayed", String.valueOf(isPlayed));
                 if (isPlayed) {
-                    playNoteSound();
+                    try {
+                        playNoteSound();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     if (repeatCount >= challenge.getmMeter() * 2) {
                         requiredScore++;
                         Log.d("score required", String.valueOf(requiredScore));
@@ -270,6 +268,30 @@ public class MainChallengeActivity extends AppCompatActivity {
         startTapButton.setText(R.string.start_string);
         disableRedo();
         generateChallenge();
+    }
+
+    private void setMediaPlayer() {
+        mp = new MediaPlayer();
+        // depreciated API ?
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                mp.reset();
+            }
+        });
+        mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                mp.start();
+            }
+        });
+    }
+
+    private void playSound(int resID) throws IOException {
+        AssetFileDescriptor afd = getApplicationContext().getResources().openRawResourceFd(resID);
+        if (afd == null) return;
+        mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+        mp.prepareAsync();
     }
 
     public void onTap(View view){
