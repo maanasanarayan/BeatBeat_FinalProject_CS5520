@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     private ImageView secondNoteHighlighted;
     private ImageView thirdNoteHighlighted;
     private ImageView fourthNoteHighlighted;
+    private TextView errorDescription;
     private ImageView threeView;
     private ImageView twoView;
     private ImageView oneView;
@@ -97,6 +99,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         secondNoteHighlighted = findViewById(R.id.secondNoteHighlighted);
         thirdNoteHighlighted = findViewById(R.id.thirdNoteHighlighted);
         fourthNoteHighlighted = findViewById(R.id.fourthNoteHighlighted);
+        errorDescription = findViewById(R.id.ErrorDescription);
         threeView = findViewById(R.id.threeView);
         twoView = findViewById(R.id.twoView);
         oneView = findViewById(R.id.oneView);
@@ -269,6 +272,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         repeatCount = 0;
         firstClick = true;
         startTapButton.setText(R.string.start_string);
+        errorDescription.setVisibility(View.INVISIBLE);
         generateChallenge();
     }
 
@@ -287,10 +291,16 @@ public class MainChallengeActivity extends AppCompatActivity {
 
     private void calculateScore() {
         long deltatime = System.currentTimeMillis() - prevtime;
+        if (errorDescription.getVisibility() == View.VISIBLE) {
+            return;
+        }
         if (!challenge.getIsNotePlayedList().get(currnoteTiming)) {
             showSadFace();
             Log.d("score Incorrect: Don't Tap During a Rest", String.valueOf(score));
+            Toast.makeText(getApplicationContext(), "Incorrect! Don't Tap a Rest!", Toast.LENGTH_SHORT).show();
             score--;
+            errorDescription.setText("Don't Tap a Rest!");
+            errorDescription.setVisibility(View.VISIBLE);
         }
         else if (prevtime == 0) {
             score++;
@@ -306,11 +316,15 @@ public class MainChallengeActivity extends AppCompatActivity {
             showSadFace();
             Log.d("score Incorrect: Too Early", String.valueOf(score));
             Toast.makeText(getApplicationContext(), "Incorrect! Too Early!", Toast.LENGTH_SHORT).show();
+            errorDescription.setText("Too Early!");
+            errorDescription.setVisibility(View.VISIBLE);
         } else if (deltatime > milisecondsperbeat *  timingLateGate) {
             score--;
             showSadFace();
             Log.d("score Incorrect: Too Late", String.valueOf(score));
             Toast.makeText(getApplicationContext(), "Incorrect! Too Late!", Toast.LENGTH_SHORT).show();
+            errorDescription.setText("Too Late!");
+            errorDescription.setVisibility(View.VISIBLE);
         }
         prevtime = System.currentTimeMillis();
         currnoteTiming++;

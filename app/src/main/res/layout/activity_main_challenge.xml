@@ -183,6 +183,24 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/metronome_left" />
 
+        <TextView
+            android:id="@+id/ErrorDescription"
+            android:layout_width="253dp"
+            android:layout_height="65dp"
+            android:fontFamily="@font/caviar_dreams"
+            android:gravity="center"
+            android:text="Error"
+            android:textColor="@color/secondaryDarkColor"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.51"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.384" />
+
         <ImageView
             android:id="@+id/threeView"
             android:layout_width="wrap_content"
