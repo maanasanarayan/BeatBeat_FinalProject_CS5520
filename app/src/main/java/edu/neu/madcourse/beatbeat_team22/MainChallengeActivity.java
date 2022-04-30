@@ -76,6 +76,12 @@ public class MainChallengeActivity extends AppCompatActivity {
         loadImages();
         setStartButton();
         setMediaPlayer();
+        String lessonTitle = challenge.getmLessonTitle();
+        if (lessonTitle != null) {
+            Intent lessonIntent = new Intent(this, LessonActivity.class);
+            lessonIntent.putExtra("title", lessonTitle);
+            startActivity(lessonIntent);
+        }
     }
 
     private void generateChallenge() {

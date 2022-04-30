@@ -3,6 +3,8 @@ package edu.neu.madcourse.beatbeat_team22;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,6 +13,7 @@ public class LessonActivity extends AppCompatActivity {
     private TextView mTitleTextView;
     private ImageView mImageView;
     private TextView mBodyTextView;
+    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,7 @@ public class LessonActivity extends AppCompatActivity {
         mTitleTextView = findViewById(R.id.LessonTitle);
         mImageView = findViewById(R.id.LessonImage);
         mBodyTextView = findViewById(R.id.LessonBody);
+        button = findViewById(R.id.continueButton);
     }
 
     public void loadLesson() {
@@ -46,5 +50,11 @@ public class LessonActivity extends AppCompatActivity {
         mTitleTextView.setText(title);
         mImageView.setImageResource(image);
         mBodyTextView.setText(body);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 }
