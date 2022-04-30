@@ -2,4 +2,10 @@
     <string name="app_name">BeatBeat_Team22</string>
     <string name="tap_string">TAP</string>
     <string name="start_string">START</string>
+    <string name="quarter_note_title">The Quarter Note</string>
+    <string name="quarter_rest_title">The Quarter Rest</string>
+    <string name="quarter_note_body">The quarter note is a filled oval with a straight stem.
+        It has the value of one beat and signals that a note should be played.</string>
+    <string name="quarter_rest_body">The quarter rest is a zigzag shape.
+        It has the value of one beat and signals that no note should be played.</string>
 </resources>
