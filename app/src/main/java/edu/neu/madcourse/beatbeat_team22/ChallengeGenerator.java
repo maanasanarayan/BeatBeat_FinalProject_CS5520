@@ -36,11 +36,13 @@ public class ChallengeGenerator {
             // image credit to icons8.com for free use of their images
             thisChallenge.addNonHighlightedNote(R.drawable.quarter_note, true);
             thisChallenge.addHighlightedNote(R.drawable.quarter_note_highlighted);
+            thisChallenge.setmLessonTitle("The Quarter Note");
         }
     }
 
     private void buildLevel2() {
         thisChallenge = new Challenge(4);
+        thisChallenge.setmLessonTitle("The Quarter Rest");
         for (int i=0; i< thisChallenge.getmMeter(); i++) {
             switch (i) {
                 case 0: case 1: case 2:

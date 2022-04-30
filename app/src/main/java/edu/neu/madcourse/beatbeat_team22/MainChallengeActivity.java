@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,15 +12,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
 import edu.neu.madcourse.beatbeat_team22.model.User;
 
-public class MainChallengeActivity extends AppCompatActivity{
+public class MainChallengeActivity extends AppCompatActivity {
     private List<ImageView> nonHighlightedNotes = new ArrayList<>();
     private List<ImageView> highlightedNotes = new ArrayList<>();
     private List<ImageView> countdownImageViews = new ArrayList<>();
@@ -31,12 +34,14 @@ public class MainChallengeActivity extends AppCompatActivity{
     private ImageView secondNoteHighlighted;
     private ImageView thirdNoteHighlighted;
     private ImageView fourthNoteHighlighted;
+    private TextView errorDescription;
     private ImageView threeView;
     private ImageView twoView;
     private ImageView oneView;
     private ImageView goView;
     private ImageView listenView;
     private ImageView tapView;
+    private ImageView redoButton;
     private boolean firstClick;
     private Button startTapButton;
     private Integer currLevel;
@@ -51,8 +56,13 @@ public class MainChallengeActivity extends AppCompatActivity{
     // credit to findsounds.com for free use of their sounds
     private MediaPlayer mp;
     private Boolean isPlayed;
-    private int requiredScore = 0;
-    private int score = 0;
+    private long prevtime = 0;
+    private double timingEarlyGate = 0.75;
+    private double timingLateGate = 1.25;
+    private long milisecondsperbeat = 1000;
+    private int currnoteTiming;
+    private int requiredScore;
+    private int score;
 
     // popUp menu
     private AlertDialog.Builder dialogBuilder;
@@ -79,9 +89,18 @@ public class MainChallengeActivity extends AppCompatActivity{
         loadImages();
         setStartButton();
         complete = false;
+        setMediaPlayer();
+        String lessonTitle = challenge.getmLessonTitle();
+        if (lessonTitle != null) {
+            Intent lessonIntent = new Intent(this, LessonActivity.class);
+            lessonIntent.putExtra("title", lessonTitle);
+            startActivity(lessonIntent);
+        }
     }
 
     private void generateChallenge() {
+        requiredScore = 0;
+        score = 0;
         currLevel = (Integer) getIntent().getSerializableExtra("level");
         challengeGenerator = new ChallengeGenerator(currLevel);
         challenge = challengeGenerator.buildChallenge();
@@ -98,6 +117,7 @@ public class MainChallengeActivity extends AppCompatActivity{
         secondNoteHighlighted = findViewById(R.id.secondNoteHighlighted);
         thirdNoteHighlighted = findViewById(R.id.thirdNoteHighlighted);
         fourthNoteHighlighted = findViewById(R.id.fourthNoteHighlighted);
+        errorDescription = findViewById(R.id.ErrorDescription);
         threeView = findViewById(R.id.threeView);
         twoView = findViewById(R.id.twoView);
         oneView = findViewById(R.id.oneView);
@@ -105,6 +125,7 @@ public class MainChallengeActivity extends AppCompatActivity{
         listenView = findViewById(R.id.listenView);
         tapView = findViewById(R.id.tapView);
         emoji = findViewById(R.id.emoji_face);
+        redoButton = findViewById(R.id.redoButton);
     }
 
     private void buildImageArrays() {
@@ -134,7 +155,6 @@ public class MainChallengeActivity extends AppCompatActivity{
             highlightedNotes.get(i).setImageResource(challenge.getHighlightedNotesList().get(i));
             countdownImageViews.get(i).setImageResource(countdown.getImagesList().get(i));
         }
-        Log.d("noteList level", String.valueOf(challenge.getNonHighlightedNotes()));
     }
 
     private void runChallenge() throws InterruptedException {
@@ -143,29 +163,19 @@ public class MainChallengeActivity extends AppCompatActivity{
         challengeThread.run();
     }
 
-    private Runnable challengeThread = new Runnable() {
-        @Override
-        public void run() {
-            Log.d("repeatCount", String.valueOf(repeatCount));
-            if (repeatCount >= challenge.getmMeter()) {
-                playNextNote.run();
-            }
-            playCountdown();
-            if (repeatCount < challenge.getTotalBeats()) {
-                toggleMetronome.run();
-                handler.postDelayed(this, 1000);
-                repeatCount++;
-            }
-        }
-    };
+    private Runnable challengeThread=new Runnable(){@Override public void run(){if(repeatCount>=challenge.getmMeter()){ // after
+                                                                                                                        // 4
+                                                                                                                        // iterations
+    playNextNote.run();}try{playCountdown(); // first 4 beats
+    }catch(IOException e){e.printStackTrace();}if(repeatCount<challenge.getTotalBeats()){ // first 4 beats
+    toggleMetronome.run();handler.postDelayed(this,1000);repeatCount++;}}};
 
-    private void playCountdown() {
-        Log.d("repeatCount countdown", String.valueOf(repeatCount));
+    private void playCountdown() throws IOException {
         int currImage = repeatCount;
         int prevImage = repeatCount - 1;
         if (repeatCount == 0) {
-            countdownImageViews.get(currImage).setVisibility(View.VISIBLE);
             playWoodblock();
+            countdownImageViews.get(currImage).setVisibility(View.VISIBLE);
         } else if (repeatCount < challenge.getmMeter()) {
             countdownImageViews.get(prevImage).setVisibility(View.INVISIBLE);
             countdownImageViews.get(currImage).setVisibility(View.VISIBLE);
@@ -175,86 +185,33 @@ public class MainChallengeActivity extends AppCompatActivity{
         }
     }
 
-    private void playWoodblock() {
-        mp = MediaPlayer.create(this, R.raw.woodblock);
-        mp.start();
-        // depreciated API ?
-        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                mp.stop();
-                mp.release();
-            }
-        });
+    private void playWoodblock() throws IOException {
+        playSound(R.raw.woodblock);
     }
 
-    private void playNoteSound() {
-        mp = MediaPlayer.create(this, R.raw.arp);
-        mp.start();
+    private void playNoteSound() throws IOException {
+        playSound(R.raw.piano_note);
     }
 
-    private Runnable toggleMetronome = new Runnable() {
-        @Override
-        public void run() {
-            if (showLeft) {
-                metronomeRight.setVisibility(View.INVISIBLE);
-                metronomeLeft.setVisibility(View.VISIBLE);
-            } else {
-                metronomeRight.setVisibility(View.VISIBLE);
-                metronomeLeft.setVisibility(View.INVISIBLE);
-            }
-            showLeft = !showLeft;
-        }
-    };
+    private Runnable toggleMetronome=new Runnable(){@Override public void run(){if(showLeft){metronomeRight.setVisibility(View.INVISIBLE);metronomeLeft.setVisibility(View.VISIBLE);}else{metronomeRight.setVisibility(View.VISIBLE);metronomeLeft.setVisibility(View.INVISIBLE);}showLeft=!showLeft;}};
 
+    private Runnable playNextNote=new Runnable(){
 
-    private Runnable playNextNote = new Runnable() {
+    @Override public void run(){
 
+    int currNote=repeatCount%challenge.getmMeter();int prevNote=(repeatCount-1)%challenge.getmMeter();
 
-        @Override
-        public void run() {
+    if(repeatCount==challenge.getmMeter()){listenView.setVisibility(View.VISIBLE);}if(repeatCount==challenge.getmMeter()*2){ // when
+                                                                                                                             // player
+                                                                                                                             // should
+                                                                                                                             // tap
+    listenView.setVisibility(View.INVISIBLE);tapView.setVisibility(View.VISIBLE);enableTapButton();}
 
-            int currNote = repeatCount % challenge.getmMeter();
-            int prevNote = (repeatCount - 1) % challenge.getmMeter();
+    if(repeatCount==challenge.getTotalBeats()){ // last time
+    hideHighlighted(prevNote);tapView.setVisibility(View.INVISIBLE);hideEmoji();enableRedo();enableTapButton();if(score==requiredScore){Log.d("score results passed",String.valueOf(score)+" / "+String.valueOf(requiredScore));Toast.makeText(getApplicationContext(),"Level Complete!",Toast.LENGTH_SHORT).show();errorDescription.setText("Level Complete!");errorDescription.setVisibility(View.VISIBLE);
+    // launch lesson activity
 
-
-            if (repeatCount == challenge.getmMeter()) {
-                listenView.setVisibility(View.VISIBLE);
-            }
-            if (repeatCount == challenge.getmMeter() * 2) {
-                listenView.setVisibility(View.INVISIBLE);
-                tapView.setVisibility(View.VISIBLE);
-            }
-
-            if (repeatCount == challenge.getTotalBeats()) { // last time
-                hideHighlighted(prevNote);
-                tapView.setVisibility(View.INVISIBLE);
-                hideEmoji();
-                if (score == requiredScore) {
-                    Log.d("score results passed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
-                    Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
-                    // launch lesson activity
-
-                    user.setLevelPassed(currLevel);
-                } else {
-                    Log.d("score results failed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
-                    Toast.makeText(getApplicationContext(), "Try Again!", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                isPlayed = challenge.getIsNotePlayedList().get(currNote);
-                Log.d("isPlayed", String.valueOf(isPlayed));
-                if (isPlayed) {
-                    playNoteSound();
-                    if (repeatCount >= challenge.getmMeter() * 2) {
-                        requiredScore++;
-                        Log.d("score required", String.valueOf(requiredScore));
-                    }
-                }
-                hideHighlighted(prevNote);
-                showHighlighted(currNote);
-            }
-        }
-    };
+    user.setLevelPassed(currLevel);}else{Log.d("score results failed",String.valueOf(score)+" / "+String.valueOf(requiredScore));Toast.makeText(getApplicationContext(),"Try Again!",Toast.LENGTH_SHORT).show();}}else{isPlayed=challenge.getIsNotePlayedList().get(currNote);Log.d("isPlayed",String.valueOf(isPlayed));if(isPlayed){try{playNoteSound();}catch(IOException e){e.printStackTrace();}if(repeatCount>=challenge.getmMeter()*2){requiredScore++;Log.d("score required",String.valueOf(requiredScore));}}hideHighlighted(prevNote);showHighlighted(currNote);}}};
 
     private void hideHighlighted(int notePos) {
         highlightedNotes.get(notePos).setVisibility(View.INVISIBLE);
@@ -269,39 +226,99 @@ public class MainChallengeActivity extends AppCompatActivity{
     private void setTapButton() {
         firstClick = false;
         startTapButton.setText(R.string.tap_string);
+        prevtime = 0;
+        currnoteTiming = 0;
     }
 
     private void setStartButton() {
         repeatCount = 0;
         firstClick = true;
         startTapButton.setText(R.string.start_string);
+        errorDescription.setVisibility(View.INVISIBLE);
+        disableRedo();
         generateChallenge();
+    }
+
+    public void onTap(View view) {
+
+    private void setMediaPlayer() {
+        mp = new MediaPlayer();
+        // depreciated API ?
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                mp.reset();
+            }
+        });
+        mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                mp.start();
+            }
+        });
+    }
+
+    private void playSound(int resID) throws IOException {
+        AssetFileDescriptor afd = getApplicationContext().getResources().openRawResourceFd(resID);
+        if (afd == null)
+            return;
+        mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+        mp.prepareAsync();
     }
 
     public void onTap(View view) {
         if (firstClick) {
             setTapButton();
+            disableTapButton();
             try {
                 runChallenge();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        } else {
+        } else if (repeatCount >= challenge.getmMeter() * 2) {
             calculateScore();
         }
+        // TODO: add feedback when player fails to tap
     }
 
     private void calculateScore() {
-        if (isPlayed) {
+        long deltatime = System.currentTimeMillis() - prevtime;
+        if (errorDescription.getVisibility() == View.VISIBLE) {
+            return;
+        }
+        if (!challenge.getIsNotePlayedList().get(currnoteTiming)) {
+            showSadFace();
+            Log.d("score Incorrect: Don't Tap During a Rest", String.valueOf(score));
+            Toast.makeText(getApplicationContext(), "Incorrect! Don't Tap a Rest!", Toast.LENGTH_SHORT).show();
+            score--;
+            errorDescription.setText("Don't Tap a Rest!");
+            errorDescription.setVisibility(View.VISIBLE);
+        } else if (prevtime == 0) {
             score++;
             showHappyFace();
             Log.d("score Correct", String.valueOf(score));
-        } else {
+        } else if (deltatime > milisecondsperbeat * timingEarlyGate
+                && deltatime < milisecondsperbeat * timingLateGate) {
+            score++;
+            showHappyFace();
+            Log.d("score Correct", String.valueOf(score));
+        } else if (deltatime < milisecondsperbeat * timingEarlyGate) {
             score--;
             showSadFace();
-            Log.d("score Incorrect", String.valueOf(score));
-            Toast.makeText(getApplicationContext(), "Incorrect!", Toast.LENGTH_SHORT).show();
+            Log.d("score Incorrect: Too Early", String.valueOf(score));
+            Toast.makeText(getApplicationContext(), "Incorrect! Too Early!", Toast.LENGTH_SHORT).show();
+            errorDescription.setText("Too Early!");
+            errorDescription.setVisibility(View.VISIBLE);
+        } else if (deltatime > milisecondsperbeat * timingLateGate) {
+            score--;
+            showSadFace();
+            Log.d("score Incorrect: Too Late", String.valueOf(score));
+            Toast.makeText(getApplicationContext(), "Incorrect! Too Late!", Toast.LENGTH_SHORT).show();
+            errorDescription.setText("Too Late!");
+            errorDescription.setVisibility(View.VISIBLE);
         }
+        prevtime = System.currentTimeMillis();
+        currnoteTiming++;
     }
 
     public void onMenu(View view) {
@@ -316,7 +333,31 @@ public class MainChallengeActivity extends AppCompatActivity{
                 "Level " + String.valueOf(currLevel) + " reset", Toast.LENGTH_SHORT).show();
     }
 
+    <<<<<<<HEAD
     // pop up menu builder
+    =======
+
+    private void disableTapButton() {
+        startTapButton.setText("");
+        startTapButton.setEnabled(false);
+    }
+
+    private void enableTapButton() {
+        startTapButton.setText(R.string.tap_string);
+        startTapButton.setEnabled(true);
+    }
+
+    private void disableRedo() {
+        redoButton.setEnabled(false);
+    }
+
+    private void enableRedo() {
+        redoButton.setEnabled(true);
+    }
+
+    // pop up menu builder
+    >>>>>>>master
+
     public void openPopUpMenu(View view) {
         dialogBuilder = new AlertDialog.Builder(this);
         final View popUpMenuView = getLayoutInflater().inflate(R.layout.popup, null);
@@ -398,7 +439,5 @@ public class MainChallengeActivity extends AppCompatActivity{
         emoji.setImageResource(R.drawable.sad_face_foreground);
         emoji.setVisibility(View.VISIBLE);
     }
-
-
 
 }
