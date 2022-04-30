@@ -2,9 +2,12 @@ package edu.neu.madcourse.beatbeat_team22;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import java.util.ArrayList;
@@ -12,20 +15,19 @@ import java.util.List;
 
 public class GlossaryActivity extends AppCompatActivity {
 
-    LeaderboardUser user;
-    List<LeaderboardCard> allUsers = new ArrayList<>();
-    private static final String NUMBER_OF_ITEMS = "NUMBER_OF_ITEMS";
-    private static final String KEY_OF_INSTANCE = "KEY_OF_INSTANCE";
+    List<LessonItem> allLessons;
+//    private static final String NUMBER_OF_ITEMS = "NUMBER_OF_ITEMS";
+//    private static final String KEY_OF_INSTANCE = "KEY_OF_INSTANCE";
 
     private RecyclerView rView;
-    private GlossaryAdapter GlossaryAdapter;
+    private GlossaryAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    String username;
+    private CardView cardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_leaderboard);
+        setContentView(R.layout.activity_glossary);
 
         init(savedInstanceState);
     }
@@ -36,42 +38,37 @@ public class GlossaryActivity extends AppCompatActivity {
     }
 
     private void createRecyclerView() {
+        rView = findViewById(R.id.GlossaryRecycler);
+        rView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
-        rView = findViewById(R.id.LeaderboardRecycler);
+        adapter = new GlossaryAdapter(allLessons);
 
-        GlossaryAdapter = new GlossaryAdapter(this, allUsers);
-
-        LeaderboardCardClickListener clkListener = new LeaderboardCardClickListener() {
+        rView.setLayoutManager(layoutManager);
+        rView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new GlossaryAdapter.OnItemClickerListener() {
             @Override
             public void onItemClick(int position) {
-                GlossaryAdapter.notifyItemChanged(position);
+                cardView = findViewById(R.id.lessonCardView);
+                changeItem(position, "clicked", cardView);
+                Intent intent = new Intent(GlossaryActivity.this, LessonActivity.class);
+                intent.putExtra("title", allLessons.get(position).getmTitle());
+                startActivity(intent);
             }
-        };
+        });
+    }
 
-        GlossaryAdapter.setLinkListener(clkListener);
-        rView.setAdapter(GlossaryAdapter);
-        rView.setLayoutManager(layoutManager);
+    public void changeItem(int position, String text, CardView cardView) {
+        allLessons.get(position).changeBodyText(text);
+        cardView.setCardBackgroundColor(Color.BLACK);
+        adapter.notifyItemChanged(position);
     }
 
     private void initializeData(Bundle savedInstanceState) {
-        allUsers.add(new LeaderboardCard("Username1"));
-        allUsers.add(new LeaderboardCard("Username2"));
-        allUsers.add(new LeaderboardCard("Username3"));
-        allUsers.add(new LeaderboardCard("Username4"));
-        allUsers.add(new LeaderboardCard("Username5"));
-        allUsers.add(new LeaderboardCard("Username6"));
+        allLessons = new ArrayList<LessonItem>();
+        allLessons.add(new LessonItem(getString(R.string.quarter_note_title),
+                R.drawable.quarter_note, ""));
+        allLessons.add(new LessonItem(getString(R.string.quarter_rest_title),
+                R.drawable.quarter_rest_90, ""));
     }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        int size = allUsers == null ? 0 : allUsers.size();
-        outState.putInt(NUMBER_OF_ITEMS, size);
-
-        for (int i = 0; i < size; i++) {
-            outState.putString(KEY_OF_INSTANCE + i + "0", allUsers.get(i).getUserName());
-        }
-        super.onSaveInstanceState(outState);
-    }
-
 
 }
