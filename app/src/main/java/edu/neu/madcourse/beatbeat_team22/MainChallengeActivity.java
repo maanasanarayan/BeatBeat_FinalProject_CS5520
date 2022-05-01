@@ -308,8 +308,6 @@ public class MainChallengeActivity extends AppCompatActivity {
 
                     if (dailyChallenge) {
                         Toast.makeText(getApplicationContext(), "Daily Challenge Complete!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
                     }
                     errorDescription.setText("Level Complete!");
                     errorDescription.setVisibility(View.VISIBLE);
@@ -340,7 +338,6 @@ public class MainChallengeActivity extends AppCompatActivity {
                     }
                 } else {
                     Log.d("score results failed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
-                    Toast.makeText(getApplicationContext(), "Try Again!", Toast.LENGTH_SHORT).show();
                     if (errorDescription.getVisibility() == View.INVISIBLE) {
                         errorDescription.setText("Too Late!");
                         errorDescription.setVisibility(View.VISIBLE);
@@ -450,7 +447,6 @@ public class MainChallengeActivity extends AppCompatActivity {
         if (!challenge.getIsNotePlayedList().get(currnoteTiming)) {
             showSadFace();
             Log.d("score Incorrect: Don't Tap During a Rest", String.valueOf(score));
-            Toast.makeText(getApplicationContext(), "Incorrect! Don't Tap a Rest!", Toast.LENGTH_SHORT).show();
             score--;
             errorDescription.setText("Don't Tap a Rest!");
             errorDescription.setVisibility(View.VISIBLE);
@@ -469,7 +465,6 @@ public class MainChallengeActivity extends AppCompatActivity {
             score--;
             showSadFace();
             Log.d("score Incorrect: Too Early", String.valueOf(score));
-            Toast.makeText(getApplicationContext(), "Incorrect! Too Early!", Toast.LENGTH_SHORT).show();
             errorDescription.setText("Too Early!");
             errorDescription.setVisibility(View.VISIBLE);
             return;
@@ -477,7 +472,6 @@ public class MainChallengeActivity extends AppCompatActivity {
             score--;
             showSadFace();
             Log.d("score Incorrect: Too Late", String.valueOf(score));
-            Toast.makeText(getApplicationContext(), "Incorrect! Too Late!", Toast.LENGTH_SHORT).show();
             errorDescription.setText("Too Late!");
             errorDescription.setVisibility(View.VISIBLE);
             return;
