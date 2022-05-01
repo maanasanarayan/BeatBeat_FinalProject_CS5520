@@ -106,7 +106,10 @@ public class MainChallengeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_challenge);
-        startTapButton = findViewById(R.id.TapButton);
+        initializeData();
+    }
+
+    private void initializeData() {
         generateChallenge();
         findViews();
         buildImageArrays();
@@ -137,7 +140,6 @@ public class MainChallengeActivity extends AppCompatActivity {
         } else {
             dailyChallenge = false;
         }
-
     }
 
     private void generateChallenge() {
@@ -160,6 +162,9 @@ public class MainChallengeActivity extends AppCompatActivity {
     }
 
     private void findViews() {
+        metronomeRight = findViewById(R.id.metronome);
+        metronomeLeft = findViewById(R.id.metronomeLeft);
+        startTapButton = findViewById(R.id.TapButton);
         firstNote = findViewById(R.id.firstNote);
         secondNote = findViewById(R.id.secondNote);
         thirdNote = findViewById(R.id.thirdNote);
@@ -209,8 +214,6 @@ public class MainChallengeActivity extends AppCompatActivity {
     }
 
     private void runChallenge() throws InterruptedException {
-        metronomeRight = findViewById(R.id.metronome);
-        metronomeLeft = findViewById(R.id.metronomeLeft);
         challengeThread.run();
     }
 
@@ -370,6 +373,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     }
 
     private void setStartButton() {
+        menuPressed = false;
         firstClick = true;
         startTapButton.setText(R.string.start_string);
         disableRedo();
