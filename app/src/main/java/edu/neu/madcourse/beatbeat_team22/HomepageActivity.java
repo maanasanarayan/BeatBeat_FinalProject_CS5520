@@ -32,6 +32,8 @@ public class HomepageActivity extends AppCompatActivity {
     User user;
     Random random;
 
+
+    public static final String EXTRA_USERNAME = "edu.neu.madcourse.beatbeat_team22.EXTRA_USERNAME";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +43,7 @@ public class HomepageActivity extends AppCompatActivity {
         if(intent.hasExtra("user")) {
             user = (User) intent.getSerializableExtra("user");
             Log.d("User details","user: " + user);
+
         }
 
         StartButton = findViewById(R.id.StartButton);
@@ -50,6 +53,8 @@ public class HomepageActivity extends AppCompatActivity {
                 Intent StartIntent = new Intent(getApplicationContext(), MainChallengeActivity.class);
                 currLevel = 1; // TODO: pull from DB
                 StartIntent.putExtra("level", currLevel);
+                StartIntent.putExtra("user", user);
+                Log.d(TAG, "onClick: " + user.getUsername());
                 startActivity(StartIntent);
             }
         });
@@ -68,9 +73,13 @@ public class HomepageActivity extends AppCompatActivity {
         LevelSelectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent LevelSelectIntent = new Intent(getApplicationContext(), LevelSelector.class);
+                Intent intent = new Intent(getApplicationContext(), LevelSelector.class);
                 //LeaderboardIntent.putExtra("username", user.getUsername());
-                startActivity(LevelSelectIntent);
+                Log.d("User details level selector","user: " + user);
+                Log.d("User details level selector","user: " + user.getUsername());
+                String userName = user.getUsername();
+                intent.putExtra("user", user);
+                startActivity(intent);
             }
         });
 

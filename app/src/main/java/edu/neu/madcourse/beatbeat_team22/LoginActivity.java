@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     private Map<String, User> users;
     private SharedPreferences sharedPreferences;
 
-    public static final String EXTRA_USERNAME = "edu.neu.madcourse.beatbeat_team22.EXTRA_USERNAME";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         db = FirebaseDatabase.getInstance().getReference();
+
         users = new HashMap<>();
         // Retrieve all usernames from the DB
         db.child("Users").addChildEventListener(new ChildEventListener() {
@@ -140,9 +141,5 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void passUsernameToLevelSelector(String username) {
-        Intent intent = new Intent(this, LevelSelector.class);
-        intent.putExtra(EXTRA_USERNAME,  username);
-    }
 
 }

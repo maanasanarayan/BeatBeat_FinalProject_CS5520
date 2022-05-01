@@ -37,7 +37,8 @@ public class LevelSelector extends AppCompatActivity {
     private LevelSeletorAdaptor adapter;
     private RecyclerView.LayoutManager layoutManager;
     private Integer currLevel;
-    private String userName;
+    private User user;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +50,10 @@ public class LevelSelector extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        userName = intent.getStringExtra(LoginActivity.EXTRA_USERNAME);
-        Log.d(TAG, "user name in levelselector oncreate: " + userName);
+        if (intent.hasExtra("user")) {
+            user = (User) intent.getSerializableExtra("user");
+            Log.d("User details level selector on create","user: " + user);
+        }
 
     }
 
@@ -87,35 +90,43 @@ public class LevelSelector extends AppCompatActivity {
 
 
     public void completeLevel(int position, View view) {
+//
+//
+//
+//        Log.d(TAG, "completeLevel: " + currLevel);
 
-
-        Log.d(TAG, "user name: " + userName);
-        readLevelDB(userName);
-
-
-        Log.d(TAG, "completeLevel: " + currLevel);
-
-        int level = levelSelectorList.get(position).getmLevel();
-
-
-
-        if (true) {
-            openLevelActivity(position);
-        } else {
-            Toast toast = Toast.makeText(getApplicationContext(), "Sorry, you have not yet unlocked level" + level, Toast.LENGTH_SHORT);
-            toast.show();
-        }
+        readLevelDB(user, position);
+//
+//        int level = levelSelectorList.get(position).getmLevel();
+//
+//        Log.d(TAG, "completeLevel currLevel: " + currLevel);
+//
+//        if (currLevel >= level) {
+//            openLevelActivity(position);
+//        } else {
+//            Toast toast = Toast.makeText(getApplicationContext(), "Sorry, you have not yet unlocked level" + level, Toast.LENGTH_SHORT);
+//            toast.show();
+//        }
     }
 
     public void openLevelActivity (int position) {
         Intent intent = new Intent(LevelSelector.this, MainChallengeActivity.class);
         intent.putExtra("level", levelSelectorList.get(position).getmLevel());
+        intent.putExtra("user", user);
         startActivity(intent);
     }
 
-    public void readLevelDB (String userName) {
-        dbRef = FirebaseDatabase.getInstance().getReference("Users");
-        dbRef.child(userName).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+    public void readLevelDB (User user, int position) {
+
+
+        dbRef = FirebaseDatabase.getInstance().getReference();
+        username = user.getUsername();
+
+        Log.d(TAG, "readLevelDB user name: " + username);
+        Log.d(TAG, "readLevelDB child user status: " + dbRef.child("Users").child(username));
+
+
+        dbRef.child("Users").child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -125,7 +136,21 @@ public class LevelSelector extends AppCompatActivity {
 
                         DataSnapshot snapshot = task.getResult();
                         String level = String.valueOf(snapshot.child("levelPassed").getValue());
+
+
+                        int levela = levelSelectorList.get(position).getmLevel();
+
                         currLevel = Integer.parseInt(level);
+                        Log.d(TAG, "completeLevel currLevel: " + currLevel);
+                        if (currLevel >= levela) {
+                            openLevelActivity(position);
+                        } else {
+                            Toast toast = Toast.makeText(getApplicationContext(), "Sorry, you have not yet unlocked level " + levela, Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+
+
+                        Log.d(TAG, "onComplete currlevel: " + currLevel);
                     } else {
                         Toast.makeText(LevelSelector.this, "User does not exist", Toast.LENGTH_SHORT).show();
                     }

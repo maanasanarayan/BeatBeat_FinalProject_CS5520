@@ -1,5 +1,8 @@
 package edu.neu.madcourse.beatbeat_team22;
 
+import static android.content.ContentValues.TAG;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -15,10 +18,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
 
 import edu.neu.madcourse.beatbeat_team22.model.User;
 
@@ -64,7 +73,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     private int requiredScore;
     private int score;
 
-    // popUp menu
+    //popUp menu
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
     // pop up menu button
@@ -74,9 +83,11 @@ public class MainChallengeActivity extends AppCompatActivity {
     private Button btnGlossary;
     private Button btnExit;
     private ImageView emoji;
-    boolean complete;
 
+    //user
     private User user;
+    private String username;
+    DatabaseReference dbRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +99,6 @@ public class MainChallengeActivity extends AppCompatActivity {
         buildImageArrays();
         loadImages();
         setStartButton();
-        complete = false;
         setMediaPlayer();
         String lessonTitle = challenge.getmLessonTitle();
         if (lessonTitle != null) {
@@ -96,6 +106,18 @@ public class MainChallengeActivity extends AppCompatActivity {
             lessonIntent.putExtra("title", lessonTitle);
             startActivity(lessonIntent);
         }
+
+        Intent intent = getIntent();
+        if(intent.hasExtra("user")) {
+            user = (User) intent.getSerializableExtra("user");
+            Log.d("User details in Main challengea activity","user: " + user);
+            username = user.getUsername();
+            Log.d(TAG, "username oncreate: " + username);
+        }
+
+
+
+
     }
 
     private void generateChallenge() {
@@ -150,7 +172,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         countdown.loadImages();
         listenView.setImageResource(R.drawable.listen_icon);
         tapView.setImageResource(R.drawable.tap_icon);
-        for (int i = 0; i < challenge.getmMeter(); i++) {
+        for (int i=0; i<challenge.getmMeter(); i++) {
             nonHighlightedNotes.get(i).setImageResource(challenge.getNonHighlightedNotes().get(i));
             highlightedNotes.get(i).setImageResource(challenge.getHighlightedNotesList().get(i));
             countdownImageViews.get(i).setImageResource(countdown.getImagesList().get(i));
@@ -163,12 +185,24 @@ public class MainChallengeActivity extends AppCompatActivity {
         challengeThread.run();
     }
 
-    private Runnable challengeThread=new Runnable(){@Override public void run(){if(repeatCount>=challenge.getmMeter()){ // after
-                                                                                                                        // 4
-                                                                                                                        // iterations
-    playNextNote.run();}try{playCountdown(); // first 4 beats
-    }catch(IOException e){e.printStackTrace();}if(repeatCount<challenge.getTotalBeats()){ // first 4 beats
-    toggleMetronome.run();handler.postDelayed(this,1000);repeatCount++;}}};
+    private Runnable challengeThread = new Runnable() {
+        @Override
+        public void run() {
+            if (repeatCount >= challenge.getmMeter()) { // after 4 iterations
+                playNextNote.run();
+            }
+            try {
+                playCountdown(); // first 4 beats
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (repeatCount < challenge.getTotalBeats()) { // first 4 beats
+                toggleMetronome.run();
+                handler.postDelayed(this, 1000);
+                repeatCount++;
+            }
+        }
+    };
 
     private void playCountdown() throws IOException {
         int currImage = repeatCount;
@@ -193,25 +227,91 @@ public class MainChallengeActivity extends AppCompatActivity {
         playSound(R.raw.piano_note);
     }
 
-    private Runnable toggleMetronome=new Runnable(){@Override public void run(){if(showLeft){metronomeRight.setVisibility(View.INVISIBLE);metronomeLeft.setVisibility(View.VISIBLE);}else{metronomeRight.setVisibility(View.VISIBLE);metronomeLeft.setVisibility(View.INVISIBLE);}showLeft=!showLeft;}};
+    private Runnable toggleMetronome = new Runnable() {
+        @Override
+        public void run() {
+            if (showLeft) {
+                metronomeRight.setVisibility(View.INVISIBLE);
+                metronomeLeft.setVisibility(View.VISIBLE);
+            } else {
+                metronomeRight.setVisibility(View.VISIBLE);
+                metronomeLeft.setVisibility(View.INVISIBLE);
+            }
+            showLeft = !showLeft;
+        }
+    };
 
-    private Runnable playNextNote=new Runnable(){
+    private Runnable playNextNote = new Runnable() {
+        @Override
+        public void run() {
+            int currNote = repeatCount % challenge.getmMeter();
+            int prevNote = (repeatCount - 1) % challenge.getmMeter();
 
-    @Override public void run(){
+            if (repeatCount == challenge.getmMeter()) {
+                listenView.setVisibility(View.VISIBLE);
+            }
+            if (repeatCount == challenge.getmMeter() * 2) { // when player should tap
+                listenView.setVisibility(View.INVISIBLE);
+                tapView.setVisibility(View.VISIBLE);
+                enableTapButton();
+            }
 
-    int currNote=repeatCount%challenge.getmMeter();int prevNote=(repeatCount-1)%challenge.getmMeter();
+            if (repeatCount == challenge.getTotalBeats()) { // last time
+                hideHighlighted(prevNote);
+                tapView.setVisibility(View.INVISIBLE);
+                hideEmoji();
+                enableRedo();
+                enableTapButton();
+                if (score == requiredScore) {
+                    Log.d("score results passed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
+                    Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
+                    errorDescription.setText("Level Complete!");
+                    errorDescription.setVisibility(View.VISIBLE);
+                    // launch lesson activity
 
-    if(repeatCount==challenge.getmMeter()){listenView.setVisibility(View.VISIBLE);}if(repeatCount==challenge.getmMeter()*2){ // when
-                                                                                                                             // player
-                                                                                                                             // should
-                                                                                                                             // tap
-    listenView.setVisibility(View.INVISIBLE);tapView.setVisibility(View.VISIBLE);enableTapButton();}
 
-    if(repeatCount==challenge.getTotalBeats()){ // last time
-    hideHighlighted(prevNote);tapView.setVisibility(View.INVISIBLE);hideEmoji();enableRedo();enableTapButton();if(score==requiredScore){Log.d("score results passed",String.valueOf(score)+" / "+String.valueOf(requiredScore));Toast.makeText(getApplicationContext(),"Level Complete!",Toast.LENGTH_SHORT).show();errorDescription.setText("Level Complete!");errorDescription.setVisibility(View.VISIBLE);
-    // launch lesson activity
+                    dbRef = FirebaseDatabase.getInstance().getReference();
 
-    user.setLevelPassed(currLevel);}else{Log.d("score results failed",String.valueOf(score)+" / "+String.valueOf(requiredScore));Toast.makeText(getApplicationContext(),"Try Again!",Toast.LENGTH_SHORT).show();}}else{isPlayed=challenge.getIsNotePlayedList().get(currNote);Log.d("isPlayed",String.valueOf(isPlayed));if(isPlayed){try{playNoteSound();}catch(IOException e){e.printStackTrace();}if(repeatCount>=challenge.getmMeter()*2){requiredScore++;Log.d("score required",String.valueOf(requiredScore));}}hideHighlighted(prevNote);showHighlighted(currNote);}}};
+
+                    //username = user.getUsername();
+
+                    Log.d(TAG, "username run: " + username);
+
+                    HashMap User = new HashMap();
+                    User.put("levelPassed", currLevel + 1);
+
+
+                    dbRef.child("Users").child(username).updateChildren(User).addOnSuccessListener(new OnSuccessListener() {
+                        @Override
+                        public void onSuccess(Object o) {
+
+                        }
+                    });
+                } else {
+                    Log.d("score results failed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
+                    Toast.makeText(getApplicationContext(), "Try Again!", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                isPlayed = challenge.getIsNotePlayedList().get(currNote);
+                Log.d("isPlayed", String.valueOf(isPlayed));
+                if (isPlayed) {
+                    try {
+                        playNoteSound();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (repeatCount >= challenge.getmMeter() * 2) {
+                        requiredScore++;
+                        Log.d("score required", String.valueOf(requiredScore));
+                    }
+                }
+                hideHighlighted(prevNote);
+                showHighlighted(currNote);
+            }
+        }
+    };
+
+
 
     private void hideHighlighted(int notePos) {
         highlightedNotes.get(notePos).setVisibility(View.INVISIBLE);
@@ -239,8 +339,6 @@ public class MainChallengeActivity extends AppCompatActivity {
         generateChallenge();
     }
 
-    public void onTap(View view) {
-
     private void setMediaPlayer() {
         mp = new MediaPlayer();
         // depreciated API ?
@@ -260,13 +358,12 @@ public class MainChallengeActivity extends AppCompatActivity {
 
     private void playSound(int resID) throws IOException {
         AssetFileDescriptor afd = getApplicationContext().getResources().openRawResourceFd(resID);
-        if (afd == null)
-            return;
+        if (afd == null) return;
         mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
         mp.prepareAsync();
     }
 
-    public void onTap(View view) {
+    public void onTap(View view){
         if (firstClick) {
             setTapButton();
             disableTapButton();
@@ -275,7 +372,7 @@ public class MainChallengeActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        } else if (repeatCount >= challenge.getmMeter() * 2) {
+        } else if (repeatCount >= challenge.getmMeter() * 2){
             calculateScore();
         }
         // TODO: add feedback when player fails to tap
@@ -293,23 +390,24 @@ public class MainChallengeActivity extends AppCompatActivity {
             score--;
             errorDescription.setText("Don't Tap a Rest!");
             errorDescription.setVisibility(View.VISIBLE);
-        } else if (prevtime == 0) {
+        }
+        else if (prevtime == 0) {
             score++;
             showHappyFace();
             Log.d("score Correct", String.valueOf(score));
-        } else if (deltatime > milisecondsperbeat * timingEarlyGate
-                && deltatime < milisecondsperbeat * timingLateGate) {
+        }
+        else if (deltatime > milisecondsperbeat * timingEarlyGate && deltatime < milisecondsperbeat * timingLateGate) {
             score++;
             showHappyFace();
             Log.d("score Correct", String.valueOf(score));
-        } else if (deltatime < milisecondsperbeat * timingEarlyGate) {
+        } else if (deltatime < milisecondsperbeat *  timingEarlyGate) {
             score--;
             showSadFace();
             Log.d("score Incorrect: Too Early", String.valueOf(score));
             Toast.makeText(getApplicationContext(), "Incorrect! Too Early!", Toast.LENGTH_SHORT).show();
             errorDescription.setText("Too Early!");
             errorDescription.setVisibility(View.VISIBLE);
-        } else if (deltatime > milisecondsperbeat * timingLateGate) {
+        } else if (deltatime > milisecondsperbeat *  timingLateGate) {
             score--;
             showSadFace();
             Log.d("score Incorrect: Too Late", String.valueOf(score));
@@ -333,10 +431,6 @@ public class MainChallengeActivity extends AppCompatActivity {
                 "Level " + String.valueOf(currLevel) + " reset", Toast.LENGTH_SHORT).show();
     }
 
-    <<<<<<<HEAD
-    // pop up menu builder
-    =======
-
     private void disableTapButton() {
         startTapButton.setText("");
         startTapButton.setEnabled(false);
@@ -355,9 +449,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         redoButton.setEnabled(true);
     }
 
-    // pop up menu builder
-    >>>>>>>master
-
+    //pop up menu builder
     public void openPopUpMenu(View view) {
         dialogBuilder = new AlertDialog.Builder(this);
         final View popUpMenuView = getLayoutInflater().inflate(R.layout.popup, null);
@@ -410,7 +502,11 @@ public class MainChallengeActivity extends AppCompatActivity {
 
     // level selector button - open level selector activity
     public void levelSelector(View view) {
-        Intent intent = new Intent(this, LevelSelector.class);
+        Intent intent = new Intent(getApplicationContext(), LevelSelector.class);
+        Log.d("User details level selector","user: " + user);
+        Log.d("User details level selector","user: " + user.getUsername());
+        //String userName = user.getUsername();
+        intent.putExtra("user", user);
         startActivity(intent);
     }
 

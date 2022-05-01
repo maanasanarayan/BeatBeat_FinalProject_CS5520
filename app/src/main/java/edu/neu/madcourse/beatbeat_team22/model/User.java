@@ -36,9 +36,8 @@ public class User implements Serializable {
         return levelPassed;
     }
 
-    public Integer setLevelPassed(Integer level) {
-        levelPassed = level;
-        return levelPassed;
+    public void setLevelPassed(Integer level) {
+        this.levelPassed = level;
     }
 
     @Override
