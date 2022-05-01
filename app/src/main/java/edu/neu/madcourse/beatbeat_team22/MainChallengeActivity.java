@@ -67,11 +67,13 @@ public class MainChallengeActivity extends AppCompatActivity {
     // credit to findsounds.com for free use of their sounds
     private MediaPlayer mp;
     private Boolean isPlayed;
+    private Boolean menuPressed;
     private long prevtime = 0;
     private double timingEarlyGate = 0.75;
     private double timingLateGate = 1.25;
     private long milisecondsperbeat = 1000;
     private int currnoteTiming;
+    private boolean firstplayed = true;
     private int requiredScore;
     private int score;
     private int playerMaxLevel;
@@ -329,7 +331,9 @@ public class MainChallengeActivity extends AppCompatActivity {
                                     }
                                 });
                     }
-                    openLevelCompletionPopup(playerMaxLevel);
+                    if (!menuPressed) {
+                        openLevelCompletionPopup(playerMaxLevel);
+                    }
                 } else {
                     Log.d("score results failed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
                     Toast.makeText(getApplicationContext(), "Try Again!", Toast.LENGTH_SHORT).show();
@@ -368,15 +372,13 @@ public class MainChallengeActivity extends AppCompatActivity {
     private void setTapButton() {
         firstClick = false;
         startTapButton.setText(R.string.tap_string);
-        prevtime = 0;
         currnoteTiming = 0;
+        firstplayed = true;
     }
 
     private void setStartButton() {
-        repeatCount = 0;
         firstClick = true;
         startTapButton.setText(R.string.start_string);
-        errorDescription.setVisibility(View.INVISIBLE);
         disableRedo();
         generateChallenge();
     }
@@ -426,9 +428,15 @@ public class MainChallengeActivity extends AppCompatActivity {
         if (errorDescription.getVisibility() == View.VISIBLE) {
             return;
         }
-        if (!challenge.getIsNotePlayedList().get(currnoteTiming) && deltatime > milisecondsperbeat * timingLateGate) {
+        if (!challenge.getIsNotePlayedList().get(currnoteTiming) && currnoteTiming == 0 && deltatime+milisecondsperbeat > milisecondsperbeat * timingLateGate) {
             currnoteTiming++;
             deltatime -= 1000;
+        }
+        if (!challenge.getIsNotePlayedList().get(currnoteTiming) && deltatime > milisecondsperbeat) {
+            while (!challenge.getIsNotePlayedList().get(currnoteTiming) && deltatime > milisecondsperbeat) {
+                currnoteTiming++;
+                deltatime -= 1000;
+            }
         }
         if (!challenge.getIsNotePlayedList().get(currnoteTiming)) {
             showSadFace();
@@ -437,11 +445,13 @@ public class MainChallengeActivity extends AppCompatActivity {
             score--;
             errorDescription.setText("Don't Tap a Rest!");
             errorDescription.setVisibility(View.VISIBLE);
-        } else if (prevtime == 0) {
-            score++;
-            showHappyFace();
-            Log.d("score Correct", String.valueOf(score));
-        } else if (deltatime > milisecondsperbeat * timingEarlyGate
+            return;
+        }
+        if (firstplayed && challenge.getIsNotePlayedList().get(currnoteTiming)) {
+            deltatime += milisecondsperbeat;
+            firstplayed = false;
+        }
+        if (deltatime > milisecondsperbeat * timingEarlyGate
                 && deltatime < milisecondsperbeat * timingLateGate) {
             score++;
             showHappyFace();
@@ -453,6 +463,7 @@ public class MainChallengeActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Incorrect! Too Early!", Toast.LENGTH_SHORT).show();
             errorDescription.setText("Too Early!");
             errorDescription.setVisibility(View.VISIBLE);
+            return;
         } else if (deltatime > milisecondsperbeat * timingLateGate) {
             score--;
             showSadFace();
@@ -460,21 +471,39 @@ public class MainChallengeActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Incorrect! Too Late!", Toast.LENGTH_SHORT).show();
             errorDescription.setText("Too Late!");
             errorDescription.setVisibility(View.VISIBLE);
+            return;
         }
         prevtime = System.currentTimeMillis();
         currnoteTiming++;
     }
 
-    public void onMenu(View view) {
+    public void onMenu(View view) throws IOException {
         // launch menu popup
         openPopUpMenu(view);
     }
 
     public void onRedo(View view) {
+        repeatCount = 0;
         setStartButton();
+        resetImages();
         score = 0; // temp
         Toast.makeText(getApplicationContext(),
                 "Level " + String.valueOf(currLevel) + " reset", Toast.LENGTH_SHORT).show();
+    }
+
+    private void resetImages() {
+        errorDescription.setVisibility(View.INVISIBLE);
+        threeView.setVisibility(View.INVISIBLE);
+        twoView.setVisibility(View.INVISIBLE);
+        oneView.setVisibility(View.INVISIBLE);
+        goView.setVisibility(View.INVISIBLE);
+        listenView.setVisibility(View.INVISIBLE);
+        metronomeRight.setVisibility(View.VISIBLE);
+        metronomeLeft.setVisibility(View.INVISIBLE);
+        for (int i = 0; i < challenge.getmMeter(); i++) {
+            highlightedNotes.get(i).setVisibility(View.INVISIBLE);
+            nonHighlightedNotes.get(i).setVisibility(View.VISIBLE);
+        }
     }
 
     private void disableTapButton() {
@@ -485,6 +514,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     private void enableTapButton() {
         startTapButton.setText(R.string.tap_string);
         startTapButton.setEnabled(true);
+        prevtime = System.currentTimeMillis() + 200;
     }
 
     private void disableRedo() {
@@ -496,7 +526,9 @@ public class MainChallengeActivity extends AppCompatActivity {
     }
 
     // pop up menu builder
-    public void openPopUpMenu(View view) {
+    public void openPopUpMenu(View view) throws IOException {
+        menuPressed = true;
+        repeatCount = challenge.getTotalBeats();
         dialogBuilder = new AlertDialog.Builder(this);
         final View popUpMenuView = getLayoutInflater().inflate(R.layout.popup, null);
 
