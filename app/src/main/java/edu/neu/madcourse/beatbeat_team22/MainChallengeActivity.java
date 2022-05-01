@@ -134,11 +134,12 @@ public class MainChallengeActivity extends AppCompatActivity {
 
         gameMaxLevel = challengeGenerator.maxGameLevel();
         Log.d(TAG, "onCreate game max level: " + gameMaxLevel);
-        readLevelProgression();
+
         if (intent.hasExtra("dailyChallenge")) {
             dailyChallenge = true;
         } else {
             dailyChallenge = false;
+            readLevelProgression();
         }
     }
 
