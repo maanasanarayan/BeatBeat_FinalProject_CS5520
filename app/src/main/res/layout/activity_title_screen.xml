@@ -9,68 +9,70 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        android:layout_width="302dp"
-        android:layout_height="673dp"
-        android:layout_marginTop="32dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@drawable/layout_bg"
         app:circularflow_radiusInDP="10"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    <ImageView
-        android:id="@+id/TitleLogo"
-        android:layout_width="182dp"
-        android:layout_height="182dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintBottom_toTopOf="@id/TitleSlogan"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/music" />
-
-    <TextView
-        android:id="@+id/TitleSlogan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/caviar_dreams"
-        android:text="Find The Rhythm In You!"
-        android:textColor="@color/secondaryDarkColor"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TitleLogo" />
-
-    <Button
-        android:id="@+id/TitleTapButton"
-        android:layout_width="260dp"
-        android:layout_height="42dp"
-        android:background="@drawable/button_bg"
-        android:fontFamily="@font/caviar_dreams"
-        android:text="Placeholder"
-        android:textColor="@color/primaryTextColor"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/TitleTapHelp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/TitleSlogan"
-        app:layout_constraintVertical_chainStyle="packed" />
-
-    <TextView
-        android:id="@+id/TitleTapHelp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/caviar_dreams"
-        android:text="Tap to Begin!"
-        android:textSize="16sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/TitleTapButton" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.8">
+
+        <ImageView
+            android:id="@+id/TitleLogo"
+            android:layout_width="182dp"
+            android:layout_height="182dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintBottom_toTopOf="@id/TitleSlogan"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/music" />
+
+        <TextView
+            android:id="@+id/TitleSlogan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/caviar_dreams"
+            android:text="Find The Rhythm In You!"
+            android:textColor="@color/secondaryDarkColor"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/TitleLogo" />
+
+        <Button
+            android:id="@+id/TitleTapButton"
+            android:layout_width="260dp"
+            android:layout_height="42dp"
+            android:background="@drawable/button_bg"
+            android:fontFamily="@font/caviar_dreams"
+            android:text="Placeholder"
+            android:textColor="@color/primaryTextColor"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/TitleTapHelp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/TitleSlogan"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/TitleTapHelp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/caviar_dreams"
+            android:text="Tap to Begin!"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/TitleTapButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

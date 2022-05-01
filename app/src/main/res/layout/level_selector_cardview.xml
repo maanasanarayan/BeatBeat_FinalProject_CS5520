@@ -6,7 +6,7 @@
     android:id="@+id/levelCardView"
     app:cardCornerRadius="20dp"
     android:layout_margin="5dp"
-    app:cardBackgroundColor="@color/black">
+    app:cardBackgroundColor="@color/primaryColor">
     <RelativeLayout
         android:id="@+id/relativeLayoutCardView"
         android:layout_width="match_parent"

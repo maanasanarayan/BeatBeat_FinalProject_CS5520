@@ -6,13 +6,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class LeaderboardActivity extends AppCompatActivity {
 
-    LeaderboardUser user;
+    //LeaderboardUser user;
     List<LeaderboardCard> allUsers = new ArrayList<>();
     private static final String NUMBER_OF_ITEMS = "NUMBER_OF_ITEMS";
     private static final String KEY_OF_INSTANCE = "KEY_OF_INSTANCE";
@@ -20,9 +29,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     private RecyclerView rView;
     private LeaderboardAdapter LeaderboardAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    //FirebaseDatabase firebaseDatabase;
-    //DatabaseReference database;
-    String username;
+    DatabaseReference database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +37,8 @@ public class LeaderboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_leaderboard);
         //username = (String) getIntent().getSerializableExtra("username");
 
-        //firebaseDatabase = FirebaseDatabase.getInstance("https://assignment7-4edd6-default-rtdb.firebaseio.com/");
-        //database = firebaseDatabase.getReference().child("Users").child(username);
-
-        //user = (User) getIntent().getSerializableExtra("user_details");
-
-        //FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //DatabaseReference ref = database.getReference("Users");
+        database = FirebaseDatabase.getInstance().getReference();
+        database = database.child("Users");
 
         init(savedInstanceState);
     }
@@ -49,51 +51,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     private void createRecyclerView() {
         layoutManager = new LinearLayoutManager(this);
         rView = findViewById(R.id.LeaderboardRecycler);
-        //rView.setHasFixedSize(true);
 
-        //Pull data from database
-        //String testuser = database.child("Users").child("LeaderboardTest1").get().getResult().child("username").getValue(String.class);
-        //Query testquery = database.equalTo("LeaderboardTest1");
-        //String testuser = "";
-        /*database.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // this method is call to get the realtime
-                // updates in the data.
-                // this method is called when the data is
-                // changed in our Firebase console.
-                // below line is for getting the data from
-                // snapshot of our database.
-                Map<String, List<String>> map = (Map<String, List<String>>)snapshot.child("stickersReceived").getValue();
-                for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-                    for (String id : entry.getValue()) {
-                        Integer imageId = stickerImages.get(id);
-                        allUsers.add(new LeaderboardCard(entry.getKey(),imageId));
-                    }
-                }
-                //allUsers.add(new LeaderboardCard(datasnapshot.child("username").getValue(String.class)));
-                //String value = snapshot.getValue(String.class);
-
-                // after getting the value we are setting
-                // our value to our text view in below line.
-                //testuser = value;
-                //allUsers.add(new LeaderboardCard(value));
-                LeaderboardAdapter.notifyDataSetChanged();
-                rView.setAdapter(LeaderboardAdapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // calling on cancelled method when we receive
-                // any error or we are not able to get the data.
-                //Toast.makeText(MainActivity.this, "Fail to get data.", Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
-
-        //allUsers.add(new LeaderboardCard(database.get().getResult().getValue(String.class)));
-        //allUsers.add(new LeaderboardCard("username2"));
-        //allUsers.add(new LeaderboardCard("username3"));
         LeaderboardAdapter = new LeaderboardAdapter(this, allUsers);
 
         LeaderboardCardClickListener clkListener = new LeaderboardCardClickListener() {
@@ -106,32 +64,67 @@ public class LeaderboardActivity extends AppCompatActivity {
         LeaderboardAdapter.setLinkListener(clkListener);
         rView.setAdapter(LeaderboardAdapter);
         rView.setLayoutManager(layoutManager);
+        //rView.setHasFixedSize(true);
+
+        //Pull data from database
+        //String testuser = database.child("Users").child("LeaderboardTest1").get().getResult().child("username").getValue(String.class);
+        //Query testquery = database.equalTo("LeaderboardTest1");
+        //String testuser = "";
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<String> usernames = new ArrayList<String>();
+                List<Integer> levels = new ArrayList<Integer>();
+
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    //Getting the data from snapshot
+                    DataSnapshot user = postSnapshot;
+                    DataSnapshot level = user.child("levelPassed");
+                    if (level.getValue() != null) {
+                        String username = (String)user.getKey();
+                        long levelPassed = (long)level.getValue();
+                        usernames.add(username);
+                        levels.add((int)levelPassed);
+                        //allUsers.add(new LeaderboardCard(username + " Levels Passed: " + levelPassed));
+                    }
+                }
+
+                int prevmax = 9999;
+                List<String> sortedUsers = new ArrayList<String>();
+                for (int i = 0; i < levels.size(); i++) {
+                    int maxLevel = 0;
+                    String maxUser = "";
+                    for (int j = 0; j < levels.size(); j++) {
+                        if (levels.get(j) > maxLevel && levels.get(j) <= prevmax) {
+                            if (!sortedUsers.contains(usernames.get(j) + " Levels Passed: " + levels.get(j))) {
+                                maxLevel = levels.get(j);
+                                maxUser = usernames.get(j);
+                            }
+                        }
+                    }
+                    sortedUsers.add(maxUser + " Levels Passed: " + maxLevel);
+                    prevmax = maxLevel;
+                }
+
+                for (int i = 0; i < sortedUsers.size(); i++) {
+                    int position = i+1;
+                    allUsers.add(new LeaderboardCard(position + ".  " + sortedUsers.get(i)));
+                }
+
+                LeaderboardAdapter.notifyDataSetChanged();
+                rView.setAdapter(LeaderboardAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     private void initializeData(Bundle savedInstanceState) {
-        allUsers.add(new LeaderboardCard("Username1"));
-        allUsers.add(new LeaderboardCard("Username2"));
-        allUsers.add(new LeaderboardCard("Username3"));
-        allUsers.add(new LeaderboardCard("Username4"));
-        allUsers.add(new LeaderboardCard("Username5"));
-        allUsers.add(new LeaderboardCard("Username6"));
 
-        /*if(savedInstanceState != null && savedInstanceState.containsKey(NUMBER_OF_ITEMS)) {
-            if(allUsers == null || allUsers.size() == 0) {
-                int size = savedInstanceState.getInt(NUMBER_OF_ITEMS);
-                for (int i = 0; i < size; i++) {
-//                    String linkName = savedInstanceState.getString(KEY_OF_INSTANCE + i + "0");
-//                    String linkUrl = savedInstanceState.getString(KEY_OF_INSTANCE + i + "1");
-//
-//                    LinkCard linkCard = new LinkCard(linkName, linkUrl);
-//
-//                    links.add(linkCard);
-                    String userName = savedInstanceState.getString(KEY_OF_INSTANCE + i + "0");
-                    LeaderboardCard receiver = new LeaderboardCard(userName);
-                    allUsers.add(receiver);
-                }
-            }
-        }*/
     }
 
     @Override

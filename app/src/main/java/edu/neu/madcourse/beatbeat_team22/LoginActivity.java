@@ -1,11 +1,14 @@
 package edu.neu.madcourse.beatbeat_team22;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import edu.neu.madcourse.beatbeat_team22.model.User;
 
@@ -31,6 +35,8 @@ public class LoginActivity extends AppCompatActivity {
     private DatabaseReference db;
     private Map<String, User> users;
     private SharedPreferences sharedPreferences;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +57,12 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         db = FirebaseDatabase.getInstance().getReference();
-        users = new HashMap<>();
 
+        users = new HashMap<>();
         // Retrieve all usernames from the DB
         db.child("Users").addChildEventListener(new ChildEventListener() {
+
+
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 User user = dataSnapshot.getValue(User.class);
@@ -75,6 +83,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {}
         });
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+        Log.d(TAG, "onCreate: " + users);
+
     }
 
     public void onLoginClick(View view) {
@@ -106,6 +117,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean validateInputs(String userName, String pwd) {
+
         if("".equals(userName) || "".equals(pwd)) {
             error.setText("Fields cannot be empty.");
             return false;
@@ -128,5 +140,6 @@ public class LoginActivity extends AppCompatActivity {
             return false;
         }
     }
+
 
 }
