@@ -2,6 +2,7 @@ package edu.neu.madcourse.beatbeat_team22;
 
 import static android.content.ContentValues.TAG;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -11,6 +12,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -30,6 +38,8 @@ public class HomepageActivity extends AppCompatActivity {
     Integer currLevel;
     int counter = 0;
     User user;
+    DatabaseReference dbRef;
+    String username;
     Random random;
 
 
@@ -45,13 +55,13 @@ public class HomepageActivity extends AppCompatActivity {
             Log.d("User details","user: " + user);
 
         }
-
+        readLevelProgression();
         StartButton = findViewById(R.id.StartButton);
         StartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent StartIntent = new Intent(getApplicationContext(), MainChallengeActivity.class);
-                currLevel = 1; // TODO: pull from DB
+                //currLevel = readLevelProgression(); // TODO: pull from DB
                 StartIntent.putExtra("level", currLevel);
                 StartIntent.putExtra("user", user);
                 Log.d(TAG, "onClick: " + user.getUsername());
@@ -127,4 +137,35 @@ public class HomepageActivity extends AppCompatActivity {
         }
     }
 
+
+    public void readLevelProgression () {
+
+
+        dbRef = FirebaseDatabase.getInstance().getReference();
+        username = user.getUsername();
+
+        Log.d(TAG, "readLevelDB user name: " + username);
+        Log.d(TAG, "readLevelDB child user status: " + dbRef.child("Users").child(username));
+
+
+        dbRef.child("Users").child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (task.getResult().exists()) {
+                        DataSnapshot snapshot = task.getResult();
+                        String level = String.valueOf(snapshot.child("levelPassed").getValue());
+
+                        currLevel = Integer.parseInt(level);
+                        Log.d(TAG, "You are at level " + currLevel);
+
+
+                    } else {
+                        Toast.makeText(HomepageActivity.this, "Failed to read data", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+            }
+        });
+    }
 }

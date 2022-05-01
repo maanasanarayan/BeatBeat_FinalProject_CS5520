@@ -82,32 +82,12 @@ public class LevelSelector extends AppCompatActivity {
         adapter.setOnItemClickListener(new LevelSeletorAdaptor.OnItemClickerListener() {
             @Override
             public void onItemClick(int position, View view) {
-                completeLevel(position, view);
+                readLevelDB(position, view);
             }
         });
     }
 
 
-
-    public void completeLevel(int position, View view) {
-//
-//
-//
-//        Log.d(TAG, "completeLevel: " + currLevel);
-
-        readLevelDB(user, position);
-//
-//        int level = levelSelectorList.get(position).getmLevel();
-//
-//        Log.d(TAG, "completeLevel currLevel: " + currLevel);
-//
-//        if (currLevel >= level) {
-//            openLevelActivity(position);
-//        } else {
-//            Toast toast = Toast.makeText(getApplicationContext(), "Sorry, you have not yet unlocked level" + level, Toast.LENGTH_SHORT);
-//            toast.show();
-//        }
-    }
 
     public void openLevelActivity (int position) {
         Intent intent = new Intent(LevelSelector.this, MainChallengeActivity.class);
@@ -116,8 +96,7 @@ public class LevelSelector extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void readLevelDB (User user, int position) {
-
+    public void readLevelDB (int position, View view) {
 
         dbRef = FirebaseDatabase.getInstance().getReference();
         username = user.getUsername();
@@ -138,14 +117,14 @@ public class LevelSelector extends AppCompatActivity {
                         String level = String.valueOf(snapshot.child("levelPassed").getValue());
 
 
-                        int levela = levelSelectorList.get(position).getmLevel();
+                        int openLevel = levelSelectorList.get(position).getmLevel();
 
                         currLevel = Integer.parseInt(level);
                         Log.d(TAG, "completeLevel currLevel: " + currLevel);
-                        if (currLevel >= levela) {
+                        if (currLevel >= openLevel) {
                             openLevelActivity(position);
                         } else {
-                            Toast toast = Toast.makeText(getApplicationContext(), "Sorry, you have not yet unlocked level " + levela, Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(getApplicationContext(), "Sorry, you have not yet unlocked level " + openLevel, Toast.LENGTH_SHORT);
                             toast.show();
                         }
 
