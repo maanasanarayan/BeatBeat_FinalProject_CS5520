@@ -431,7 +431,7 @@ public class MainChallengeActivity extends AppCompatActivity {
 
     private void calculateScore() {
         long deltatime = System.currentTimeMillis() - prevtime;
-        if (errorDescription.getVisibility() == View.VISIBLE) {
+        if (errorDescription.getVisibility() == View.VISIBLE || currnoteTiming >= challenge.getIsNotePlayedList().size()) {
             return;
         }
         if (!challenge.getIsNotePlayedList().get(currnoteTiming) && currnoteTiming == 0 && deltatime+milisecondsperbeat > milisecondsperbeat * timingLateGate) {
@@ -442,6 +442,9 @@ public class MainChallengeActivity extends AppCompatActivity {
             while (!challenge.getIsNotePlayedList().get(currnoteTiming) && deltatime > milisecondsperbeat) {
                 currnoteTiming++;
                 deltatime -= 1000;
+                if (currnoteTiming >= challenge.getIsNotePlayedList().size()) {
+                    return;
+                }
             }
         }
         if (!challenge.getIsNotePlayedList().get(currnoteTiming)) {
