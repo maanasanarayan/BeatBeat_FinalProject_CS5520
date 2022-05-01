@@ -48,13 +48,19 @@ public class LevelSelector extends AppCompatActivity {
         createLevelSelectorList();
         buildRecyclerView();
 
-
         Intent intent = getIntent();
         if (intent.hasExtra("user")) {
             user = (User) intent.getSerializableExtra("user");
             Log.d("User details level selector on create","user: " + user);
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), HomepageActivity.class);
+        intent.putExtra("user", user);
+        startActivity(intent);
     }
 
     public void createLevelSelectorList() {
