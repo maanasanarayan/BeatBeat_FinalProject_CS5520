@@ -641,9 +641,13 @@ public class MainChallengeActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     if (task.getResult().exists()) {
                         DataSnapshot snapshot = task.getResult();
-                        String level = String.valueOf(snapshot.child("levelPassed").getValue());
+                        if(snapshot.child("levelPassed").exists()) {
+                            String level = String.valueOf(snapshot.child("levelPassed").getValue());
+                            playerMaxLevel = Integer.parseInt(level);
+                        } else {
+                            playerMaxLevel = 1;
+                        }
 
-                        playerMaxLevel = Integer.parseInt(level);
                         Log.d(TAG, "You are at level " + currLevel);
 
                     } else {
