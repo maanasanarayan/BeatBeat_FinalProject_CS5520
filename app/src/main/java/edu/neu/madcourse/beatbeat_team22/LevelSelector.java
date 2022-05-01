@@ -57,6 +57,14 @@ public class LevelSelector extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), HomepageActivity.class);
+        intent.putExtra("user", user);
+        startActivity(intent);
+    }
+
     public void createLevelSelectorList() {
         levelSelectorList = new ArrayList<>();
         levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 1", "If I had a Quarter"));
