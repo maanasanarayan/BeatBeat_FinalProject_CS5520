@@ -6,10 +6,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Level;
+
+import edu.neu.madcourse.beatbeat_team22.model.User;
 
 public class HomepageActivity extends AppCompatActivity {
 
@@ -18,13 +23,23 @@ public class HomepageActivity extends AppCompatActivity {
     Button GlossaryButton;
     Button LevelSelectButton;
     Button LogoutButton;
+    Button DailyChallengeButton;
     SharedPreferences sharedPreferences;
     Integer currLevel;
+    int counter = 0;
+    User user;
+    Random random;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
+
+        Intent intent = getIntent();
+        if(intent.hasExtra("user")) {
+            user = (User) intent.getSerializableExtra("user");
+            Log.d("User details","user: " + user);
+        }
 
         StartButton = findViewById(R.id.StartButton);
         StartButton.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +97,23 @@ public class HomepageActivity extends AppCompatActivity {
                 startActivity(LogoutIntent);
             }
         });
+
+        DailyChallengeButton = findViewById(R.id.DailyChallenge);
+        DailyChallengeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent DailyChallenge = new Intent(getApplicationContext(), DailyChallengeActivity.class);
+//                startActivity(DailyChallenge);
+            }
+        });
     }
 
+    @Override
+    public void onBackPressed() {
+        counter++;
+        if(counter == 2) {
+            moveTaskToBack(true);
+        }
+    }
 
 }
