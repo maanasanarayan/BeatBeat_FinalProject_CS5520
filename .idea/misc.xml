@@ -23,7 +23,8 @@
         <entry key="app/src/main/res/layout/activity_title_screen.xml" value="0.14447463768115942" />
         <entry key="app/src/main/res/layout/leaderboard_card_layout.xml" value="0.14447463768115942" />
         <entry key="app/src/main/res/layout/level_selector_cardview.xml" value="0.14447463768115942" />
-        <entry key="app/src/main/res/layout/popup.xml" value="0.14447463768115942" />
+        <entry key="app/src/main/res/layout/levelcompletion_popup.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/popup.xml" value="0.5" />
         <entry key="app/src/main/res/menu/popup_menu.xml" value="0.16145833333333334" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1453125" />
       </map>

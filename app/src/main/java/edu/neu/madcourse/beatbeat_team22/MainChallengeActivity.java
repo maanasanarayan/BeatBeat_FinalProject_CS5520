@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -72,6 +74,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     private int currnoteTiming;
     private int requiredScore;
     private int score;
+    private int playerMaxLevel;
 
     //popUp menu
     private AlertDialog.Builder dialogBuilder;
@@ -82,12 +85,19 @@ public class MainChallengeActivity extends AppCompatActivity {
     private Button btnLeaderBoard;
     private Button btnGlossary;
     private Button btnExit;
+
+    // level completion popup menu
+    private Button nextLevel;
+    private Button replay;
+    private Button exit;
+
     private ImageView emoji;
 
     //user
     private User user;
     private String username;
     DatabaseReference dbRef;
+    private Integer gameMaxLevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +110,9 @@ public class MainChallengeActivity extends AppCompatActivity {
         loadImages();
         setStartButton();
         setMediaPlayer();
+
+
+
         String lessonTitle = challenge.getmLessonTitle();
         if (lessonTitle != null) {
             Intent lessonIntent = new Intent(this, LessonActivity.class);
@@ -115,16 +128,23 @@ public class MainChallengeActivity extends AppCompatActivity {
             Log.d(TAG, "username oncreate: " + username);
         }
 
-
-
-
+        gameMaxLevel = challengeGenerator.maxGameLevel();
+        Log.d(TAG, "onCreate game max level: " + gameMaxLevel);
+        readLevelProgression();
     }
-
     private void generateChallenge() {
         requiredScore = 0;
         score = 0;
         currLevel = (Integer) getIntent().getSerializableExtra("level");
         challengeGenerator = new ChallengeGenerator(currLevel);
+        challenge = challengeGenerator.buildChallenge();
+        Log.d("levelAfterGenerate", String.valueOf(challenge.getNonHighlightedNotes()));
+        countdown = new Countdown();
+    }
+    private void genNextLevelChallenge(int nextLevel) {
+        requiredScore = 0;
+        score = 0;
+        challengeGenerator = new ChallengeGenerator(nextLevel);
         challenge = challengeGenerator.buildChallenge();
         Log.d("levelAfterGenerate", String.valueOf(challenge.getNonHighlightedNotes()));
         countdown = new Countdown();
@@ -241,6 +261,8 @@ public class MainChallengeActivity extends AppCompatActivity {
         }
     };
 
+
+
     private Runnable playNextNote = new Runnable() {
         @Override
         public void run() {
@@ -262,35 +284,45 @@ public class MainChallengeActivity extends AppCompatActivity {
                 hideEmoji();
                 enableRedo();
                 enableTapButton();
+
+
+
+
                 if (score == requiredScore) {
                     Log.d("score results passed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
                     Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
                     errorDescription.setText("Level Complete!");
                     errorDescription.setVisibility(View.VISIBLE);
                     // launch lesson activity
+                    Log.d(TAG, "run playerMax: " + playerMaxLevel);
+                    Log.d(TAG, "run playerMax: " + currLevel);
+
+                    if ( playerMaxLevel == currLevel && currLevel < gameMaxLevel) {
 
 
-                    dbRef = FirebaseDatabase.getInstance().getReference();
+                        dbRef = FirebaseDatabase.getInstance().getReference();
+
+                        Log.d(TAG, "username run: " + username);
+
+                        HashMap User = new HashMap();
+
+                        User.put("levelPassed", currLevel + 1);
 
 
-                    //username = user.getUsername();
+                        dbRef.child("Users").child(username).updateChildren(User).addOnSuccessListener(new OnSuccessListener() {
+                            @Override
+                            public void onSuccess(Object o) {
 
-                    Log.d(TAG, "username run: " + username);
+                            }
+                        });
+                    }
 
-                    HashMap User = new HashMap();
-                    User.put("levelPassed", currLevel + 1);
 
-
-                    dbRef.child("Users").child(username).updateChildren(User).addOnSuccessListener(new OnSuccessListener() {
-                        @Override
-                        public void onSuccess(Object o) {
-
-                        }
-                    });
                 } else {
                     Log.d("score results failed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
                     Toast.makeText(getApplicationContext(), "Try Again!", Toast.LENGTH_SHORT).show();
                 }
+                openLevelCompletionPopup(playerMaxLevel);
             } else {
                 isPlayed = challenge.getIsNotePlayedList().get(currNote);
                 Log.d("isPlayed", String.valueOf(isPlayed));
@@ -471,7 +503,8 @@ public class MainChallengeActivity extends AppCompatActivity {
         btnResume.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                onRedo(view);
+                dialog.dismiss();
             }
         });
 
@@ -499,10 +532,62 @@ public class MainChallengeActivity extends AppCompatActivity {
         btnExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.dismiss();
+                Intent intent = new Intent(getApplicationContext(), HomepageActivity.class);
+                intent.putExtra("user", user);
+                startActivity(intent);
             }
         });
     }
+
+    public void openLevelCompletionPopup(Integer playerMaxLevel) {
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View popUpMenuView = getLayoutInflater().inflate(R.layout.levelcompletion_popup, null);
+
+        nextLevel = popUpMenuView.findViewById(R.id.nextLevel);
+        replay = popUpMenuView.findViewById(R.id.replay);
+        exit = popUpMenuView.findViewById(R.id.levelCompletionPopupExit);
+
+        dialogBuilder.setView(popUpMenuView);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        nextLevel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Log.d(TAG, "onClick currlevel: " + currLevel);
+                if (currLevel < gameMaxLevel) {
+                    Log.d(TAG, "onClick gamemax level: " + gameMaxLevel);
+                    int nextLevel = currLevel + 1;
+                    Intent intent = new Intent(getApplicationContext(), MainChallengeActivity.class);
+                    intent.putExtra("level", nextLevel);
+                    intent.putExtra("user", user);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Congrats, you have reached the highest level yet!!!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        replay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onRedo(view);
+                dialog.dismiss();
+            }
+        });
+
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), HomepageActivity.class);
+                intent.putExtra("user", user);
+                startActivity(intent);
+            }
+        });
+    }
+
+
 
     // level selector button - open level selector activity
     public void levelSelector(View view) {
@@ -538,6 +623,37 @@ public class MainChallengeActivity extends AppCompatActivity {
     private void showSadFace() {
         emoji.setImageResource(R.drawable.sad_face_foreground);
         emoji.setVisibility(View.VISIBLE);
+    }
+
+    public void readLevelProgression () {
+
+
+        dbRef = FirebaseDatabase.getInstance().getReference();
+        username = user.getUsername();
+
+        Log.d(TAG, "readLevelDB user name: " + username);
+        Log.d(TAG, "readLevelDB child user status: " + dbRef.child("Users").child(username));
+
+
+        dbRef.child("Users").child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (task.getResult().exists()) {
+                        DataSnapshot snapshot = task.getResult();
+                        String level = String.valueOf(snapshot.child("levelPassed").getValue());
+
+                        playerMaxLevel = Integer.parseInt(level);
+                        Log.d(TAG, "You are at level " + currLevel);
+
+
+                    } else {
+                        Toast.makeText(MainChallengeActivity.this, "Failed to read data", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+            }
+        });
     }
 
 }

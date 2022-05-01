@@ -53,9 +53,9 @@ public class HomepageActivity extends AppCompatActivity {
         if(intent.hasExtra("user")) {
             user = (User) intent.getSerializableExtra("user");
             Log.d("User details","user: " + user);
-
+            readLevelProgression();
         }
-        readLevelProgression();
+
         StartButton = findViewById(R.id.StartButton);
         StartButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,10 +84,7 @@ public class HomepageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), LevelSelector.class);
-                //LeaderboardIntent.putExtra("username", user.getUsername());
-                Log.d("User details level selector","user: " + user);
-                Log.d("User details level selector","user: " + user.getUsername());
-                String userName = user.getUsername();
+
                 intent.putExtra("user", user);
                 startActivity(intent);
             }

@@ -90,4 +90,8 @@ public class ChallengeGenerator {
         }
     }
 
+    public Integer maxGameLevel() {
+        return 4;
+    }
+
 }
