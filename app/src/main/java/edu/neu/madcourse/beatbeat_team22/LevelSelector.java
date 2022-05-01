@@ -111,15 +111,17 @@ public class LevelSelector extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     if(task.getResult().exists()) {
 
-                        Toast.makeText(LevelSelector.this, "Read data successfully", Toast.LENGTH_SHORT).show();
-
                         DataSnapshot snapshot = task.getResult();
-                        String level = String.valueOf(snapshot.child("levelPassed").getValue());
-
+                        String level;
+                        if(snapshot.child("levelPassed").exists()) {
+                            level = String.valueOf(snapshot.child("levelPassed").getValue());
+                            currLevel = Integer.parseInt(level);
+                        } else {
+                            currLevel = 1;
+                        }
 
                         int openLevel = levelSelectorList.get(position).getmLevel();
 
-                        currLevel = Integer.parseInt(level);
                         Log.d(TAG, "completeLevel currLevel: " + currLevel);
                         if (currLevel >= openLevel) {
                             openLevelActivity(position);

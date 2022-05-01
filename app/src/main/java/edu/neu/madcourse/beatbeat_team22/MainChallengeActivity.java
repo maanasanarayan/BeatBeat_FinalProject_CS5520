@@ -72,6 +72,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     private int currnoteTiming;
     private int requiredScore;
     private int score;
+    private boolean dailyChallenge;
 
     //popUp menu
     private AlertDialog.Builder dialogBuilder;
@@ -114,7 +115,11 @@ public class MainChallengeActivity extends AppCompatActivity {
             username = user.getUsername();
             Log.d(TAG, "username oncreate: " + username);
         }
-
+        if(intent.hasExtra("dailyChallenge")) {
+            dailyChallenge = true;
+        } else {
+            dailyChallenge = false;
+        }
 
 
 
@@ -264,7 +269,12 @@ public class MainChallengeActivity extends AppCompatActivity {
                 enableTapButton();
                 if (score == requiredScore) {
                     Log.d("score results passed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
-                    Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
+
+                    if(dailyChallenge) {
+                        Toast.makeText(getApplicationContext(), "Daily Challenge Complete!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
+                    }
                     errorDescription.setText("Level Complete!");
                     errorDescription.setVisibility(View.VISIBLE);
                     // launch lesson activity
