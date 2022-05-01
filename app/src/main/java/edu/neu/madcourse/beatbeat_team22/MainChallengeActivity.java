@@ -67,6 +67,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     // credit to findsounds.com for free use of their sounds
     private MediaPlayer mp;
     private Boolean isPlayed;
+    private Boolean menuPressed;
     private long prevtime = 0;
     private double timingEarlyGate = 0.75;
     private double timingLateGate = 1.25;
@@ -323,12 +324,14 @@ public class MainChallengeActivity extends AppCompatActivity {
                                     }
                                 });
                     }
-
+                    if (!menuPressed) {
+                        openLevelCompletionPopup(playerMaxLevel);
+                    }
                 } else {
                     Log.d("score results failed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
                     Toast.makeText(getApplicationContext(), "Try Again!", Toast.LENGTH_SHORT).show();
                 }
-                openLevelCompletionPopup(playerMaxLevel);
+
             } else {
                 isPlayed = challenge.getIsNotePlayedList().get(currNote);
                 Log.d("isPlayed", String.valueOf(isPlayed));
@@ -367,10 +370,8 @@ public class MainChallengeActivity extends AppCompatActivity {
     }
 
     private void setStartButton() {
-        repeatCount = 0;
         firstClick = true;
         startTapButton.setText(R.string.start_string);
-        errorDescription.setVisibility(View.INVISIBLE);
         disableRedo();
         generateChallenge();
     }
@@ -469,16 +470,33 @@ public class MainChallengeActivity extends AppCompatActivity {
         currnoteTiming++;
     }
 
-    public void onMenu(View view) {
+    public void onMenu(View view) throws IOException {
         // launch menu popup
         openPopUpMenu(view);
     }
 
     public void onRedo(View view) {
+        repeatCount = 0;
         setStartButton();
+        resetImages();
         score = 0; // temp
         Toast.makeText(getApplicationContext(),
                 "Level " + String.valueOf(currLevel) + " reset", Toast.LENGTH_SHORT).show();
+    }
+
+    private void resetImages() {
+        errorDescription.setVisibility(View.INVISIBLE);
+        threeView.setVisibility(View.INVISIBLE);
+        twoView.setVisibility(View.INVISIBLE);
+        oneView.setVisibility(View.INVISIBLE);
+        goView.setVisibility(View.INVISIBLE);
+        listenView.setVisibility(View.INVISIBLE);
+        metronomeRight.setVisibility(View.VISIBLE);
+        metronomeLeft.setVisibility(View.INVISIBLE);
+        for (int i = 0; i < challenge.getmMeter(); i++) {
+            highlightedNotes.get(i).setVisibility(View.INVISIBLE);
+            nonHighlightedNotes.get(i).setVisibility(View.VISIBLE);
+        }
     }
 
     private void disableTapButton() {
@@ -501,7 +519,9 @@ public class MainChallengeActivity extends AppCompatActivity {
     }
 
     // pop up menu builder
-    public void openPopUpMenu(View view) {
+    public void openPopUpMenu(View view) throws IOException {
+        menuPressed = true;
+        repeatCount = challenge.getTotalBeats();
         dialogBuilder = new AlertDialog.Builder(this);
         final View popUpMenuView = getLayoutInflater().inflate(R.layout.popup, null);
 
@@ -653,9 +673,13 @@ public class MainChallengeActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     if (task.getResult().exists()) {
                         DataSnapshot snapshot = task.getResult();
-                        String level = String.valueOf(snapshot.child("levelPassed").getValue());
+                        if(snapshot.child("levelPassed").exists()) {
+                            String level = String.valueOf(snapshot.child("levelPassed").getValue());
+                            playerMaxLevel = Integer.parseInt(level);
+                        } else {
+                            playerMaxLevel = 1;
+                        }
 
-                        playerMaxLevel = Integer.parseInt(level);
                         Log.d(TAG, "You are at level " + currLevel);
 
                     } else {
