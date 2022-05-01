@@ -12,13 +12,16 @@ public class Challenge {
     private List<Integer> highlightedNotesList = new ArrayList<>();
     private int totalBeats;
     private int mMeter;
+    private boolean passed;
     private String mLessonTitle;
 
     public Challenge(int meter) {
         this.mMeter = meter;
     }
 
-    public int getNumNotes() { return this.notesList.size(); }
+    public int getNumNotes() {
+        return this.notesList.size();
+    }
 
     public List<Integer> getNonHighlightedNotes() {
         return this.notesList;
@@ -33,7 +36,9 @@ public class Challenge {
         return this.highlightedNotesList;
     }
 
-    public List<Boolean> getIsNotePlayedList() { return this.isNotePlayedList; }
+    public List<Boolean> getIsNotePlayedList() {
+        return this.isNotePlayedList;
+    }
 
     public String getmLessonTitle() {
         return mLessonTitle;

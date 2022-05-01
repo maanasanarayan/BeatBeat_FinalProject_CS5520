@@ -1,5 +1,8 @@
 package edu.neu.madcourse.beatbeat_team22;
 
+import static android.content.ContentValues.TAG;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -15,9 +18,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import edu.neu.madcourse.beatbeat_team22.model.User;
 
 public class MainChallengeActivity extends AppCompatActivity {
     private List<ImageView> nonHighlightedNotes = new ArrayList<>();
@@ -72,6 +84,11 @@ public class MainChallengeActivity extends AppCompatActivity {
     private Button btnExit;
     private ImageView emoji;
 
+    //user
+    private User user;
+    private String username;
+    DatabaseReference dbRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +106,18 @@ public class MainChallengeActivity extends AppCompatActivity {
             lessonIntent.putExtra("title", lessonTitle);
             startActivity(lessonIntent);
         }
+
+        Intent intent = getIntent();
+        if(intent.hasExtra("user")) {
+            user = (User) intent.getSerializableExtra("user");
+            Log.d("User details in Main challengea activity","user: " + user);
+            username = user.getUsername();
+            Log.d(TAG, "username oncreate: " + username);
+        }
+
+
+
+
     }
 
     private void generateChallenge() {
@@ -239,6 +268,25 @@ public class MainChallengeActivity extends AppCompatActivity {
                     errorDescription.setText("Level Complete!");
                     errorDescription.setVisibility(View.VISIBLE);
                     // launch lesson activity
+
+
+                    dbRef = FirebaseDatabase.getInstance().getReference();
+
+
+                    //username = user.getUsername();
+
+                    Log.d(TAG, "username run: " + username);
+
+                    HashMap User = new HashMap();
+                    User.put("levelPassed", currLevel + 1);
+
+
+                    dbRef.child("Users").child(username).updateChildren(User).addOnSuccessListener(new OnSuccessListener() {
+                        @Override
+                        public void onSuccess(Object o) {
+
+                        }
+                    });
                 } else {
                     Log.d("score results failed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
                     Toast.makeText(getApplicationContext(), "Try Again!", Toast.LENGTH_SHORT).show();
@@ -262,6 +310,8 @@ public class MainChallengeActivity extends AppCompatActivity {
             }
         }
     };
+
+
 
     private void hideHighlighted(int notePos) {
         highlightedNotes.get(notePos).setVisibility(View.INVISIBLE);
@@ -456,7 +506,11 @@ public class MainChallengeActivity extends AppCompatActivity {
 
     // level selector button - open level selector activity
     public void levelSelector(View view) {
-        Intent intent = new Intent(this, LevelSelector.class);
+        Intent intent = new Intent(getApplicationContext(), LevelSelector.class);
+        Log.d("User details level selector","user: " + user);
+        Log.d("User details level selector","user: " + user.getUsername());
+        //String userName = user.getUsername();
+        intent.putExtra("user", user);
         startActivity(intent);
     }
 

@@ -7,15 +7,17 @@ public class User implements Serializable {
     private String name;
     private String username;
     private String password;
+    private Integer levelPassed;
 
     public User() {
 
     }
 
-    public User(String name, String username, String password) {
+    public User(String name, String username, String password, Integer levelPassed) {
         this.name = name;
         this.username = username;
         this.password = password;
+        this.levelPassed = levelPassed;
     }
 
     public String getUsername() {
@@ -28,6 +30,14 @@ public class User implements Serializable {
 
     public String getPassword() {
         return password;
+    }
+
+    public Integer getLevelPassed() {
+        return levelPassed;
+    }
+
+    public void setLevelPassed(Integer level) {
+        this.levelPassed = level;
     }
 
     @Override

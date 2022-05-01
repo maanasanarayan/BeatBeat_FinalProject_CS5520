@@ -1,5 +1,6 @@
 package edu.neu.madcourse.beatbeat_team22;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ public class LevelSeletorAdaptor extends RecyclerView.Adapter<LevelSeletorAdapto
 
 
     public interface OnItemClickerListener {
-        void onItemClick(int position);
+        void onItemClick(int position, View view);
     }
 
     public void setOnItemClickListener(OnItemClickerListener listener) {
@@ -46,7 +47,7 @@ public class LevelSeletorAdaptor extends RecyclerView.Adapter<LevelSeletorAdapto
                     if (listener  != null) {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
+                            listener.onItemClick(position, itemView);
                         }
                     }
                 }

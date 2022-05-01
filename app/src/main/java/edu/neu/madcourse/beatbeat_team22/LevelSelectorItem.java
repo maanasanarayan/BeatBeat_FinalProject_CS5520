@@ -9,12 +9,14 @@ public class LevelSelectorItem {
     private String mText1;
     private String mText2;
     private Integer mLevel;
+    private Integer mNextLevel;
 
     public LevelSelectorItem(int imageResource, String text1, String text2) {
         mImageResource = imageResource;
         mText1 = text1;
         mText2 = text2;
         mLevel = parseLevel(text1);
+        mNextLevel = mLevel + 1;
     }
 
     private int parseLevel(String text) {
@@ -25,10 +27,6 @@ public class LevelSelectorItem {
             System.out.println("LevelSelectorItem text1 does not end with integer");
         }
         return mLevel;
-    }
-
-    public void changeText1 (String text) {
-        mText1 = text;
     }
 
     public int getImageResource() {
@@ -46,4 +44,10 @@ public class LevelSelectorItem {
     public Integer getmLevel() {
         return mLevel;
     }
+
+    public Integer getmNextLevel() {
+        return mNextLevel;
+    }
+
+
 }
