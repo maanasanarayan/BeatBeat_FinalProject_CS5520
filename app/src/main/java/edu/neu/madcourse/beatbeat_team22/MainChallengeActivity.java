@@ -72,6 +72,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     private double timingLateGate = 1.25;
     private long milisecondsperbeat = 1000;
     private int currnoteTiming;
+    private boolean firstplayed = true;
     private int requiredScore;
     private int score;
     private int playerMaxLevel;
@@ -361,8 +362,8 @@ public class MainChallengeActivity extends AppCompatActivity {
     private void setTapButton() {
         firstClick = false;
         startTapButton.setText(R.string.tap_string);
-        prevtime = 0;
         currnoteTiming = 0;
+        firstplayed = true;
     }
 
     private void setStartButton() {
@@ -419,9 +420,15 @@ public class MainChallengeActivity extends AppCompatActivity {
         if (errorDescription.getVisibility() == View.VISIBLE) {
             return;
         }
-        if (!challenge.getIsNotePlayedList().get(currnoteTiming) && deltatime > milisecondsperbeat * timingLateGate) {
+        if (!challenge.getIsNotePlayedList().get(currnoteTiming) && currnoteTiming == 0 && deltatime+milisecondsperbeat > milisecondsperbeat * timingLateGate) {
             currnoteTiming++;
             deltatime -= 1000;
+        }
+        if (!challenge.getIsNotePlayedList().get(currnoteTiming) && deltatime > milisecondsperbeat) {
+            while (!challenge.getIsNotePlayedList().get(currnoteTiming) && deltatime > milisecondsperbeat) {
+                currnoteTiming++;
+                deltatime -= 1000;
+            }
         }
         if (!challenge.getIsNotePlayedList().get(currnoteTiming)) {
             showSadFace();
@@ -430,11 +437,13 @@ public class MainChallengeActivity extends AppCompatActivity {
             score--;
             errorDescription.setText("Don't Tap a Rest!");
             errorDescription.setVisibility(View.VISIBLE);
-        } else if (prevtime == 0) {
-            score++;
-            showHappyFace();
-            Log.d("score Correct", String.valueOf(score));
-        } else if (deltatime > milisecondsperbeat * timingEarlyGate
+            return;
+        }
+        if (firstplayed && challenge.getIsNotePlayedList().get(currnoteTiming)) {
+            deltatime += milisecondsperbeat;
+            firstplayed = false;
+        }
+        if (deltatime > milisecondsperbeat * timingEarlyGate
                 && deltatime < milisecondsperbeat * timingLateGate) {
             score++;
             showHappyFace();
@@ -446,6 +455,7 @@ public class MainChallengeActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Incorrect! Too Early!", Toast.LENGTH_SHORT).show();
             errorDescription.setText("Too Early!");
             errorDescription.setVisibility(View.VISIBLE);
+            return;
         } else if (deltatime > milisecondsperbeat * timingLateGate) {
             score--;
             showSadFace();
@@ -453,6 +463,7 @@ public class MainChallengeActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Incorrect! Too Late!", Toast.LENGTH_SHORT).show();
             errorDescription.setText("Too Late!");
             errorDescription.setVisibility(View.VISIBLE);
+            return;
         }
         prevtime = System.currentTimeMillis();
         currnoteTiming++;
@@ -478,6 +489,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     private void enableTapButton() {
         startTapButton.setText(R.string.tap_string);
         startTapButton.setEnabled(true);
+        prevtime = System.currentTimeMillis() + 200;
     }
 
     private void disableRedo() {
