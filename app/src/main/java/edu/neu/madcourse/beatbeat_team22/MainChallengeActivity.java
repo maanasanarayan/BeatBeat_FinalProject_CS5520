@@ -341,6 +341,10 @@ public class MainChallengeActivity extends AppCompatActivity {
                 } else {
                     Log.d("score results failed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
                     Toast.makeText(getApplicationContext(), "Try Again!", Toast.LENGTH_SHORT).show();
+                    if (errorDescription.getVisibility() == View.INVISIBLE) {
+                        errorDescription.setText("Too Late!");
+                        errorDescription.setVisibility(View.VISIBLE);
+                    }
                 }
 
             } else {
