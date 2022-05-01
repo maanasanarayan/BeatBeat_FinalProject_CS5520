@@ -124,6 +124,7 @@ public class HomepageActivity extends AppCompatActivity {
                 Intent DailyChallengeIntent = new Intent(getApplicationContext(), MainChallengeActivity.class);
                 DailyChallengeIntent.putExtra("level", level);
                 DailyChallengeIntent.putExtra("dailyChallenge", "true");
+                DailyChallengeIntent.putExtra("user", user);
                 startActivity(DailyChallengeIntent);
             }
         });
