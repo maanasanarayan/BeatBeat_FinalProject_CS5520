@@ -51,7 +51,7 @@ public class ChallengeGenerator {
                 break;
                 case 3:
                     thisChallenge.addNonHighlightedNote(R.drawable.quarter_rest_90, false);
-                    thisChallenge.addHighlightedNote(R.drawable.quarter_note_highlighted);
+                    thisChallenge.addHighlightedNote(R.drawable.quarter_rest_highlighted);
             }
         }
     }
@@ -67,7 +67,7 @@ public class ChallengeGenerator {
                     break;
                 case 2:
                     thisChallenge.addNonHighlightedNote(R.drawable.quarter_rest_90, false);
-                    thisChallenge.addHighlightedNote(R.drawable.quarter_note_highlighted);
+                    thisChallenge.addHighlightedNote(R.drawable.quarter_rest_highlighted);
                     break;
             }
         }
@@ -84,7 +84,7 @@ public class ChallengeGenerator {
                     break;
                 case 0: case 2: case 3:
                     thisChallenge.addNonHighlightedNote(R.drawable.quarter_rest_90, false);
-                    thisChallenge.addHighlightedNote(R.drawable.quarter_note_highlighted);
+                    thisChallenge.addHighlightedNote(R.drawable.quarter_rest_highlighted);
                     break;
             }
         }

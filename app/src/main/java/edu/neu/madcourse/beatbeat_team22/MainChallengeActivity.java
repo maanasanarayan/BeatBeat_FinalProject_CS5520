@@ -75,8 +75,9 @@ public class MainChallengeActivity extends AppCompatActivity {
     private int requiredScore;
     private int score;
     private int playerMaxLevel;
+    private boolean dailyChallenge;
 
-    //popUp menu
+    // popUp menu
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
     // pop up menu button
@@ -93,7 +94,7 @@ public class MainChallengeActivity extends AppCompatActivity {
 
     private ImageView emoji;
 
-    //user
+    // user
     private User user;
     private String username;
     DatabaseReference dbRef;
@@ -111,8 +112,6 @@ public class MainChallengeActivity extends AppCompatActivity {
         setStartButton();
         setMediaPlayer();
 
-
-
         String lessonTitle = challenge.getmLessonTitle();
         if (lessonTitle != null) {
             Intent lessonIntent = new Intent(this, LessonActivity.class);
@@ -121,9 +120,9 @@ public class MainChallengeActivity extends AppCompatActivity {
         }
 
         Intent intent = getIntent();
-        if(intent.hasExtra("user")) {
+        if (intent.hasExtra("user")) {
             user = (User) intent.getSerializableExtra("user");
-            Log.d("User details in Main challengea activity","user: " + user);
+            Log.d("User details in Main challengea activity", "user: " + user);
             username = user.getUsername();
             Log.d(TAG, "username oncreate: " + username);
         }
@@ -131,7 +130,14 @@ public class MainChallengeActivity extends AppCompatActivity {
         gameMaxLevel = challengeGenerator.maxGameLevel();
         Log.d(TAG, "onCreate game max level: " + gameMaxLevel);
         readLevelProgression();
+        if (intent.hasExtra("dailyChallenge")) {
+            dailyChallenge = true;
+        } else {
+            dailyChallenge = false;
+        }
+
     }
+
     private void generateChallenge() {
         requiredScore = 0;
         score = 0;
@@ -141,6 +147,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         Log.d("levelAfterGenerate", String.valueOf(challenge.getNonHighlightedNotes()));
         countdown = new Countdown();
     }
+
     private void genNextLevelChallenge(int nextLevel) {
         requiredScore = 0;
         score = 0;
@@ -192,7 +199,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         countdown.loadImages();
         listenView.setImageResource(R.drawable.listen_icon);
         tapView.setImageResource(R.drawable.tap_icon);
-        for (int i=0; i<challenge.getmMeter(); i++) {
+        for (int i = 0; i < challenge.getmMeter(); i++) {
             nonHighlightedNotes.get(i).setImageResource(challenge.getNonHighlightedNotes().get(i));
             highlightedNotes.get(i).setImageResource(challenge.getHighlightedNotesList().get(i));
             countdownImageViews.get(i).setImageResource(countdown.getImagesList().get(i));
@@ -261,8 +268,6 @@ public class MainChallengeActivity extends AppCompatActivity {
         }
     };
 
-
-
     private Runnable playNextNote = new Runnable() {
         @Override
         public void run() {
@@ -285,20 +290,21 @@ public class MainChallengeActivity extends AppCompatActivity {
                 enableRedo();
                 enableTapButton();
 
-
-
-
                 if (score == requiredScore) {
                     Log.d("score results passed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
-                    Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
+
+                    if (dailyChallenge) {
+                        Toast.makeText(getApplicationContext(), "Daily Challenge Complete!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
+                    }
                     errorDescription.setText("Level Complete!");
                     errorDescription.setVisibility(View.VISIBLE);
                     // launch lesson activity
                     Log.d(TAG, "run playerMax: " + playerMaxLevel);
                     Log.d(TAG, "run playerMax: " + currLevel);
 
-                    if ( playerMaxLevel == currLevel && currLevel < gameMaxLevel) {
-
+                    if (playerMaxLevel == currLevel && currLevel < gameMaxLevel) {
 
                         dbRef = FirebaseDatabase.getInstance().getReference();
 
@@ -308,15 +314,14 @@ public class MainChallengeActivity extends AppCompatActivity {
 
                         User.put("levelPassed", currLevel + 1);
 
+                        dbRef.child("Users").child(username).updateChildren(User)
+                                .addOnSuccessListener(new OnSuccessListener() {
+                                    @Override
+                                    public void onSuccess(Object o) {
 
-                        dbRef.child("Users").child(username).updateChildren(User).addOnSuccessListener(new OnSuccessListener() {
-                            @Override
-                            public void onSuccess(Object o) {
-
-                            }
-                        });
+                                    }
+                                });
                     }
-
 
                 } else {
                     Log.d("score results failed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
@@ -342,8 +347,6 @@ public class MainChallengeActivity extends AppCompatActivity {
             }
         }
     };
-
-
 
     private void hideHighlighted(int notePos) {
         highlightedNotes.get(notePos).setVisibility(View.INVISIBLE);
@@ -390,12 +393,13 @@ public class MainChallengeActivity extends AppCompatActivity {
 
     private void playSound(int resID) throws IOException {
         AssetFileDescriptor afd = getApplicationContext().getResources().openRawResourceFd(resID);
-        if (afd == null) return;
+        if (afd == null)
+            return;
         mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
         mp.prepareAsync();
     }
 
-    public void onTap(View view){
+    public void onTap(View view) {
         if (firstClick) {
             setTapButton();
             disableTapButton();
@@ -404,7 +408,7 @@ public class MainChallengeActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        } else if (repeatCount >= challenge.getmMeter() * 2){
+        } else if (repeatCount >= challenge.getmMeter() * 2) {
             calculateScore();
         }
         // TODO: add feedback when player fails to tap
@@ -426,24 +430,23 @@ public class MainChallengeActivity extends AppCompatActivity {
             score--;
             errorDescription.setText("Don't Tap a Rest!");
             errorDescription.setVisibility(View.VISIBLE);
-        }
-        else if (prevtime == 0) {
+        } else if (prevtime == 0) {
             score++;
             showHappyFace();
             Log.d("score Correct", String.valueOf(score));
-        }
-        else if (deltatime > milisecondsperbeat * timingEarlyGate && deltatime < milisecondsperbeat * timingLateGate) {
+        } else if (deltatime > milisecondsperbeat * timingEarlyGate
+                && deltatime < milisecondsperbeat * timingLateGate) {
             score++;
             showHappyFace();
             Log.d("score Correct", String.valueOf(score));
-        } else if (deltatime < milisecondsperbeat *  timingEarlyGate) {
+        } else if (deltatime < milisecondsperbeat * timingEarlyGate) {
             score--;
             showSadFace();
             Log.d("score Incorrect: Too Early", String.valueOf(score));
             Toast.makeText(getApplicationContext(), "Incorrect! Too Early!", Toast.LENGTH_SHORT).show();
             errorDescription.setText("Too Early!");
             errorDescription.setVisibility(View.VISIBLE);
-        } else if (deltatime > milisecondsperbeat *  timingLateGate) {
+        } else if (deltatime > milisecondsperbeat * timingLateGate) {
             score--;
             showSadFace();
             Log.d("score Incorrect: Too Late", String.valueOf(score));
@@ -485,7 +488,7 @@ public class MainChallengeActivity extends AppCompatActivity {
         redoButton.setEnabled(true);
     }
 
-    //pop up menu builder
+    // pop up menu builder
     public void openPopUpMenu(View view) {
         dialogBuilder = new AlertDialog.Builder(this);
         final View popUpMenuView = getLayoutInflater().inflate(R.layout.popup, null);
@@ -564,7 +567,8 @@ public class MainChallengeActivity extends AppCompatActivity {
                     intent.putExtra("user", user);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(getApplicationContext(), "Congrats, you have reached the highest level yet!!!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Congrats, you have reached the highest level yet!!!",
+                            Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -587,14 +591,12 @@ public class MainChallengeActivity extends AppCompatActivity {
         });
     }
 
-
-
     // level selector button - open level selector activity
     public void levelSelector(View view) {
         Intent intent = new Intent(getApplicationContext(), LevelSelector.class);
-        Log.d("User details level selector","user: " + user);
-        Log.d("User details level selector","user: " + user.getUsername());
-        //String userName = user.getUsername();
+        Log.d("User details level selector", "user: " + user);
+        Log.d("User details level selector", "user: " + user.getUsername());
+        // String userName = user.getUsername();
         intent.putExtra("user", user);
         startActivity(intent);
     }
@@ -625,15 +627,13 @@ public class MainChallengeActivity extends AppCompatActivity {
         emoji.setVisibility(View.VISIBLE);
     }
 
-    public void readLevelProgression () {
-
+    public void readLevelProgression() {
 
         dbRef = FirebaseDatabase.getInstance().getReference();
         username = user.getUsername();
 
         Log.d(TAG, "readLevelDB user name: " + username);
         Log.d(TAG, "readLevelDB child user status: " + dbRef.child("Users").child(username));
-
 
         dbRef.child("Users").child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -645,7 +645,6 @@ public class MainChallengeActivity extends AppCompatActivity {
 
                         playerMaxLevel = Integer.parseInt(level);
                         Log.d(TAG, "You are at level " + currLevel);
-
 
                     } else {
                         Toast.makeText(MainChallengeActivity.this, "Failed to read data", Toast.LENGTH_SHORT).show();

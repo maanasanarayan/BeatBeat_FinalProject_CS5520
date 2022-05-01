@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
@@ -40,7 +41,6 @@ public class HomepageActivity extends AppCompatActivity {
     User user;
     DatabaseReference dbRef;
     String username;
-    Random random;
 
 
     public static final String EXTRA_USERNAME = "edu.neu.madcourse.beatbeat_team22.EXTRA_USERNAME";
@@ -61,7 +61,6 @@ public class HomepageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent StartIntent = new Intent(getApplicationContext(), MainChallengeActivity.class);
-                //currLevel = readLevelProgression(); // TODO: pull from DB
                 StartIntent.putExtra("level", currLevel);
                 StartIntent.putExtra("user", user);
                 Log.d(TAG, "onClick: " + user.getUsername());
@@ -116,14 +115,30 @@ public class HomepageActivity extends AppCompatActivity {
             }
         });
 
+        Integer minutes = Integer.valueOf(LocalDateTime.now().getMinute());
+        int level = getLevel(minutes);
         DailyChallengeButton = findViewById(R.id.DailyChallenge);
         DailyChallengeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent DailyChallenge = new Intent(getApplicationContext(), DailyChallengeActivity.class);
-//                startActivity(DailyChallenge);
+                Intent DailyChallengeIntent = new Intent(getApplicationContext(), MainChallengeActivity.class);
+                DailyChallengeIntent.putExtra("level", level);
+                DailyChallengeIntent.putExtra("dailyChallenge", "true");
+                startActivity(DailyChallengeIntent);
             }
         });
+    }
+
+    private int getLevel(Integer mins) {
+        if((mins <= 5) || (mins > 20 && mins <= 25) || (mins > 40 && mins <= 45)) {
+            return 1;
+        } else if((mins > 5 && mins <= 10) || (mins > 25 && mins <= 30) || (mins > 45 && mins <= 50)) {
+            return 2;
+        } else if((mins > 10 && mins <= 15) || (mins > 30 && mins <= 35) || (mins > 50 && mins <= 55)) {
+            return 3;
+        } else {
+            return 4;
+        }
     }
 
     @Override
@@ -151,9 +166,13 @@ public class HomepageActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     if (task.getResult().exists()) {
                         DataSnapshot snapshot = task.getResult();
-                        String level = String.valueOf(snapshot.child("levelPassed").getValue());
+                        if(snapshot.child("levelPassed").exists()) {
+                            String level = String.valueOf(snapshot.child("levelPassed").getValue());
+                            currLevel = Integer.parseInt(level);
+                        } else {
+                            currLevel = 1;
+                        }
 
-                        currLevel = Integer.parseInt(level);
                         Log.d(TAG, "You are at level " + currLevel);
 
 
