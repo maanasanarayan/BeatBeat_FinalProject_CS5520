@@ -517,7 +517,7 @@ public class MainChallengeActivity extends AppCompatActivity {
     private void enableTapButton() {
         startTapButton.setText(R.string.tap_string);
         startTapButton.setEnabled(true);
-        prevtime = System.currentTimeMillis() + 100;
+        prevtime = System.currentTimeMillis() + 300;
     }
 
     private void disableRedo() {
