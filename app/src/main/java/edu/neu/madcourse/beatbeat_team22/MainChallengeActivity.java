@@ -142,6 +142,13 @@ public class MainChallengeActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), HomepageActivity.class);
+        intent.putExtra("user", user);
+        startActivity(intent);
+    }
+
     private void generateChallenge() {
         requiredScore = 0;
         score = 0;

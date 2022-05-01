@@ -48,19 +48,27 @@ public class LevelSelector extends AppCompatActivity {
         createLevelSelectorList();
         buildRecyclerView();
 
-
         Intent intent = getIntent();
         if (intent.hasExtra("user")) {
             user = (User) intent.getSerializableExtra("user");
-            Log.d("User details level selector on create","user: " + user);
+            Log.d("User details level selector on create", "user: " + user);
         }
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), HomepageActivity.class);
+        intent.putExtra("user", user);
+        startActivity(intent);
+    }
+
     public void createLevelSelectorList() {
         levelSelectorList = new ArrayList<>();
-        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 1", "If I had a Quarter"));
-        levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 2", "The Quarter Rest"));
+        levelSelectorList
+                .add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 1", "If I had a Quarter"));
+        levelSelectorList
+                .add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 2", "The Quarter Rest"));
         levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 3", "Mixin' It Up"));
         levelSelectorList.add(new LevelSelectorItem(R.drawable.ic_baseline_music_note_24, "Level 4", "Give It a Rest"));
     }
@@ -68,8 +76,6 @@ public class LevelSelector extends AppCompatActivity {
     public ArrayList<LevelSelectorItem> returnList() {
         return levelSelectorList;
     }
-
-
 
     public void buildRecyclerView() {
         recyclerView = findViewById(R.id.recyclerView);
@@ -87,16 +93,14 @@ public class LevelSelector extends AppCompatActivity {
         });
     }
 
-
-
-    public void openLevelActivity (int position) {
+    public void openLevelActivity(int position) {
         Intent intent = new Intent(LevelSelector.this, MainChallengeActivity.class);
         intent.putExtra("level", levelSelectorList.get(position).getmLevel());
         intent.putExtra("user", user);
         startActivity(intent);
     }
 
-    public void readLevelDB (int position, View view) {
+    public void readLevelDB(int position, View view) {
 
         dbRef = FirebaseDatabase.getInstance().getReference();
         username = user.getUsername();
@@ -104,16 +108,15 @@ public class LevelSelector extends AppCompatActivity {
         Log.d(TAG, "readLevelDB user name: " + username);
         Log.d(TAG, "readLevelDB child user status: " + dbRef.child("Users").child(username));
 
-
         dbRef.child("Users").child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
-                    if(task.getResult().exists()) {
+                    if (task.getResult().exists()) {
 
                         DataSnapshot snapshot = task.getResult();
                         String level;
-                        if(snapshot.child("levelPassed").exists()) {
+                        if (snapshot.child("levelPassed").exists()) {
                             level = String.valueOf(snapshot.child("levelPassed").getValue());
                             currLevel = Integer.parseInt(level);
                         } else {
@@ -126,10 +129,10 @@ public class LevelSelector extends AppCompatActivity {
                         if (currLevel >= openLevel) {
                             openLevelActivity(position);
                         } else {
-                            Toast toast = Toast.makeText(getApplicationContext(), "Sorry, you have not yet unlocked level " + openLevel, Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(getApplicationContext(),
+                                    "Sorry, you have not yet unlocked level " + openLevel, Toast.LENGTH_SHORT);
                             toast.show();
                         }
-
 
                         Log.d(TAG, "onComplete currlevel: " + currLevel);
                     } else {
@@ -142,6 +145,5 @@ public class LevelSelector extends AppCompatActivity {
             }
         });
     }
-
 
 }
