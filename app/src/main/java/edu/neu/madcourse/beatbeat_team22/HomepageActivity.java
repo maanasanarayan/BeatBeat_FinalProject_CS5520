@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
@@ -28,7 +29,6 @@ public class HomepageActivity extends AppCompatActivity {
     Integer currLevel;
     int counter = 0;
     User user;
-    Random random;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,14 +98,30 @@ public class HomepageActivity extends AppCompatActivity {
             }
         });
 
+        Integer minutes = Integer.valueOf(LocalDateTime.now().getMinute());
+        int level = getLevel(minutes);
         DailyChallengeButton = findViewById(R.id.DailyChallenge);
         DailyChallengeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent DailyChallenge = new Intent(getApplicationContext(), DailyChallengeActivity.class);
-//                startActivity(DailyChallenge);
+                Intent DailyChallengeIntent = new Intent(getApplicationContext(), MainChallengeActivity.class);
+                DailyChallengeIntent.putExtra("level", level);
+                DailyChallengeIntent.putExtra("dailyChallenge", "true");
+                startActivity(DailyChallengeIntent);
             }
         });
+    }
+
+    private int getLevel(Integer mins) {
+        if((mins <= 5) || (mins > 20 && mins <= 25) || (mins > 40 && mins <= 45)) {
+            return 1;
+        } else if((mins > 5 && mins <= 10) || (mins > 25 && mins <= 30) || (mins > 45 && mins <= 50)) {
+            return 2;
+        } else if((mins > 10 && mins <= 15) || (mins > 30 && mins <= 35) || (mins > 50 && mins <= 55)) {
+            return 3;
+        } else {
+            return 4;
+        }
     }
 
     @Override
