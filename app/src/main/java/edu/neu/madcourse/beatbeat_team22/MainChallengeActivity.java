@@ -333,6 +333,10 @@ public class MainChallengeActivity extends AppCompatActivity {
         if (errorDescription.getVisibility() == View.VISIBLE) {
             return;
         }
+        if (!challenge.getIsNotePlayedList().get(currnoteTiming) && deltatime > milisecondsperbeat * timingLateGate) {
+            currnoteTiming++;
+            deltatime -= 1000;
+        }
         if (!challenge.getIsNotePlayedList().get(currnoteTiming)) {
             showSadFace();
             Log.d("score Incorrect: Don't Tap During a Rest", String.valueOf(score));
