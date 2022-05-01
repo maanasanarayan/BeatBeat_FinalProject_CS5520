@@ -129,11 +129,12 @@ public class MainChallengeActivity extends AppCompatActivity {
 
         gameMaxLevel = challengeGenerator.maxGameLevel();
         Log.d(TAG, "onCreate game max level: " + gameMaxLevel);
-        readLevelProgression();
+
         if (intent.hasExtra("dailyChallenge")) {
             dailyChallenge = true;
         } else {
             dailyChallenge = false;
+            readLevelProgression();
         }
 
     }
@@ -297,32 +298,33 @@ public class MainChallengeActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Daily Challenge Complete!", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "Level Complete!", Toast.LENGTH_SHORT).show();
+                        errorDescription.setText("Level Complete!");
+                        errorDescription.setVisibility(View.VISIBLE);
+                        // launch lesson activity
+                        Log.d(TAG, "run playerMax: " + playerMaxLevel);
+                        Log.d(TAG, "run playerMax: " + currLevel);
+
+                        if (playerMaxLevel == currLevel && currLevel < gameMaxLevel) {
+
+                            dbRef = FirebaseDatabase.getInstance().getReference();
+
+                            Log.d(TAG, "username run: " + username);
+
+                            HashMap User = new HashMap();
+
+                            User.put("levelPassed", currLevel + 1);
+
+                            dbRef.child("Users").child(username).updateChildren(User)
+                                    .addOnSuccessListener(new OnSuccessListener() {
+                                        @Override
+                                        public void onSuccess(Object o) {
+
+                                        }
+                                    });
+                        }
+                        openLevelCompletionPopup(playerMaxLevel);
                     }
-                    errorDescription.setText("Level Complete!");
-                    errorDescription.setVisibility(View.VISIBLE);
-                    // launch lesson activity
-                    Log.d(TAG, "run playerMax: " + playerMaxLevel);
-                    Log.d(TAG, "run playerMax: " + currLevel);
 
-                    if (playerMaxLevel == currLevel && currLevel < gameMaxLevel) {
-
-                        dbRef = FirebaseDatabase.getInstance().getReference();
-
-                        Log.d(TAG, "username run: " + username);
-
-                        HashMap User = new HashMap();
-
-                        User.put("levelPassed", currLevel + 1);
-
-                        dbRef.child("Users").child(username).updateChildren(User)
-                                .addOnSuccessListener(new OnSuccessListener() {
-                                    @Override
-                                    public void onSuccess(Object o) {
-
-                                    }
-                                });
-                    }
-                    openLevelCompletionPopup(playerMaxLevel);
                 } else {
                     Log.d("score results failed", String.valueOf(score) + " / " + String.valueOf(requiredScore));
                     Toast.makeText(getApplicationContext(), "Try Again!", Toast.LENGTH_SHORT).show();
